@@ -1,7 +1,5 @@
 'use strict';
-var crypto = require('crypto');
 var mongoose = require('mongoose');
-var _ = require('lodash');
 
 var schema = new mongoose.Schema({
 
@@ -10,7 +8,7 @@ var schema = new mongoose.Schema({
 		required: true,
 		trim: true
 	},
-	location: [{type: Schema.Types.ObjectId, ref: 'Location'}]
+	location: {type: Schema.Types.ObjectId, ref: 'Location'}
 
 })
    
