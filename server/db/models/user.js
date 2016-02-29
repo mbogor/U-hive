@@ -4,8 +4,34 @@ var mongoose = require('mongoose');
 var _ = require('lodash');
 
 var schema = new mongoose.Schema({
-    email: {
+    
+    name: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    phone: {
         type: String
+    },
+    location: [{type: Schema.Types.ObjectId, ref: 'Location'}],
+    college: [{type: Schema.Types.ObjectId, ref: 'College'}],
+    photo: {
+        type: String,
+        default: '/images/default-photo.jpg' //find default image later
+    },
+    isAdmin: {
+        type: Boolean,
+        default: false
+    },
+    UComb: {
+        type: Number,
+        default: 0
+    },
+
+    taskHistory: [{type: Schema.Types.ObjectId, ref: 'Task'}],
+    email: {
+        type: String,
+        required: true
     },
     password: {
         type: String
@@ -26,6 +52,9 @@ var schema = new mongoose.Schema({
         id: String
     }
 });
+
+//VIRTUAL FOR RATING
+
 
 // method to remove sensitive information from user objects before sending them out
 schema.methods.sanitize =  function () {
