@@ -23,13 +23,17 @@ var taskSchema = new mongoose.Schema({
         type: String,
         default: '/default-image.png'
     },
-    date: Date,
+    date: {
+        type: Date,
+        required: true
+    }
     user: {
         type: Schema.Types.ObjectId,
         ref: 'User'
     },
     restrictedByCampus: {
-        type: Boolean
+        type: Boolean,
+        default: false
     },
     completed: {
         type: Boolean,
