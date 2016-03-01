@@ -9,7 +9,14 @@ var schema = new mongoose.Schema({
 		trim: true
 	},
 	location: {type: Schema.Types.ObjectId, ref: 'Location'}
-
+	streetAddress: {
+	        type: String,
+	        required: true
+	},
+	zipCode: {
+	        type: Number,
+	        required: true
+	}
 })
    
 
