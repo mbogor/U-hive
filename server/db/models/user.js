@@ -13,8 +13,12 @@ var schema = new mongoose.Schema({
     phone: {
         type: String
     },
-    location: [{type: Schema.Types.ObjectId, ref: 'Location'}],
-    college: [{type: Schema.Types.ObjectId, ref: 'College'}],
+    location: [{type: Schema.Types.ObjectId, ref: 'Location'}], 
+    //places you're willing to work at/you're selling to
+    college: {
+        type: Schema.Types.ObjectId, 
+        ref: 'College'
+    },
     photo: {
         type: String,
         default: '/images/default-photo.jpg' //find default image later

@@ -8,6 +8,7 @@ var schema = new mongoose.Schema({
 		required: true,
 		trim: true
 	},
+	location: {type: Schema.Types.ObjectId, ref: 'Location'}
 	streetAddress: {
 	        type: String,
 	        required: true
@@ -16,8 +17,6 @@ var schema = new mongoose.Schema({
 	        type: Number,
 	        required: true
 	}
-	location: [{type: Schema.Types.ObjectId, ref: 'Location'}]
-
 })
    
 
