@@ -28,7 +28,8 @@ var schema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-    UComb: {
+    //UCombs is the $ amount you have on your account
+    uComb: {
         type: Number,
         default: 0
     },
@@ -58,6 +59,18 @@ var schema = new mongoose.Schema({
 
 //VIRTUAL FOR RATING
 
+
+
+
+
+
+
+
+
+//STATIC METHODS
+schema.methods.getCompletedTasks = function() {
+    return mongoose.model('Task').find({user: this._id, completed: true});
+}
 
 // method to remove sensitive information from user objects before sending them out
 schema.methods.sanitize =  function () {
