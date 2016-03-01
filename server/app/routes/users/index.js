@@ -60,9 +60,11 @@ router.delete('/:userId', function(req, res, next){
     .then(null, next)
 })
 
-router.get('/:userId/history', function(req, res, next) {
+// router.get('/:userId/history', function(req, res, next) {
+//     User.findById(req.params.userId)
+//     .populate(Task)
 
-})
+// })
 
 
 router.get('/secret-stash', ensureAuthenticated, function (req, res) {
