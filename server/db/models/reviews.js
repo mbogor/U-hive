@@ -10,7 +10,10 @@ var schema = new mongoose.Schema({
 	reviewer: {type: Schema.Types.ObjectId, ref: 'User'},
 	text: {
 		type: String,
-		required: true
+	},
+	rating: {
+		type: Number,
+		enum: [1, 2, 3, 4, 5]
 	}
 
 })
