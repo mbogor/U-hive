@@ -40,6 +40,7 @@ router.post('/', function(req, res, next) {
 })
 
 router.put('/:userId', function(req, res, next){
+    //can we check on findByIdAndUpdate and any extra validation that might be necessary?
     User.findByIdAndUpdate(req.params.userId, 
         {$set: req.body},
         {new: true}
@@ -51,6 +52,7 @@ router.put('/:userId', function(req, res, next){
 })
 
 router.delete('/:userId', function(req, res, next){
+    //can we check on findByIdAndRemove and any extra validation that might be necessary?
     User.findByIdAndRemove(req.params.userId)
     .then(function(){
         res.sendStatus(204)
