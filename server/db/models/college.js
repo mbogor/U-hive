@@ -6,7 +6,7 @@ var schema = new mongoose.Schema({
 	name: {
 		type: String,
 		required: true,
-		trim: true
+		trim: true,
 	},
 	location: {type: Schema.Types.ObjectId, ref: 'Location'}
 	streetAddress: {
@@ -18,7 +18,7 @@ var schema = new mongoose.Schema({
 	        required: true
 	}
 })
-   
+
 
 
 mongoose.model('College', schema);

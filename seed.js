@@ -56,3 +56,5 @@ connectToDb.then(function () {
         process.kill(1);
     });
 });
+
+// var collegeNames = [{name: 'NYU', location: {_nycId}, streetAddress: 132 some St, zipCode: 10101},'CUNY Hunter', 'Columbia','Fordham', 'Manhattan CC', 'Brooklyn College','Grace Hopper Academy']

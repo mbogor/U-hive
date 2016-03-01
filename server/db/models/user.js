@@ -3,8 +3,10 @@ var crypto = require('crypto');
 var mongoose = require('mongoose');
 var _ = require('lodash');
 
+
+
 var schema = new mongoose.Schema({
-    
+
     name: {
         type: String,
         required: true,
@@ -13,10 +15,9 @@ var schema = new mongoose.Schema({
     phone: {
         type: String
     },
-    location: [{type: Schema.Types.ObjectId, ref: 'Location'}], 
     //places you're willing to work at/you're selling to
     college: {
-        type: Schema.Types.ObjectId, 
+        type: Schema.Types.ObjectId,
         ref: 'College'
     },
     photo: {
@@ -31,8 +32,6 @@ var schema = new mongoose.Schema({
         type: Number,
         default: 0
     },
-
-    taskHistory: [{type: Schema.Types.ObjectId, ref: 'Task'}],
     email: {
         type: String,
         required: true
