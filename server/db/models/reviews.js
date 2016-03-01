@@ -1,8 +1,6 @@
 'use strict';
 var mongoose = require('mongoose');
 
-var scores = [1, 2, 3, 4, 5];
-
 var schema = new mongoose.Schema({
 
 	reviewee: {
@@ -13,9 +11,10 @@ var schema = new mongoose.Schema({
 		type: String,
 		required: true
 	},
-  score: {
-    enum: scores
-  }
+	rating: {
+		type: Number,
+		enum: [1, 2, 3, 4, 5]
+	}
 
 })
    
