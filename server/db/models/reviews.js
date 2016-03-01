@@ -1,15 +1,15 @@
 'use strict';
 var mongoose = require('mongoose');
 
-
 var schema = new mongoose.Schema({
 
-	user: {
+	reviewee: {
 		type: Schema.Types.ObjectId, 
 		ref: 'User'},
 	reviewer: {type: Schema.Types.ObjectId, ref: 'User'},
 	text: {
 		type: String,
+		required: true
 	},
 	rating: {
 		type: Number,
