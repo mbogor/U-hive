@@ -68,8 +68,8 @@ var schema = new mongoose.Schema({
 
 
 //STATIC METHODS
-schema.statics.getCompletedTasks = function(userId) {
-    return mongoose.model('Task').find({user: userId, completed: true});
+schema.methods.getCompletedTasks = function() {
+    return mongoose.model('Task').find({user: this._id, completed: true});
 }
 
 // method to remove sensitive information from user objects before sending them out
