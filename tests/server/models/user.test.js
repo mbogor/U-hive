@@ -4,6 +4,7 @@ var clearDB = require('mocha-mongoose')(dbURI);
 var sinon = require('sinon');
 var expect = require('chai').expect;
 var mongoose = require('mongoose');
+var Promise = require('bluebird')
 
 
 // Require in all models.
@@ -11,8 +12,9 @@ var mongoose = require('mongoose');
 var models = require('../../../server/db/models');
 var User = mongoose.model('User');
 var Task  = mongoose.model('Task');
+var Category = mongoose.model('Category');
 
-xdescribe('User model', function () {
+describe('User model', function () {
 
     beforeEach('Establish DB connection', function (done) {
         if (mongoose.connection.db)  return done();
@@ -99,7 +101,7 @@ xdescribe('User model', function () {
 
         });
 
-        xdescribe('on creation', function () {
+        describe('on creation', function () {
 
             var encryptSpy;
             var saltSpy;
@@ -144,7 +146,7 @@ xdescribe('User model', function () {
 
         });
 
-        xdescribe('sanitize method', function () {
+        describe('sanitize method', function () {
 
             var createUser = function () {
                 return User.create({ name: 'Obama', email: 'obama@gmail.com', password: 'potus' });
@@ -166,30 +168,78 @@ xdescribe('User model', function () {
 
     });
 
-    xdescribe('methods & statics', function(){
-        var task1 = {seller: 123456, name:'save the country', category:"1", price:30, date:Date.now, description:"best task ever", forSaleOrWanted:"sale", completed:false};
-        var task2 = {seller: 123456, name:'another', category:"2", price:3000, date:Date.now-1000*60*60*24*7, description:"second best task ever", forSaleOrWanted:"sale", completed:true};
-        var user1 = { _id: 123456, name: 'Obama', email: 'obama@gmail.com', password: 'potus' };
+    describe('methods & statics', function(){
+        var user1 = { name: 'Obama', email: 'obama@gmail.com'};
+        var task1 = {
+                    name:'save the country', 
+                    price:30, 
+                    date: new Date(), 
+                    description:"best task ever", 
+                    forSaleOrWanted:"forsale", 
+                    completed:false
+                };
+        var task2 = {
+            name:'another', 
+            price:3000, 
+            date:new Date() -1000*60*60*24*7, 
+            description:"second best task ever", 
+            forSaleOrWanted:"forsale", 
+            completed:true
+        };
+        var sellerG;
 
-        beforeEach(function(){
-            return Promise.all([Task.create(task1),Task.create(task2),User.create(user1)]);
+        beforeEach(function(done){
+            User.create(user1)
+            .then(function(seller){
+                var sellerId = seller._id;
+                task1.seller = sellerId;
+                task2.seller = sellerId;
+                sellerG = seller;
+                done()
+            })
+            .then(null, done);
         });
 
-        afterEach(function(){
-            return Promise.all([Task.remove(), User.remove()]);
+        beforeEach(function(done){
+            Category.create({name:"Cat1"})
+            .then(function(category){
+                task1.category = category._id;
+                task2.category = category._id;
+                done()
+            })
+            .then(null, done);
+        })
+
+        beforeEach(function(done){
+            Promise.all([Task.create(task1),Task.create(task2)])
+            .spread(function(t1, t2){
+                console.log('t1', t1, 't2', t2)
+                done();
+            })
+            .then(null, done)
+
+        });
+
+        afterEach(function(done){
+            return Promise.all([Task.remove(), User.remove()])
+            .then(function(){
+                done()
+            })
+            .then(null, done);
         });
 
         describe('completed tasks method', function(){
 
             it('should return a list of all seller\'s completed tasks', function(done){
-                User.getCompletedTasks()
+                sellerG.getCompletedTasks()
                 .then(function(tasks){
                     expect(tasks).to.have.length(1);
-                    // tasks.forEach(function(task){
-                    //     expect(task.completed).to.be.true;
-                    // });
+                    tasks.forEach(function(task){
+                        expect(task.completed).to.be.true;
+                    });
                     done()
                 })
+                .then(null, done)
             })
 
         })
