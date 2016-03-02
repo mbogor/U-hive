@@ -33,6 +33,7 @@ cartSchema.methods.processCheckout = function(cartTotal) {
     })
     .then(function(taskArr){
       return Promise.map(taskArr, function(task){
+        task.purchased = true;
         return processPayment(task);
       });
     });
