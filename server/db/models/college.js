@@ -8,7 +8,7 @@ var schema = new mongoose.Schema({
 		required: true,
 		trim: true,
 	},
-	location: {type: Schema.Types.ObjectId, ref: 'Location'}
+	location: {type: mongoose.Schema.Types.ObjectId, ref: 'Location'},
 	streetAddress: {
     type: String,
     required: true

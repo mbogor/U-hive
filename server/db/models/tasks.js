@@ -7,7 +7,7 @@ var taskSchema = new mongoose.Schema({
         required: true
     },
     category: [{
-        type: Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'Category',
         required: true
     }],
@@ -27,9 +27,9 @@ var taskSchema = new mongoose.Schema({
     date: {
         type: Date,
         required: true
-    }
+    },
     seller: {
-        type: Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },
     restrictedByCampus: {
@@ -43,7 +43,7 @@ var taskSchema = new mongoose.Schema({
     purchased:{
         type: Boolean,
         default: false
-    }
+    },
     forSaleOrWanted: {
         type: String,
         required: true,
