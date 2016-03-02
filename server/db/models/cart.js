@@ -1,58 +1,54 @@
 'use strict';
 
 var mongoose = require('mongoose');
-
+var Promise = require('bluebird');
 
 //user on cart is the buyer and user on a task is a seller
 var cartSchema = new mongoose.Schema({
-  user: { type: Schema.Types.ObjectId, ref: 'User' },
+  buyer: { type: Schema.Types.ObjectId, ref: 'User' },
   tasks: [{type: Schema.Types.ObjectId, ref: 'Task'}],
-  timeCreated: { type: Date, default: Date.now }, 
-  paid: { type: Boolean, default: false },
+  timeCreated: { type: Date, default: Date.now },
   processed: { type: Boolean, default: false }
 })
 
 
-											//cartTotal will be passed in from the front end so that we don't need to calculate the cart total here
+//cartTotal will be passed in from the front end so that we don't need to calculate the cart total here
 cartSchema.methods.processCheckout = function(cartTotal) {
+  var cart = this;
 
-	var buyer = mongoose.model('User').findById(this.user);
-	var sellers = this.tasks.forEach(function(task){
-		mongoose.model('Task').findById(task._id)
-	})
-
-	if(buyer.uComb < cartTotal) throw new Error('You do not have enough credit.');
-
-	Promise.all([findBook, findChapter])
-  .spread(function (book, chapter) {
-    return book.removeChapter(chapter);
+  mongoose.model('User').findById(this.buyer)
+  .then(function(buyer){
+    if (buyer.uComb < cartTotal) { throw  new Error('You do not have enough credit.');};
+    else{
+      cart.processed = true;
+      cart.save();
+      return checkoutTasks();
+    }
   })
-  .then(function () {
-    res.sendStatus(204);
-  })
-   .then(null, notFound(next));
+  .then(null, next);
 
+  function checkoutTasks (){
+    return Promise.map(cart.tasks, function(taskId){
+      return mongoose.model('Task').findById(taskId)
+    })
+    .then(function(taskArr){
+      return Promise.map(taskArr, function(task){
+        return processPayment(task);
+      });
+    });
+  }
 
-
-
-
-	//2. update the buyers credit --remove money
-	mongoose.model('User').findById(this.user)
-	.then(function(user) {
-		if(user.uComb < cartTotal) throw new Error('You do not have enough credit.');
-		user.uComb = user.uComb - cartTotal;
-	})
-	
-
-	//1. update the sellers credit ++add money
-
-
-
-
-
-	//3. changed the cart status to true
-	this.processed = true;
+  //returns a promise for the updated seller
+  function processPayment(task){
+    return mongoose.model('User').findById(task.seller)
+    .then(function(seller){
+      seller.uComb += task.price
+      return seller.save();
+    });
+  }
 }
+
+
 
 mongoose.model('Cart', cartSchema);
 

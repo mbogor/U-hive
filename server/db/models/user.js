@@ -58,22 +58,6 @@ var schema = new mongoose.Schema({
     }
 });
 
-//VIRTUAL FOR RATING
-User
-.virtual('rating')
-.get(function(id){
-    //find all the scores by user id for the user
-    //loop over ratings and average them out
-    //return the average
-
-})
-
-
-
-
-
-
-
 
 //STATIC METHODS
 schema.methods.getCompletedTasks = function() {

@@ -10,12 +10,12 @@ var schema = new mongoose.Schema({
 	},
 	location: {type: Schema.Types.ObjectId, ref: 'Location'}
 	streetAddress: {
-	        type: String,
-	        required: true
+    type: String,
+    required: true
 	},
 	zipCode: {
-	        type: Number,
-	        required: true
+    type: Number,
+    required: true
 	}
 })
 
