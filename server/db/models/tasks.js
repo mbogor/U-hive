@@ -13,7 +13,8 @@ var taskSchema = new mongoose.Schema({
     }],
     price: {
         type: Number,
-        default: 0
+        default: 0,
+        required: true
     },
     description: {
         type: String,
@@ -27,7 +28,7 @@ var taskSchema = new mongoose.Schema({
         type: Date,
         required: true
     }
-    user: {
+    seller: {
         type: Schema.Types.ObjectId,
         ref: 'User'
     },

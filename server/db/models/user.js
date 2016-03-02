@@ -57,15 +57,6 @@ var schema = new mongoose.Schema({
     }
 });
 
-//VIRTUAL FOR RATING
-
-
-
-
-
-
-
-
 
 //STATIC METHODS
 schema.methods.getCompletedTasks = function() {
