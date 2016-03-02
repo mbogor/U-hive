@@ -10,6 +10,7 @@ var mongoose = require('mongoose');
 require('../../../server/db/models');
 
 var Task = mongoose.model('Task');
+var Category = mongoose.model('Category'); 
 
 describe('Task model', function () {
 
@@ -77,22 +78,24 @@ describe('Task model', function () {
 
 	describe('Success', function() {
         var gardeningTask;
+        var category = new Category({name: 'plantlife'})
 		beforeEach(function(done) {
     		 Task.create({name: 'garden', 
-                // category: ['plantlife', 'nature'], 
+                category: [category._id], 
                 price: 200, 
                 description: 'plant a tree', 
                 date: new Date(2040, 11, 17, 3, 24, 0), 
-                forSaleOrWanted: 'for sale'})
-
-    			.then(function(task) {
+                forSaleOrWanted: 'forsale'
+            })
+             .then(function(task) {
                     gardeningTask = task;
+                    console.log('task: ', gardeningTask)
                     done()
                 }, done)
     			
     	})
 
-    	it ('successfully creates a task', function(done) {
+    	it ('successfully creates task', function(done) {
 
     		Task.findById(gardeningTask._id)
     		.then(function(task){

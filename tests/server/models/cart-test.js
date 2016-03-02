@@ -1,5 +1,6 @@
 var dbURI = 'mongodb://localhost:27017/testingDB';
 var clearDB = require('mocha-mongoose')(dbURI);
+var Promise = require('bluebird')
 
 var sinon = require('sinon');
 var expect = require('chai').expect;
@@ -9,6 +10,8 @@ var mongoose = require('mongoose');
  
 require('../../../server/db/models');
 
+var Task = mongoose.model('Task');
+var User = mongoose.model('User');
 var Cart = mongoose.model('Cart');
 
 describe('Cart model', function () {
@@ -34,8 +37,8 @@ describe('Cart model', function () {
 
     	it ('defaults to the current date', function(done) {
     		cart.validate(function() {
-    			expect(cart.timeCreated).to.equal(Date())
-    			done();
+    			expect(cart.timeCreated).to.not.be.null;
+                done()
     		})
     	})
 
@@ -46,26 +49,96 @@ describe('Cart model', function () {
             })
         })
 
-        // Will do this later, not sure how to validate 'enum' field
-
-    	// it ('defaults to the correct rating array', function(done) {
-    	// 	review.validate(function() {
-    	// 		expect(review.rating).to.equal(ratings)
-    	// 		done();
-    	// 	})
-    	// })
-
-
-    	// it ('errors without a reviewBy', function(done) {
-    	// 	review.validate(function() {
-    	// 		expect(review.reviewBy).to.be.undefined
-    	// 		done();
-    	// 	})
-    	// })
-
     })
 
+
+
+    describe('methods', function() {
+
+        var userA,
+            userB,
+            taskA,
+            taskB, 
+            cartA, 
+            cartB;
+
+        beforeEach(function(done){
+            var user = new User()
+            console.log('user!!!!!', user)
+            Promise.all([
+                Task.create({
+                    seller: user._id, 
+                    price: 10, 
+                    description: 'This task rocks', 
+                    date: 'Tuesday'
+                }),
+                Task.create({seller: user._id })
+            ])
+            .spread(function(_task1, _task2){
+                  taskA = _task1;
+                  taskB = _task2;
+                  done()  
+            })
+            .then(null, done)
+
+        })
+
+        beforeEach(function(done){
+            Promise.all([
+                Cart.create({buyer: userA, tasks: [taskA], processed: true}),
+                Cart.create({ buyer: userB, tasks: [taskB], processed: false})
+            ])
+            .spread(function(_cart1, _cart2){
+                cartA = _cart1, 
+                cartB = _cart2
+                done()
+            })
+            .then(null, done)
+        })
+
+
+        describe('processCheckout', function() {
+
+
+          it('check that cart.processed is true', function(done) {
+
+            cartB.processCheckout(100);
+
+            expect(cartB.process).to.be.true;
+                console.log('it: ha: ');
+                done();
+            
+          });
+
+          // it('check that the buyer\'s uComb is updated', function(done) {
+
+          //   // task.addChild({ name: 'task2' })
+          //   // .then(function(child) {
+          //   //   expect(child.parent).to.equal(task._id);
+          //   //   expect(child.name).to.equal('task2');
+          //   //   done();
+          //   // })
+          //   // .then(null, done); //catch test errors
+
+          // });
+
+          // it('check that the seller\'s uComb is updated', function(done) {
+
+            
+          // });
+
+          // it('check that task.completed is true', function(done) {
+
+            
+          // });
+
+        });
+    })
+
+
+
 	// describe('Success', function() {
+
  //        var gardeningReview;
 	// 	beforeEach(function(done) {
  //    		 Review.create({text: "reviewwww"})
@@ -87,5 +160,11 @@ describe('Cart model', function () {
 
  //    	})
 
- //    })
+    // })
+
+    //chance library
+    //expect(err).to.exist
+    //category
+    //curl
+    //more express routes
 })
