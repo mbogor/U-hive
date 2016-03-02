@@ -40,9 +40,14 @@ var taskSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
+    purchased:{
+        type: Boolean,
+        default: false
+    }
     forSaleOrWanted: {
         type: String,
-        required: true
+        required: true,
+        enum: ['forsale', 'wanted']
     }
 });
 
