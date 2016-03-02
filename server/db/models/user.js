@@ -2,6 +2,7 @@
 var crypto = require('crypto');
 var mongoose = require('mongoose');
 var _ = require('lodash');
+// var Score = require('Score')
 
 var schema = new mongoose.Schema({
     
@@ -54,7 +55,14 @@ var schema = new mongoose.Schema({
 });
 
 //VIRTUAL FOR RATING
+User
+.virtual('rating')
+.get(function(id){
+    //find all the scores by user id for the user
+    //loop over ratings and average them out
+    //return the average
 
+})
 
 // method to remove sensitive information from user objects before sending them out
 schema.methods.sanitize =  function () {
