@@ -4,8 +4,10 @@ var mongoose = require('mongoose');
 var _ = require('lodash');
 // var Score = require('Score')
 
+
+
 var schema = new mongoose.Schema({
-    
+
     name: {
         type: String,
         required: true,
@@ -14,8 +16,11 @@ var schema = new mongoose.Schema({
     phone: {
         type: String
     },
-    location: [{type: Schema.Types.ObjectId, ref: 'Location'}],
-    college: [{type: Schema.Types.ObjectId, ref: 'College'}],
+    //places you're willing to work at/you're selling to
+    college: {
+        type: Schema.Types.ObjectId,
+        ref: 'College'
+    },
     photo: {
         type: String,
         default: '/images/default-photo.jpg' //find default image later
@@ -24,12 +29,11 @@ var schema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-    UComb: {
+    //UCombs is the $ amount you have on your account
+    uComb: {
         type: Number,
         default: 0
     },
-
-    taskHistory: [{type: Schema.Types.ObjectId, ref: 'Task'}],
     email: {
         type: String,
         required: true
@@ -64,10 +68,33 @@ User
 
 })
 
+
+
+
+
+
+
+
+//STATIC METHODS
+schema.methods.getCompletedTasks = function() {
+    return mongoose.model('Task').find({user: this._id, completed: true});
+}
+
 // method to remove sensitive information from user objects before sending them out
 schema.methods.sanitize =  function () {
     return _.omit(this.toJSON(), ['password', 'salt']);
 };
+
+schema.methods.getAggregateScore = function() {
+
+    return Reviews.find({reviewee: this._id})
+    .then(function(reviews) {
+        var sum = reviews.reduce(function(initial, curr) {
+            return initial + curr;
+        })
+        return sum/reviews.length;
+    })
+}
 
 // generateSalt, encryptPassword and the pre 'save' and 'correctPassword' operations
 // are all used for local authentication security.

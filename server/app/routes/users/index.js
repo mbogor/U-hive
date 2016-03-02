@@ -2,6 +2,10 @@
 var router = require('express').Router();
 module.exports = router;
 var _ = require('lodash');
+var mongoose = require('mongoose')
+var User = mongoose.model('User');
+var Task = mongoose.model('Task');
+
 
 var ensureAuthenticated = function (req, res, next) {
     if (req.isAuthenticated()) {
@@ -10,6 +14,58 @@ var ensureAuthenticated = function (req, res, next) {
         res.status(401).end();
     }
 };
+
+router.use('/', function(req, res, next) {
+    User.find({})
+    .then(function(users){
+        res.json(users);
+    })
+    .then(null, next);
+})
+
+router.user('/:userId', function(req, res, next) {
+    User.findById(req.params.userId)
+    .then(function(user){
+        res.json(user)
+    })
+    .then(null, next);
+})
+
+router.post('/', function(req, res, next) {
+    User.create(req.body)
+    .then(function(user) {
+        res.status(201).json(user)
+    })
+    .then(null, next)
+})
+
+router.put('/:userId', function(req, res, next){
+    //can we check on findByIdAndUpdate and any extra validation that might be necessary?
+    User.findByIdAndUpdate(req.params.userId, 
+        {$set: req.body},
+        {new: true}
+    )
+    .then(function(user) {
+        res.json(user)
+    })
+    .then(null, next)
+})
+
+router.delete('/:userId', function(req, res, next){
+    //can we check on findByIdAndRemove and any extra validation that might be necessary?
+    User.findByIdAndRemove(req.params.userId)
+    .then(function(){
+        res.sendStatus(204)
+    })
+    .then(null, next)
+})
+
+// router.get('/:userId/history', function(req, res, next) {
+//     User.findById(req.params.userId)
+//     .populate(Task)
+
+// })
+
 
 router.get('/secret-stash', ensureAuthenticated, function (req, res) {
 
