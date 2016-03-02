@@ -5,9 +5,9 @@ var mongoose = require('mongoose');
 var schema = new mongoose.Schema({
 
 	reviewee: {
-		type: Schema.Types.ObjectId,
+		type: mongoose.Schema.Types.ObjectId,
 		ref: 'User'},
-	reviewer: {type: Schema.Types.ObjectId, ref: 'User'},
+	reviewer: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
 	text: {
 		type: String,
 		required: true
@@ -17,7 +17,7 @@ var schema = new mongoose.Schema({
 		enum: [1, 2, 3, 4, 5]
 	},
 	task: {
-		type: Schema.Types.ObjectId,
+		type: mongoose.Schema.Types.ObjectId,
 		ref: 'Task'
 	},
 	reviewBy: {

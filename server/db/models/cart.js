@@ -5,8 +5,8 @@ var Promise = require('bluebird');
 
 //user on cart is the buyer and user on a task is a seller
 var cartSchema = new mongoose.Schema({
-  buyer: { type: Schema.Types.ObjectId, ref: 'User' },
-  tasks: [{type: Schema.Types.ObjectId, ref: 'Task'}],
+  buyer: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  tasks: [{type: mongoose.Schema.Types.ObjectId, ref: 'Task'}],
   timeCreated: { type: Date, default: Date.now },
   processed: { type: Boolean, default: false }
 })
@@ -18,7 +18,7 @@ cartSchema.methods.processCheckout = function(cartTotal) {
 
   mongoose.model('User').findById(this.buyer)
   .then(function(buyer){
-    if (buyer.uComb < cartTotal) { throw  new Error('You do not have enough credit.');};
+    if (buyer.uComb < cartTotal) { throw  new Error('You do not have enough credit.');}
     else{
       cart.processed = true;
       cart.save();
