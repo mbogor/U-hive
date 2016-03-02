@@ -6,5 +6,6 @@ require('./user');
 require('./cart');
 require('./college');
 require('./location');
+require('./category');
 require('./reviews');
 require('./tasks');
