@@ -25,23 +25,21 @@ var moment = require('moment');
 var chalk = require('chalk');
 var chance = require('chance')(12345);
 var _ = require('lodash');
-var User = require('./server/db/models/user');
-var Task = require('./server/db/models/tasks'); 
-var Review = require('./server/db/models/reviews');
-var Cart = ('./server/db/models/cart');
-var College = require('./server/db/models/college');
+var models = require('./server/db/models')
+var User = mongoose.model('User');
+var Task = mongoose.model('Task');
+var Review = mongoose.model('Review');
+var Cart = mongoose.model('Cart');
+var College = mongoose.model('College');
 
 var connectToDb = require('./server/db');
 
-var categories = ['food', 'tutoring', 'delivery', 'moving', 'cleaning', 'other'];
+var categoriesArr = ['food', 'tutoring', 'delivery', 'moving', 'cleaning', 'other'];
 
-var colleges = [{name: 'NYU', location: 'New York City, NY', streetAddress: '123 N West St', zipCode:12345},
+var collegesArr = [
+    {name: 'NYU', location: 'New York City, NY', streetAddress: '123 N West St', zipCode:12345},
     {name: 'Columbia', location: 'New York City, NY', streetAddress: '456 N North St', zipCode:12345},
-    {name: 'Hunter', location: 'New York City, NY', streetAddress: '789 N West St', zipCode:12345}];
-
-var userArr = [];
-
-var taskArr = [];
+    {name: 'Hunter', location: 'New York City, NY', streetAddress: '789 N West St', zipCode:12345} ];
 
 function randPhoto(){
     var g = chance.pick(['men', 'women']);
@@ -50,11 +48,9 @@ function randPhoto(){
 };
 
 function makeColleges(){
-    var collegeArr = [];
-    collegeArr.forEach(function(col){
-        collegeArr.push(new College(col));
-    });
-    return collegeArr;
+    return collegesArr.map(function(college){
+        return new College(college)
+    })
 };
 
 function makeUsers(){
@@ -74,7 +70,7 @@ function makeTasks(){
     return new Task({
         //seller: reference to User
         name: chance.sentence({words: _.random(3,15)}),
-        category: categories[_.random(0,categories.length-1)],
+        category: categoriesArr[_.random(0,categoriesArr.length-1)],
         price: _.random(10,100),
         description: chance.sentence({words: _.random(15,40)}),
         imageUrl: 'http://lorempixel.com/400/200/',
@@ -110,7 +106,7 @@ function addCollegeToUser(user){
     return College.find({})
     .then(function(colleges){
         var randCollege = _.sample(colleges);
-        user.college = randCollege;
+        user.college = randCollege._id;
         return user.save();
     })
 };
@@ -119,7 +115,7 @@ function addSellerToTask(task){
     return User.find({})
     .then(function(users){
         var randUser = _.sample(users);
-        task.seller = randUser;
+        task.seller = randUser._id;
         return task.save();
     })
 };
@@ -135,9 +131,9 @@ function addRevieweeReviewerAndTaskToReview(review){
             var randReviewer = randPeople[1];
             var randTask = _.sample(tasks);
 
-            review.reviewee = randReviewee;
-            review.reviewer = randReviewer;
-            review.task = randTask;
+            review.reviewee = randReviewee._id;
+            review.reviewer = randReviewer._id;
+            review.task = randTask._id;
             return review.save();
         })
 };
@@ -151,13 +147,16 @@ function addBuyerAndTasksToCart(cart) {
             var randUser = _.sample(users);
             var randTasks = _.sample(tasks, _.random(1,4));
 
-            cart.buyer = randUser;
-            cart.tasks = randTasks;
+            cart.buyer = randUser._id;
+            cart.tasks = randTasks.map(function(task){
+                return task._id
+            })
             return cart.save();
         })
 };
 
 function generateAll () {
+    var colleges = makeColleges();
     var users = _.times(15, makeUsers);
     users.push(new User({
         name: 'Busy Bees',
@@ -171,33 +170,42 @@ function generateAll () {
     var tasks = _.times(20, makeTasks);
     var reviews = _.times(5, makeReviews);
     var carts = _.times(5, makeCarts);
-    return users.concat(tasks).concat(reviews).concat(carts);
+    // console.log(colleges)
+    return users.concat(tasks).concat(reviews).concat(carts).concat(colleges)
 }
 
 function seed() {
     var docs = generateAll();
     return Promise.map(docs, function(doc){
-        if(doc.constructor == 'User') {console.log('USER!'); return addCollegeToUser(doc); }
-        else if (doc.constructor == 'Task') return addSellerToTask(doc);
-        else if (doc.constructor == 'Review') return addRevieweeReviewerAndTaskToReview(doc);
-        else if (doc.constructor == 'Cart') return addBuyerAndTasksToCart(doc)
-        else console.log('AHHHH!')
+        // console.log(doc)
+        return doc.save()
     })
-    .then(null, function(err){
-        console.log('err here', err)
-    });
+    .then(function(savedDocs){
+        // console.log(savedDocs)
+        return Promise.map(savedDocs, function(doc){
+            // console.log(doc)
+            if(doc instanceof User) return addCollegeToUser(doc); 
+            else if (doc instanceof Task) return addSellerToTask(doc); 
+            else if (doc instanceof Review) return addRevieweeReviewerAndTaskToReview(doc); 
+            else if (doc instanceof Cart) return addBuyerAndTasksToCart(doc); 
+            else if (doc instanceof College) return doc.save();
+        })
+    })
 }
 
-connectToDb.then(function() {
-    mongoose.connection.db.dropDatabase(function() {
-        console.log('Dropped old data, now inserting new data');
-        return seed();
-    })
-    .then(function(){
-        console.log('Done inserting data!');
-        mongoose.connection.close()
-    })
-    // .catch(function(err){
-    //     console.error(err)
-    // })
+connectToDb.then(function () {
+   User.find({}).then(function (users) {
+       if (users.length === 0) {
+           return seed();
+       } else {
+           console.log(chalk.magenta('Seems to already be user data, exiting!'));
+           process.kill(0);
+       }
+   }).then(function () {
+       console.log(chalk.green('Seed successful!'));
+       process.kill(0);
+   }).catch(function (err) {
+       console.error(err);
+       process.kill(1);
+   });
 });
