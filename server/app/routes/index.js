@@ -3,11 +3,7 @@ var router = require('express').Router();
 module.exports = router;
 
 router.use('/tasks', require('./tasks'));
-router.use('/api/users', require('./users'));
-router.use('/cart', require('./users'));
-
-
-
+router.use('/users', require('./users'));
 
 // Make sure this is after all of
 // the registered routes!
