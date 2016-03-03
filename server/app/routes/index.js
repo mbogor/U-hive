@@ -4,7 +4,7 @@ module.exports = router;
 
 router.use('/tasks', require('./tasks'));
 router.use('/api/users', require('./users'));
-
+router.use('/cart', require('./users'));
 
 
 
