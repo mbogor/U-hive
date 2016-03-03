@@ -89,7 +89,7 @@ describe('Task model', function () {
             })
              .then(function(task) {
                     gardeningTask = task;
-                    console.log('task: ', gardeningTask)
+
                     done()
                 }, done)
     			

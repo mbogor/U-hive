@@ -213,7 +213,7 @@ describe('User model', function () {
         beforeEach(function(done){
             Promise.all([Task.create(task1),Task.create(task2)])
             .spread(function(t1, t2){
-                console.log('t1', t1, 't2', t2)
+
                 done();
             })
             .then(null, done)
