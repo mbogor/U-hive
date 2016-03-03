@@ -5,6 +5,5 @@ console.log("hello");
 require('./user');
 require('./cart');
 require('./college');
-require('./location');
 require('./reviews');
 require('./tasks');
