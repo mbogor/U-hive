@@ -16,6 +16,7 @@ var ensureAuthenticated = function (req, res, next) {
 };
 
 router.use('/', function(req, res, next) {
+    // res.sendStatus(200);
     User.find({})
     .then(function(users){
         res.json(users);
@@ -23,7 +24,7 @@ router.use('/', function(req, res, next) {
     .then(null, next);
 })
 
-router.user('/:userId', function(req, res, next) {
+router.use('/:userId', function(req, res, next) {
     User.findById(req.params.userId)
     .then(function(user){
         res.json(user)
@@ -41,7 +42,7 @@ router.post('/', function(req, res, next) {
 
 router.put('/:userId', function(req, res, next){
     //can we check on findByIdAndUpdate and any extra validation that might be necessary?
-    User.findByIdAndUpdate(req.params.userId, 
+    User.findByIdAndUpdate(req.params.userId,
         {$set: req.body},
         {new: true}
     )
