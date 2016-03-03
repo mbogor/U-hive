@@ -6,8 +6,6 @@ var Promise = require('bluebird');
 var Review = mongoose.model('Review');
 module.exports = router;
 
-// Think about this?!?!?!!
-
 router.param('id', function(req, res, next){
   Review.findById(req.params.id)
   .then(function(review){
@@ -17,44 +15,36 @@ router.param('id', function(req, res, next){
   .then(null, next);
 })
 
-// get all tasks
-router.get('/', function(req, res, next){
-  Task.find({})
-  .then(function(tasks){
-    res.json(tasks);
-  })
-  .then(null, next)
-})
-
-//get one by id
+// get one review by id
 router.get('/:id', function(req, res, next){
-  res.json(req.task)
+  res.json(req.review)
 });
 
-// post one task
+// post one review
 router.post('/', function(req, res, next){
-  Task.create(req.body)
-  .then(function(newTask){
-    res.json(newTask);
+  Review.create(req.body)
+  .then(function(newReview){
+    res.json(newReview);
   })
   .then(null, next);
 });
 
-// update a task
+// update a review
 router.put('/:id', function(req, res, next){
-  req.task.set(req.body); //set is synchronous!!! look out for extra fields on req.body
-  req.task.save()
-  .then(function(updatedT){
-    res.json(updatedT);
+  req.review.set(req.body); 
+  req.review.save()
+  .then(function(updatedReview){
+    res.json(updatedReview);
   })
   .then(null, next);
 })
 
-// delete task by id
+// delete review by id
 router.delete('/:id', function(req, res, next){
-  req.task.remove()
+  req.review.remove()
   .then(function(){
     res.sendStatus(204)
   })
   .then(null, next);
 })
+
