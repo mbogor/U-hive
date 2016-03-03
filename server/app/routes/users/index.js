@@ -36,7 +36,6 @@ router.get('/:id', function(req, res, next) {
 })
 
 router.post('/', function(req, res, next) {
-    console.log('hehe');
     User.create(req.body)
     .then(function(user) {
         res.status(201).json(user)
