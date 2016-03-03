@@ -21,147 +21,94 @@ var mongoose = require('mongoose');
 var Promise = require('bluebird');
 var moment = require('moment');
 var chalk = require('chalk');
+var chance = require('chance');
 var _ = require('lodash');
+var db;
+
 var connectToDb = require('./server/db');
 
-var User = Promise.promisifyAll(mongoose.model('User'));
-var Task = Promise.promisifyAll(mongoose.model('Task'));
+var categories = ['food', 'tutoring', 'delivery', 'moving', 'cleaning', 'other'];
 
-var modelsHash = {
-    "User": User,
-    "Task": Task
-}
+var colleges = [{name: 'NYU', location: 'New York City, NY', streetAddress: '123 N West St', zipCode:12345},
+    {name: 'Columbia', location: 'New York City, NY', streetAddress: '456 N North St', zipCode:12345},
+    {name: 'Hunter', location: 'New York City, NY', streetAddress: '789 N West St', zipCode:12345}];
 
-var seed = {
+var userArr = [];
 
-    User: [
-        { name: 'Obama', email: 'obama@gmail.com', uComb: 9000, password: 'potus'},
-        { name: 'Clinton', email: 'clinton@gmail.com', uComb: 2000, password: 'bill'},
-        { name: 'Rubio', email: 'rubio@gmail.com', uComb: 500, password: 'secondchoice'},
-        { name: 'O\'Mally', email: 'omally@gmail.com', uComb: 20, password: 'who'},
-        { name: 'Sanders', email: 'sanders@gmail.com', uComb: 400, password: 'democrat'},
-        { name: 'Trump', email: 'trump@gmail.com', uComb: -40, password: 'moneyrules'},
-        { name: 'BusyBee', email: 'busybee@gmail.com', uComb: 1000000, isAdmin: true, password: 'buzz'}
-    ],
-    Task: [
-        {   name:'clean your room', 
-            price:30, 
-            date: moment().add(7, 'days').calendar(), 
-            description:"second best task ever", 
-            forSaleOrWanted:"forsale", 
-            completed:true
-        },
-        {   name:'bring cookies', 
-            price:10, 
-            date: moment().add(3, 'days').calendar(), 
-            description:"please make me 1 dozen nice cookies", 
-            forSaleOrWanted:"wanted", 
-            completed:false
-        },
-        {   name:'ride home', 
-            price:30, 
-            date: moment().add(14, 'days').calendar(), 
-            description:"pick me up from JFK, take me to Williamsburg", 
-            forSaleOrWanted:"wanted", 
-            completed:false
-        },
-        {   name:'grocery shopping', 
-            price:15, 
-            date: moment().add(0.5, 'days').calendar(), 
-            description:"I need eggs and milk", 
-            forSaleOrWanted:"wanted", 
-            completed:false
-        },
-        {   name:'Computer help', 
-            price:30, 
-            date: moment().add(7, 'days').calendar(), 
-            description:"I can fix your computer", 
-            forSaleOrWanted:"forsale", 
-            completed:false
-        },
-        {   name:'Computer help', 
-            price:30, 
-            date: moment().subtract(7, 'days').calendar(), 
-            description:"I can fix your computer", 
-            forSaleOrWanted:"forsale", 
-            completed:true
-        },
-    ]
+var taskArr = [];
 
-    // Category: [{}],
+function randPhoto(){
+    var g = chance.pick(['men', 'women']);
+    var n = _.random(0,96)
+    return 'http://api.randomuser.me/portraits/thumb/' + g + '/' + n + '.jpg';
+};
+
+function makeColleges(){
+    var collegeArr = [];
+    collegeArr.forEach(function(col){
+        collegeArr.push(new College(col));
+    });
+    return collegeArr;
+};
+
+function makeUsers(){
+    return new User({
+        name: [chance.first(), chance.last()].join(' '),
+        email: chance.email(),
+        password: chance.word(),
+        uComb: _.random(10,500),
+        photo: randPhoto(),
+        isAdmin: chance.weighted([true, false], [5,95]),
+        phone: chance.phone()
+    });
+};
+
+function makeTasks(){
+    return new Task({
+        name: chance.sentence({words: _.random(3,15)}),
+        category: categories[_.random(0,categories.length-1)],
+        price: _.random(10,100),
+        description: chance.sentence({words: _.random(15,40)}),
+        imageUrl: 'http://lorempixel.com/400/200/',
+        date: chance.date({year: 2016}),
+        restrictedByCampus: chance.weighted([true, false], [50,50]),
+        completed: false,
+        purchased: chance.weighted([true, false], [50,50]),
+        forSaleOrWanted: chance.weighted(['forsale', 'wanted'], [50,50]),
+    });
+};
+function addSellerToTasks(){
 
 };
+
+function addCollegeToUsers(){
+
+};
+
+function generateAll () {
+    var users = _.times(15, makeUsers);
+    users.push(new User({
+        name: 'Busy Bees',
+        email: 'bb@gmail.com',
+        password: 'buzz',
+        uComb: _.random(10,500),
+        photo: randPhoto(),
+        isAdmin: false,
+        phone: chance.phone()
+    }));
+    var tasks = _.times(40, makeTasks);
+}
 
 connectToDb.then(function() {
     mongoose.connection.db.dropDatabase(function() {
         console.log('Dropped old data, now inserting new data');
-        Promise.map(Object.keys(seed), function(modelName) {
 
-            return Promise.map(seed[modelName], function(item) {
+        return seed();
 
-                return modelsHash[modelName].create(item)
-                .then(null, console.log);
-            });
-        }).then(function() {
-            console.log("Finished inserting data");
-            }, console.log).then(function() {
-            mongoose.connection.close()
-       });
+
+    })
+    .then(function(){
+        console.log('Done inserting data!');
+        mongoose.connection.close()
     })
 });
-
-
-            // if(modelName==='Task'){
-            //     // console.log('seed tasks', seed.Task[0].date);
-            //     getAllUsers()
-            //     .then(function(uIds){
-            //         console.log('arr of uids', uIds)
-            //         assignTasks(uIds)
-            //     })
-            // }
-function getAllUsers(){
-    var userIds = [];
-    return mongoose.model('User').find({})
-    .then(function(users){
-        users.forEach(function(user){
-            userIds.push(user._id);
-        })
-        return userIds;
-    })
-
-
-}
-
-function assignTasks(uId){
-    seed.Task.forEach(function(task){
-        task.seller = _.sample(uId);
-    });
-    console.log(seed.Task[1]);
-}
-
-// mongoose.connection.on('open', function() {
-//  mongoose.connection.db.dropDatabase(function() {
-
-//    console.log("Dropped old data, now inserting data");
-
-//  });
-// });
-
-// connectToDb.then(function () {
-//     User.findAsync({}).then(function (users) {
-//         if (users.length === 0) {
-//             return seedUsers();
-//         } else {
-//             console.log(chalk.magenta('Seems to already be user data, exiting!'));
-//             process.kill(0);
-//         }
-//     }).then(function () {
-//         console.log(chalk.green('Seed successful!'));
-//         process.kill(0);
-//     }).catch(function (err) {
-//         console.error(err);
-//         process.kill(1);
-//     });
-// });
-
-// var collegeNames = [{name: 'NYU', location: {_nycId}, streetAddress: 132 some St, zipCode: 10101},'CUNY Hunter', 'Columbia','Fordham', 'Manhattan CC', 'Brooklyn College','Grace Hopper Academy']

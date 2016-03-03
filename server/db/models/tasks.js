@@ -7,9 +7,9 @@ var taskSchema = new mongoose.Schema({
         required: true
     },
     category: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Category',
-        required: true
+        type: [String],
+        required: true,
+        enum: ['food', 'tutoring', 'delivery', 'moving', 'cleaning', 'other']
     }],
     price: {
         type: Number,
