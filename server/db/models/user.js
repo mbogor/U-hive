@@ -57,7 +57,29 @@ var schema = new mongoose.Schema({
 });
 
 
-//STATIC METHODS
+//STATICS & METHODS
+
+schema.statics.top10Users = function() {
+    var usersAndAvgRatings = []
+    return this.find({})
+    .then(function(users){
+        Promise.map(users, function(user){
+            var userScore = user.getAggregateScore();
+            usersAndAvgRatings.push(
+                {"user": user, 
+                "aggregateScore": userScore
+            });
+        })
+        return usersAndAvgRatings;
+    })
+    .then(function(usersAndAvgRatingsArr){
+        var sortedUsers = usersAndAvgRatingsArr.sort(function(a,b){
+            return b.aggregateScore - a.aggregateScore;
+        })
+        return sortedUsers.slice(0,10)
+    })
+}
+
 schema.methods.getCompletedTasks = function() {
     return mongoose.model('Task').find({seller: this._id, completed: true});
 }
@@ -77,6 +99,7 @@ schema.methods.getAggregateScore = function() {
         return sum/reviews.length;
     })
 }
+
 
 // generateSalt, encryptPassword and the pre 'save' and 'correctPassword' operations
 // are all used for local authentication security.
