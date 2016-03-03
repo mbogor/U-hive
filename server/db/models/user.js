@@ -57,7 +57,40 @@ var schema = new mongoose.Schema({
 });
 
 
-//STATIC METHODS
+//STATICS & METHODS
+
+schema.statics.top10Users = function() {
+    var usersAndAvgRatings = []
+    return this.find({})
+    .then(function(users){
+        Promise.map(users, function(user){
+            var userScore = user.getAggregateScore();
+            usersAndAvgRatings.push(
+                {"user": user, 
+                "aggregateScore": userScore
+            });
+        })
+        return usersAndAvgRatings;
+    })
+    .then(function(usersAndAvgRatingsArr){
+        var sortedUsers = usersAndAvgRatingsArr.sort(function(a,b){
+            return b.aggregateScore - a.aggregateScore;
+        })
+        return sortedUsers.slice(0,10)
+    })
+}
+
+schema.methods.getAggregateScore = function() {
+
+    return Reviews.find({reviewee: this._id})
+    .then(function(reviews) {
+        var sum = reviews.rating.reduce(function(initial, curr) {
+            return initial + curr;
+        })
+        return sum/reviews.length;
+    })
+}
+
 schema.methods.getCompletedTasks = function() {
     return mongoose.model('Task').find({seller: this._id, completed: true});
 }
@@ -67,16 +100,6 @@ schema.methods.sanitize =  function () {
     return _.omit(this.toJSON(), ['password', 'salt']);
 };
 
-schema.methods.getAggregateScore = function() {
-
-    return Reviews.find({reviewee: this._id})
-    .then(function(reviews) {
-        var sum = reviews.reduce(function(initial, curr) {
-            return initial + curr;
-        })
-        return sum/reviews.length;
-    })
-}
 
 // generateSalt, encryptPassword and the pre 'save' and 'correctPassword' operations
 // are all used for local authentication security.
