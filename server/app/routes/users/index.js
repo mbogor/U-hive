@@ -23,7 +23,7 @@ router.param('id', function(req, res, next){
     .then(null, next);
 });
 
-router.use('/', function(req, res, next) {
+router.get('/', function(req, res, next) {
     User.find({})
     .then(function(users){
         res.json(users);
@@ -31,7 +31,7 @@ router.use('/', function(req, res, next) {
     .then(null, next);
 })
 
-router.use('/:id', function(req, res, next) {
+router.get('/:id', function(req, res, next) {
     res.json(req.reqUser);
 })
 
