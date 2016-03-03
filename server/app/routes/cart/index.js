@@ -15,7 +15,7 @@ router.param('id', function(req, res, next){
   .then(null, next);
 })
 
-//get a cart 
+//get a cart
 router.get('/:id', function(req, res, next){
   res.json(req.cart)
 });
@@ -35,9 +35,9 @@ router.put('/:id/:taskId', function(req, res, next){
   // assumes req.body is includes only the updated fields from an update/edit form
   req.cart.set(req.body.taskId);
   req.cart.save()
-  .then(function(updatedCart)) {
+  .then(function(updatedCart) {
     res.json(updatedCart);
-  }
+  })
 })
 
 // delete a cart by id
