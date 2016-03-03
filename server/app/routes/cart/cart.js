@@ -15,7 +15,7 @@ router.param('id', function(req, res, next){
   .then(null, next);
 })
 
-//get one cart 
+//get a cart 
 router.get('/:cartId', function(req, res, next){
   res.json(req.cart)
 });
@@ -49,11 +49,3 @@ router.delete('/:cartId', function(req, res, next){
   .then(null, next);
 })
 
-// delete a task in a cart by id
-router.delete('/cart/:id', function(req, res, next){
-  req.task.remove()
-  .then(function(){
-    res.sendStatus(204)
-  })
-  .then(null, next);
-})
