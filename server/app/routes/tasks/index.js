@@ -10,9 +10,9 @@ router.param('id', function(req, res, next){
   Task.findById(req.params.id)
   .then(function(t){
     req.task = t;
+    next();
   })
   .then(null, next);
-  next();
 })
 
 // get all tasks
@@ -31,8 +31,6 @@ router.get('/:id', function(req, res, next){
 
 // post one task
 router.post('/', function(req, res, next){
-  // assumes req.body has all the required fields from a new-task form
-  // req.body = {name, category, price ... etc}
   Task.create(req.body)
   .then(function(newTask){
     res.json(newTask);
@@ -42,11 +40,12 @@ router.post('/', function(req, res, next){
 
 // update a task
 router.put('/:id', function(req, res, next){
-  // assumes req.body is includes only the updated fields from an update/edit form
-  req.task.update({$set: req.body}, {new: true})
+  req.task.set(req.body); //set is synchronous!!! look out for extra fields on req.body
+  req.task.save()
   .then(function(updatedT){
     res.json(updatedT);
   })
+  .then(null, next);
 })
 
 // delete task by id
