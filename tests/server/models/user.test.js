@@ -171,19 +171,19 @@ describe('User model', function () {
     describe('methods & statics', function(){
         var user1 = { name: 'Obama', email: 'obama@gmail.com'};
         var task1 = {
-                    name:'save the country', 
-                    price:30, 
-                    date: new Date(), 
-                    description:"best task ever", 
-                    forSaleOrWanted:"forsale", 
+                    name:'save the country',
+                    price:30,
+                    date: new Date(),
+                    description:"best task ever",
+                    forSaleOrWanted:"forsale",
                     completed:false
                 };
         var task2 = {
-            name:'another', 
-            price:3000, 
-            date:new Date() -1000*60*60*24*7, 
-            description:"second best task ever", 
-            forSaleOrWanted:"forsale", 
+            name:'another',
+            price:3000,
+            date:new Date() -1000*60*60*24*7,
+            description:"second best task ever",
+            forSaleOrWanted:"forsale",
             completed:true
         };
         var sellerG;

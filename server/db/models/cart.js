@@ -14,11 +14,11 @@ var cartSchema = new mongoose.Schema({
 
 //cartTotal will be passed in from the front end so that we don't need to calculate the cart total here
 
-// sballan I think you should calculate it on the back end too for validation purposes  
+// sballan I think you should calculate it on the back end too for validation purposes
 cartSchema.methods.processCheckout = function(cartTotal) {
   var cart = this;
-  
-  // sballan by this point buyer should probably be available to you, either via the session object or previous population  
+
+  // sballan by this point buyer should probably be available to you, either via the session object or previous population
   mongoose.model('User').findById(this.buyer)
   .then(function(buyer){
     if (buyer.uComb < cartTotal) { throw  new Error('You do not have enough credit.');}
@@ -44,6 +44,8 @@ cartSchema.methods.processCheckout = function(cartTotal) {
   }
 
   //returns a promise for the updated seller
+
+  // sballan This functions should take money away from one and give money to the other; Both halves!
   function processPayment(task){
     return mongoose.model('User').findById(task.seller)
     .then(function(seller){

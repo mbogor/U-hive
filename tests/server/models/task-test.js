@@ -6,7 +6,7 @@ var expect = require('chai').expect;
 var mongoose = require('mongoose');
 
 // Require in all models.
- 
+
 require('../../../server/db/models');
 
 var Task = mongoose.model('Task');
@@ -29,12 +29,12 @@ describe('Task model', function () {
     describe('Validations', function() {
     	var task;
     	beforeEach(function() {
-    	//sballan sync/async?
     		task = new Task();
     	})
 
     	it ('errors without a name', function(done) {
-    		task.validate(function() {
+    		task.validate(function(err) {
+                expect(err.error).to.be.an.object
     		// sballan  not technically checking for an error.
     			expect(task.name).to.be.undefined
     			done();
@@ -68,7 +68,7 @@ describe('Task model', function () {
     	it ('errors without a date', function(done) {
     		task.validate(function() {
     		// sballan  not technically checking for an error.
-    		
+
     			expect(task.date).to.be.undefined
     			done();
     		})
@@ -86,18 +86,18 @@ describe('Task model', function () {
 	describe('Success', function() {
         var gardeningTask;
 		beforeEach(function(done) {
-    		 Task.create({name: 'garden', 
-                // category: ['plantlife', 'nature'], 
-                price: 200, 
-                description: 'plant a tree', 
-                date: new Date(2040, 11, 17, 3, 24, 0), 
+    		 Task.create({name: 'garden',
+                // category: ['plantlife', 'nature'],
+                price: 200,
+                description: 'plant a tree',
+                date: new Date(2040, 11, 17, 3, 24, 0),
                 forSaleOrWanted: 'for sale'})
 
     			.then(function(task) {
                     gardeningTask = task;
                     done()
                 }, done)
-    			
+
     	})
 
     	it ('successfully creates a task', function(done) {

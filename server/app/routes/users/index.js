@@ -15,6 +15,8 @@ var ensureAuthenticated = function (req, res, next) {
     }
 };
 
+// sballan If you decide to use the 'params', be careful not to attach the user to req.user, since this field will be used by passport.  Perhaps conisder req.reqUser
+
 // sballan This should be get, not use, otherwise you post('/') will never get hit.
 router.use('/', function(req, res, next) {
     User.find({})
@@ -25,6 +27,8 @@ router.use('/', function(req, res, next) {
 })
 
 // sballan router.user? I thnk this should be get().
+
+// sballan Also - this can be /id, doesn't need to be /userId
 router.user('/:userId', function(req, res, next) {
     User.findById(req.params.userId)
     .then(function(user){
@@ -43,7 +47,9 @@ router.post('/', function(req, res, next) {
 
 router.put('/:userId', function(req, res, next){
     //can we check on findByIdAndUpdate and any extra validation that might be necessary?
-    User.findByIdAndUpdate(req.params.userId, 
+
+    // sballan Be aware that this will not hit any hooks/validation. Consider calling set() on an already gotten user object.
+    User.findByIdAndUpdate(req.params.userId,
         {$set: req.body},
         {new: true}
     )

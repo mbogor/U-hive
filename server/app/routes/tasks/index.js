@@ -43,10 +43,17 @@ router.post('/tasks', function(req, res, next){
 // update a task
 router.put('/tasks/:id', function(req, res, next){
   // assumes req.body is includes only the updated fields from an update/edit form
+
+  /*  sballan This is a useful way to do 'update' on an instance
+    req.task.set(req.body)
+    req.task.save()
+  */
+
   req.task.update({$set: req.body}, {new: true})
   .then(function(updatedT){
     res.json(updatedT);
   })
+  // sballan Add some error handling yo
 })
 
 // delete task by id
