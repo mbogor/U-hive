@@ -5,54 +5,47 @@ var mongoose = require('mongoose');
 var Promise = require('bluebird');
 module.exports = router;
 
+
 router.param('id', function(req, res, next){
   mongoose.model('Cart').findById(req.params.id)
-  .then(function(t){
-    req.task = t;
+  .then(function(cart){
+    req.cart = cart;
     next()
   })
   .then(null, next);
 })
 
-// get / empty or otherwise
-
-// put /post add task to cart
-
-// delete item - remove items
-// delete the full cart
-
-
-
-//get one cart by id
-router.get('/cart/:cartId', function(req, res, next){
-  res.json(req.task)
+//get a cart
+router.get('/:id', function(req, res, next){
+  res.json(req.cart)
 });
 
-// post one task
-router.post('/cart/:taskId', function(req, res, next){
-  // assumes req.body has all the required fields from a new-task form
-  // req.body = {name, category, price ... etc}
-  mongoose.model('Task').create(req.body)
-  .then(function(newTask){
-    res.json(newTask);
+// post a new cart
+router.post('/', function(req, res, next){
+  // req.body = {buyer, tasks, etc}
+  mongoose.model('Cart').create(req.body)
+  .then(function(newCart){
+    res.json(newCart);
   })
   .then(null, next);
 });
 
-// update a task
-router.put('/tasks/:id', function(req, res, next){
+// update a cart by adding a task
+router.put('/:id/:taskId', function(req, res, next){
   // assumes req.body is includes only the updated fields from an update/edit form
-  req.task.update({$set: req.body}, {new: true})
-  .then(function(updatedT){
-    res.json(updatedT);
+  req.cart.set(req.body.taskId);
+  req.cart.save()
+  .then(function(updatedCart) {
+    res.json(updatedCart);
   })
 })
 
-// delete cart by id
-router.delete('/cart/:id', function(req, res, next){
-  req.task.remove()
+// delete a cart by id
+router.delete('/:id', function(req, res, next){
+  req.cart.remove()
   .then(function(){
     res.sendStatus(204)
   })
   .then(null, next);
 })
+

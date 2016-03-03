@@ -6,7 +6,7 @@ var expect = require('chai').expect;
 var mongoose = require('mongoose');
 
 // Require in all models.
- 
+
 require('../../../server/db/models');
 
 var Task = mongoose.model('Task');
@@ -78,19 +78,38 @@ describe('Task model', function () {
 	describe('Success', function() {
         var gardeningTask;
 		beforeEach(function(done) {
-    		 Task.create({name: 'garden', 
-                // category: ['plantlife', 'nature'], 
-                price: 200, 
-                description: 'plant a tree', 
-                date: new Date(2040, 11, 17, 3, 24, 0), 
-                forSaleOrWanted: 'for sale'})
-
+    		 Task.create({name: 'garden',
+                category: ['cleaning', 'other'],
+                price: 200,
+                description: 'plant a tree',
+                dateOffered: new Date(2040, 11, 17, 3, 24, 0),
+                forSaleOrWanted: 'forsale'})
     			.then(function(task) {
                     gardeningTask = task;
                     done()
                 }, done)
-    			
-    	})
+
+    	});
+        beforeEach(function(done){
+            Promise.all([
+                Task.create({name: 'pack for u',
+                    category: ['moving'],
+                    price: 200,
+                    description: 'plant a tree',
+                    dateOffered: new Date(2040, 11, 17, 3, 24, 0),
+                    datePosted: new Date(2016, 1, 2),
+                    forSaleOrWanted: 'forsale'}),
+                Task.create({name: 'garden',
+                    category: ['tutoring', 'other'],
+                    price: 200,
+                    description: 'plant a tree',
+                    dateOffered: new Date(2040, 11, 17, 3, 24, 0),
+                    forSaleOrWanted: 'forsale'})
+                ])
+            .then(function(){
+                done()
+            })
+        })
 
     	it ('successfully creates a task', function(done) {
 
@@ -119,6 +138,24 @@ describe('Task model', function () {
             // })
             // .then(null, done)
     	})
+        describe('methods and statics', function(){
+            describe('newPosts', function(){
+                it('should get all posts 1 week old or less',function(){
+                    Task.newPosts()
+                    .then(function(tasks){
+                        expect(tasks.length).to.equal(2);
+                    })
+                });
+            })
+            describe('findSimilar', function(){
+                it('should get any tasks with a matching category', function(){
+                    gardeningTask.findSimilar()
+                    .then(function(tasks){
+                        expect(tasks.length).to.equal(1);
+                    })
+                })
+            })
+        })
+    });
 
-    })
 })

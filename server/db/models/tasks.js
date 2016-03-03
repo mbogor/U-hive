@@ -1,16 +1,18 @@
 'use strict';
 var mongoose = require('mongoose');
+var Promise = require('bluebird');
+var moment = require('moment');
 
 var taskSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true
     },
-    category: [{
+    category: {
         type: [String],
         required: true,
         enum: ['food', 'tutoring', 'delivery', 'moving', 'cleaning', 'other']
-    }],
+    },
     price: {
         type: Number,
         default: 0,
@@ -24,9 +26,13 @@ var taskSchema = new mongoose.Schema({
         type: String,
         default: '/default-image.png'
     },
-    date: {
+    dateOffered: {
         type: Date,
         required: true
+    },
+    datePosted: {
+        type: Date,
+        default: new Date()
     },
     seller: {
         type: mongoose.Schema.Types.ObjectId,
@@ -51,4 +57,38 @@ var taskSchema = new mongoose.Schema({
     }
 });
 
+taskSchema.methods.findSimilar = function() {
+    return Task.find({category: {$in: this.category}, _id: {$ne: this._id}}).exec();
+}
+
+taskSchema.statics.findPriceRange = function(min, max){
+    if(min < 0) min = 0;
+    if(min >= max) max = min;
+    return Task.find({price: {$gte: min, $lte: max}}).exec();
+}
+
+taskSchema.statics.getAllForSale = function(){
+    return Task.find({forSaleOrWanted: 'forsale'}).exec();
+}
+
+taskSchema.statics.getAllWanted = function(){
+    return Task.find({forSaleOrWanted: 'wanted'}).exec();
+}
+
+taskSchema.statics.newPosts = function(){
+    var lastWeek = moment().subtract(7, 'days');
+    return Task.find()
+    .then(function(tasks){
+        return Promise.filter(tasks, function(t){
+            if(t.datePosted >= lastWeek) return t;
+        });
+    })
+}
+
+taskSchema.statics.clearOutDate = function(){
+    return Task.remove({dateOffered: {$lte: Date.now()}}).exec()
+}
+
 mongoose.model('Task', taskSchema);
+
+var Task = mongoose.model('Task');
