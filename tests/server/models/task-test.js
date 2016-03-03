@@ -29,11 +29,13 @@ describe('Task model', function () {
     describe('Validations', function() {
     	var task;
     	beforeEach(function() {
+    	//sballan sync/async?
     		task = new Task();
     	})
 
     	it ('errors without a name', function(done) {
     		task.validate(function() {
+    		// sballan  not technically checking for an error.
     			expect(task.name).to.be.undefined
     			done();
     		})
@@ -41,6 +43,7 @@ describe('Task model', function () {
 
     	it ('errors without a category', function(done) {
     		task.validate(function() {
+    		// sballan  not technically checking for an error.
     			expect(task.category).to.be.empty
     			done();
     		})
@@ -48,6 +51,7 @@ describe('Task model', function () {
 
     	it ('errors without a price', function(done) {
     		task.validate(function() {
+    		// sballan  not technically checking for an error.
     			expect(task.price).to.equal(0)
     			done();
     		})
@@ -55,6 +59,7 @@ describe('Task model', function () {
 
     	it ('errors without a description', function(done) {
     		task.validate(function() {
+    		// sballan  not technically checking for an error.
     			expect(task.description).to.be.undefined
     			done();
     		})
@@ -62,6 +67,8 @@ describe('Task model', function () {
 
     	it ('errors without a date', function(done) {
     		task.validate(function() {
+    		// sballan  not technically checking for an error.
+    		
     			expect(task.date).to.be.undefined
     			done();
     		})
@@ -69,6 +76,7 @@ describe('Task model', function () {
 
     	it ('errors without a forSaleOrWanted', function(done) {
     		task.validate(function() {
+    		// sballan  not technically checking for an error.
     			expect(task.forSaleOrWanted).to.be.undefined
     			done();
     		})

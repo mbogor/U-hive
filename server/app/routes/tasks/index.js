@@ -11,6 +11,7 @@ router.param('id', function(req, res, next){
     req.task = t;
   })
   .then(null, next);
+  // sballan Genuinely curious - under what conditions is this next() called?
   next();
 })
 

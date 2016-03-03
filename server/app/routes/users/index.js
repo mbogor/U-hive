@@ -15,6 +15,7 @@ var ensureAuthenticated = function (req, res, next) {
     }
 };
 
+// sballan This should be get, not use, otherwise you post('/') will never get hit.
 router.use('/', function(req, res, next) {
     User.find({})
     .then(function(users){
@@ -23,6 +24,7 @@ router.use('/', function(req, res, next) {
     .then(null, next);
 })
 
+// sballan router.user? I thnk this should be get().
 router.user('/:userId', function(req, res, next) {
     User.findById(req.params.userId)
     .then(function(user){
@@ -67,6 +69,7 @@ router.delete('/:userId', function(req, res, next){
 // })
 
 
+// sballan Fun route?
 router.get('/secret-stash', ensureAuthenticated, function (req, res) {
 
     var theStash = [

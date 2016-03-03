@@ -24,6 +24,7 @@ var taskSchema = new mongoose.Schema({
         type: String,
         default: '/default-image.png'
     },
+    // sballan Due date? date of transaction?
     date: {
         type: Date,
         required: true

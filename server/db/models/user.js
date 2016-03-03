@@ -78,6 +78,8 @@ schema.methods.getAggregateScore = function() {
     })
 }
 
+// sballan maybe some statics for getting things like most popular seller or most popular buyer  
+
 // generateSalt, encryptPassword and the pre 'save' and 'correctPassword' operations
 // are all used for local authentication security.
 var generateSalt = function () {
