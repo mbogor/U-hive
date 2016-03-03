@@ -17,13 +17,19 @@ name in the environment files.
 
 */
 
+//reminder to delete the location and category models
+
 var mongoose = require('mongoose');
 var Promise = require('bluebird');
 var moment = require('moment');
 var chalk = require('chalk');
-var chance = require('chance');
+var chance = require('chance')(12345);
 var _ = require('lodash');
-var db;
+var User = require('./server/db/models/user');
+var Task = require('./server/db/models/tasks'); 
+var Review = require('./server/db/models/reviews');
+var Cart = ('./server/db/models/cart');
+var College = require('./server/db/models/college');
 
 var connectToDb = require('./server/db');
 
@@ -53,6 +59,7 @@ function makeColleges(){
 
 function makeUsers(){
     return new User({
+        //college: reference to College
         name: [chance.first(), chance.last()].join(' '),
         email: chance.email(),
         password: chance.word(),
@@ -65,6 +72,7 @@ function makeUsers(){
 
 function makeTasks(){
     return new Task({
+        //seller: reference to User
         name: chance.sentence({words: _.random(3,15)}),
         category: categories[_.random(0,categories.length-1)],
         price: _.random(10,100),
@@ -77,12 +85,76 @@ function makeTasks(){
         forSaleOrWanted: chance.weighted(['forsale', 'wanted'], [50,50]),
     });
 };
-function addSellerToTasks(){
 
+function makeReviews() { 
+    return new Review ({
+    //reviewee: reference to User
+    //reviewer: reference to User
+    //task: reference to Task
+    text: chance.sentence({words: _.random(15, 40)}),
+    rating: _.random(1,5),
+    reviewBy: chance.weighted(['Buyer', 'Seller'], [50,50])
+    })
 };
 
-function addCollegeToUsers(){
+function makeCarts() {
+    return new Cart ({
+    //buyer: reference to User
+    //tasks: [reference to Task]
+    timeCreated: chance.date({month: _.random(0,3), year: 2016}),
+    processed: chance.weighted([true, false], [10,90])  
+    })
+}
 
+function addCollegeToUser(user){
+    return College.find({})
+    .then(function(colleges){
+        var randCollege = _.sample(colleges);
+        user.college = randCollege;
+        return user.save();
+    })
+};
+
+function addSellerToTask(task){
+    return User.find({})
+    .then(function(users){
+        var randUser = _.sample(users);
+        task.seller = randUser;
+        return task.save();
+    })
+};
+
+function addRevieweeReviewerAndTaskToReview(review){
+    return Promise.all([
+        User.find({}),
+        Task.find({})
+        ])
+        .spread(function(users, tasks){
+            var randPeople = _.sample(users, 2);
+            var randReviewee = randPeople[0];
+            var randReviewer = randPeople[1];
+            var randTask = _.sample(tasks);
+
+            review.reviewee = randReviewee;
+            review.reviewer = randReviewer;
+            review.task = randTask;
+            return review.save();
+        })
+};
+
+function addBuyerAndTasksToCart(cart) {
+    return Promise.all([
+        User.find({}),
+        Task.find({}) ///we don't want a task where the task's seller is the cart's buyer
+        ])
+        .spread(function(users, tasks) {
+            var randUser = _.sample(users);
+            var randTasks = _.sample(tasks, _.random(1,4));
+
+            cart.buyer = randUser;
+            cart.tasks = randTasks;
+            return cart.save();
+        })
 };
 
 function generateAll () {
@@ -93,22 +165,39 @@ function generateAll () {
         password: 'buzz',
         uComb: _.random(10,500),
         photo: randPhoto(),
-        isAdmin: false,
+        isAdmin: true,
         phone: chance.phone()
     }));
-    var tasks = _.times(40, makeTasks);
+    var tasks = _.times(20, makeTasks);
+    var reviews = _.times(5, makeReviews);
+    var carts = _.times(5, makeCarts);
+    return users.concat(tasks).concat(reviews).concat(carts);
+}
+
+function seed() {
+    var docs = generateAll();
+    return Promise.map(docs, function(doc){
+        if(doc.constructor == 'User') {console.log('USER!'); return addCollegeToUser(doc); }
+        else if (doc.constructor == 'Task') return addSellerToTask(doc);
+        else if (doc.constructor == 'Review') return addRevieweeReviewerAndTaskToReview(doc);
+        else if (doc.constructor == 'Cart') return addBuyerAndTasksToCart(doc)
+        else console.log('AHHHH!')
+    })
+    .then(null, function(err){
+        console.log('err here', err)
+    });
 }
 
 connectToDb.then(function() {
     mongoose.connection.db.dropDatabase(function() {
         console.log('Dropped old data, now inserting new data');
-
         return seed();
-
-
     })
     .then(function(){
         console.log('Done inserting data!');
         mongoose.connection.close()
     })
+    // .catch(function(err){
+    //     console.error(err)
+    // })
 });
