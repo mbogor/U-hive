@@ -167,8 +167,8 @@ function generateAll () {
         isAdmin: true,
         phone: chance.phone()
     }));
-    var tasks = _.times(20, makeTasks);
-    var reviews = _.times(5, makeReviews);
+    var tasks = _.times(40, makeTasks);
+    var reviews = _.times(40, makeReviews);
     var carts = _.times(5, makeCarts);
     // console.log(colleges)
     return users.concat(tasks).concat(reviews).concat(carts).concat(colleges)

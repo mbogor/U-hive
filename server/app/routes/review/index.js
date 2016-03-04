@@ -15,6 +15,15 @@ router.param('id', function(req, res, next){
   .then(null, next);
 })
 
+// get all reviews
+router.get('/', function(req, res, next){
+  Review.find({})
+  .then(function(reviews) {
+    res.json(reviews)
+  })
+  .then(null, next);
+});
+
 // get one review by id
 router.get('/:id', function(req, res, next){
   res.json(req.review)
