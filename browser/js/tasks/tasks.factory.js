@@ -10,6 +10,13 @@ app.factory('TaskFactory', function($http){
     });
   };
 
+  TaskFactory.getForSaleByUser = function(userId) {
+  	return $http.get('/api/tasks/forsale/' + userId) 
+    .then(function(res){
+      return res.data;
+    });
+  };
+
   return TaskFactory;
 
 });

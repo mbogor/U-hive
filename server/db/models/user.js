@@ -2,6 +2,7 @@
 var crypto = require('crypto');
 var mongoose = require('mongoose');
 var _ = require('lodash');
+
 // var Score = require('Score')
 
 var schema = new mongoose.Schema({
@@ -82,14 +83,30 @@ schema.statics.top10Users = function() {
 
 schema.methods.getAggregateScore = function() {
 
-    return Reviews.find({reviewee: this._id})
+    return mongoose.model('Review').find({reviewee: this._id})
     .then(function(reviews) {
-        var sum = reviews.rating.reduce(function(initial, curr) {
-            return initial + curr;
-        })
-        return sum/reviews.length;
+        // console.log('agg score reviews', reviews)
+        if(!reviews.length) return 'User hasn\'t been reviewed yet'
+        var sum = reviews.reduce(function(accum, elem) {
+            return accum + elem.rating;
+        }, 0)
+
+        return sum/(reviews.length);
     })
 }
+
+schema.methods.getReviews = function() {
+
+    return mongoose.model('Review').find({reviewee: this._id}).populate('reviewer')
+    .then(function(reviews) {
+        console.log('reviews', reviews)
+        if(!reviews.length) return 'User hasn\'t been reviewed yet';
+        return reviews;
+    })
+}
+
+
+
 
 schema.methods.getCompletedTasks = function() {
     return mongoose.model('Task').find({seller: this._id, completed: true});
