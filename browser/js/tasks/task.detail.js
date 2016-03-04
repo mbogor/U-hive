@@ -1,13 +1,13 @@
 'use strict';
 
 app.config(function($stateProvider){
-  $stateProvider.state('tasksForSale', {
+  $stateProvider.state('taskDetail', {
     url: '/forsale/:id',
     templateUrl: '/js/tasks/task.detail.html',
-    controller: 'ForSaleCtrl',
+    controller: 'ItemCtrl',
     resolve:{
-      detail: function(TaskFactory){ //this is the injectible thing
-        return TaskFactory.getDetail(id);
+      task: function(TaskFactory, $stateParams){ //this is the injectible thing
+        return TaskFactory.getDetail($stateParams.id);
       }
     }
   });
