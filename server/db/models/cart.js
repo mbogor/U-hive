@@ -18,7 +18,9 @@ cartSchema.methods.processCheckout = function(cartTotal) {
 
   mongoose.model('User').findById(this.buyer)
   .then(function(buyer){
-    if (buyer.uComb < cartTotal) { throw  new Error('You do not have enough credit.');}
+    if (buyer.uComb < cartTotal) {
+      throw new Error('You do not have enough credit.');
+    }
     else{
       cart.processed = true;
       cart.save();
@@ -43,7 +45,7 @@ cartSchema.methods.processCheckout = function(cartTotal) {
   function processPayment(task){
     return mongoose.model('User').findById(task.seller)
     .then(function(seller){
-      seller.uComb += task.price
+      seller.uComb += task.price;
       return seller.save();
     });
   }
