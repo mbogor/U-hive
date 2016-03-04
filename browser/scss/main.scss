@@ -19,6 +19,14 @@ body {
   margin: 0 auto;
 }
 
+.task-list {
+  border-style: solid;
+  border-width: 1px;
+  border-color: gray;
+  border-radius: 4px;
+  margin: 3px;
+}
+
 @import 'directives/main';
 @import 'home/main';
 @import 'about/main';
