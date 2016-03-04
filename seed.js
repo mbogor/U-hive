@@ -74,7 +74,7 @@ function makeTasks(){
         price: _.random(10,100),
         description: chance.sentence({words: _.random(15,40)}),
         imageUrl: 'http://lorempixel.com/400/200/',
-        date: chance.date({year: 2016}),
+        dateOffered: chance.date({year: 2016}),
         restrictedByCampus: chance.weighted([true, false], [50,50]),
         completed: false,
         purchased: chance.weighted([true, false], [50,50]),
@@ -82,7 +82,7 @@ function makeTasks(){
     });
 };
 
-function makeReviews() { 
+function makeReviews() {
     return new Review ({
     //reviewee: reference to User
     //reviewer: reference to User
@@ -98,7 +98,7 @@ function makeCarts() {
     //buyer: reference to User
     //tasks: [reference to Task]
     timeCreated: chance.date({month: _.random(0,3), year: 2016}),
-    processed: chance.weighted([true, false], [10,90])  
+    processed: chance.weighted([true, false], [10,90])
     })
 }
 
@@ -184,10 +184,10 @@ function seed() {
         // console.log(savedDocs)
         return Promise.map(savedDocs, function(doc){
             // console.log(doc)
-            if(doc instanceof User) return addCollegeToUser(doc); 
-            else if (doc instanceof Task) return addSellerToTask(doc); 
-            else if (doc instanceof Review) return addRevieweeReviewerAndTaskToReview(doc); 
-            else if (doc instanceof Cart) return addBuyerAndTasksToCart(doc); 
+            if(doc instanceof User) return addCollegeToUser(doc);
+            else if (doc instanceof Task) return addSellerToTask(doc);
+            else if (doc instanceof Review) return addRevieweeReviewerAndTaskToReview(doc);
+            else if (doc instanceof Cart) return addBuyerAndTasksToCart(doc);
             else if (doc instanceof College) return doc.save();
         })
     })
