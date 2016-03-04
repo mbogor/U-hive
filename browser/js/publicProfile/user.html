@@ -1,0 +1,56 @@
+<div class="container">
+  <h1>{{user.name}}'s U-hive profile</h1>
+
+  <div class="row">
+    <div class="col-lg-3">
+      <img src="{{user.photo}}" class="img-thumbnail">
+    </div> 
+
+    <div class="col-lg-9">
+      <ul>
+        <li>School: {{user.college.name}}</li>
+        <li>Average Rating: {{avgRating}}</li>
+        <li>Email: {{user.email}}</li>
+        <li>Phone: {{user.phone}}</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-12">
+      <h3>Items For Sale</h3>
+        <span ng-repeat="task in tasks">
+          <img src="{{task.imageUrl}}" class="taskImage">
+          <br><span>{{task.name}}</span>
+        </span>
+        <span ng-show="tasks.length === 0">User has no items for sale</span>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-12">
+      <h3>Reviews</h3>
+
+      <table class='table'>
+        <thead>
+          <tr>
+            <th>Feedback</th>
+            <th>From</th>
+            <th>When</th>
+            <th>Rating</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="review in reviews">
+            <td>{{ review.text }} <span ng-show="reviews.length === 0">User has not been reviewed</span></td>
+            <td>{{ review.reviewer.name }}</td>
+            <td>{{ review.reviewDate }}</td>
+            <td>{{ review.rating }}</td>
+          </tr>
+        </tbody>
+      </table>
+     </div> 
+  </div>
+
+
+</div>

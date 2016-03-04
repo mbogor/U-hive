@@ -5,6 +5,7 @@ var _ = require('lodash');
 var mongoose = require('mongoose')
 var User = mongoose.model('User');
 var Task = mongoose.model('Task');
+var College = mongoose.model('College')
 
 
 var ensureAuthenticated = function (req, res, next) {
@@ -15,7 +16,7 @@ var ensureAuthenticated = function (req, res, next) {
     }
 };
 router.param('id', function(req, res, next){
-    User.findById(req.params.id)
+    User.findById(req.params.id).populate('college').exec()
     .then(function(user){
         req.reqUser = user;
         next();
@@ -31,9 +32,33 @@ router.get('/', function(req, res, next) {
     .then(null, next);
 })
 
+
 router.get('/:id', function(req, res, next) {
     res.json(req.reqUser);
 })
+
+router.get('/:id/averagerating', function(req, res, next) {
+    req.reqUser.getAggregateScore()
+    .then(function(score){
+        res.json(score);
+    })
+    .then(null, next)
+})
+
+router.get('/:id/reviews', function(req, res, next) {
+    req.reqUser.getReviews()
+    .then(function(reviews){
+        res.json(reviews);
+    })
+    .then(null, next)
+})
+
+
+// router.get('/:id/tasks', function(req, res, next){
+//     Tasks.find({})
+// })
+
+
 
 router.post('/', function(req, res, next) {
     User.create(req.body)

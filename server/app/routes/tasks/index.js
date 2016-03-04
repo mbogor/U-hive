@@ -4,6 +4,7 @@ var router = require('express').Router();
 var mongoose = require('mongoose');
 var Promise = require('bluebird');
 var Task = mongoose.model('Task')
+var User = mongoose.model('User')
 module.exports = router;
 
 router.param('id', function(req, res, next){
@@ -64,3 +65,18 @@ router.delete('/:id', function(req, res, next){
   })
   .then(null, next);
 })
+
+//get a users forsale tasks
+
+router.get('/forsale/:sellerId', function(req, res, next){
+  console.log('hehe', req.params.sellerId)
+  Task.find({seller: req.params.sellerId, forSaleOrWanted: 'forsale', 
+    completed: false })
+  .then(function(tasks){
+    console.log('tasks', tasks)
+    res.json(tasks);
+  })
+  .then(null, next);
+});
+
+// 
