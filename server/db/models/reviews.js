@@ -23,6 +23,11 @@ var schema = new mongoose.Schema({
 	reviewBy: {
 		type: String,
 		enum: ['Buyer', 'Seller']
+	},
+	reviewDate: {
+		type: Date,
+		required: true,
+		default: new Date()
 	}
 
 })
