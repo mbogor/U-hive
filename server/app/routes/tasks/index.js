@@ -24,6 +24,14 @@ router.get('/', function(req, res, next){
   .then(null, next)
 })
 
+router.get('/forsale', function(req, res, next){
+  Task.find({completed: false, forSaleOrWanted: 'forsale'})
+  .then(function(tasks){
+    res.json(tasks);
+  })
+  .then(null, next);
+})
+
 //get one by id
 router.get('/:id', function(req, res, next){
   res.json(req.task)
