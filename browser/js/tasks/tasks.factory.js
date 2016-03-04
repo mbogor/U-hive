@@ -10,6 +10,13 @@ app.factory('TaskFactory', function($http){
     });
   };
 
+  TaskFactory.getDetail = function(id){
+    return $http.get('api/tasks/'+id)
+    .then(function(task){
+      return task.data;
+    })
+  }
+
   return TaskFactory;
 
 });
