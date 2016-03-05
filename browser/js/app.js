@@ -1,13 +1,18 @@
 'use strict';
-window.app = angular.module('FullstackGeneratedApp', ['js-data', 'fsaPreBuilt', 'ui.router', 'ui.bootstrap', 'ngAnimate']);
+window.app = angular.module('FullstackGeneratedApp', ['js-data', 'LocalStorageModule', 'fsaPreBuilt', 'ui.router', 'ui.bootstrap', 'ngAnimate']);
 
 app.config(function ($urlRouterProvider, $locationProvider) {
     // This turns off hashbang urls (/#about) and changes it to something normal (/about)
     $locationProvider.html5Mode(true);
     // If we go to a URL that ui-router doesn't have registered, go to the "/" url.
     $urlRouterProvider.otherwise('/');
-});
 
+});
+app.config(function(localStorageServiceProvider){
+    localStorageServiceProvider
+    .setStorageType('sessionStorage') //type of storage
+    .setStorageCookie(7,'/'); //number of days before cookies expire & the path they represent(?)
+});
 // This app.run is for controlling access to specific states.
 app.run(function ($rootScope, AuthService, $state) {
 
