@@ -69,7 +69,6 @@ router.delete('/:id', function(req, res, next){
 //get a users forsale tasks
 
 router.get('/forsale/:sellerId', function(req, res, next){
-  console.log('hehe', req.params.sellerId)
   Task.find({seller: req.params.sellerId, forSaleOrWanted: 'forsale', 
     completed: false })
   .then(function(tasks){
