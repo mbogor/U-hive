@@ -33,8 +33,10 @@
         };
         return {
             responseError: function (response) {
+                console.log('response error:', response.status);
+                console.log('response:', response);
                 $rootScope.$broadcast(statusDict[response.status], response);
-                return $q.reject(response)
+                return $q.reject(response);
             }
         };
     });
@@ -51,6 +53,7 @@
     app.service('AuthService', function ($http, Session, $rootScope, AUTH_EVENTS, $q) {
 
         function onSuccessfulLogin(response) {
+            console.log('running success login', response.data);
             var data = response.data;
             Session.create(data.id, data.user);
             $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
@@ -64,7 +67,7 @@
         };
 
         this.getLoggedInUser = function (fromServer) {
-
+            console.log('in AuthService.getLoggedInUser', fromServer);
             // If an authenticated session exists, we
             // return the user attached to that session
             // with a promise. This ensures that we can
@@ -80,7 +83,9 @@
             // Make request GET /session.
             // If it returns a user, call onSuccessfulLogin with the response.
             // If it returns a 401 response, we catch it and instead resolve to null.
-            return $http.get('/session').then(onSuccessfulLogin).catch(function () {
+            return $http.get('/session')
+            .then(onSuccessfulLogin)
+            .catch(function () {
                 return null;
             });
 
@@ -95,23 +100,27 @@
         };
 
         this.logout = function () {
-            return $http.get('/logout').then(function () {
+            return $http.get('/logout')
+            .then(function () {
+                console.log('logged out');
                 Session.destroy();
                 $rootScope.$broadcast(AUTH_EVENTS.logoutSuccess);
             });
         };
 
     });
-
+    // this regeisters Session on the app - avail elsewhere. it is a constructor function
     app.service('Session', function ($rootScope, AUTH_EVENTS) {
-
+        console.log('running session service creator');
         var self = this;
 
         $rootScope.$on(AUTH_EVENTS.notAuthenticated, function () {
+            console.log('not auth. destroying', self)
             self.destroy();
         });
 
         $rootScope.$on(AUTH_EVENTS.sessionTimeout, function () {
+            console.log('sessionTimeout. destroying', self)
             self.destroy();
         });
 
@@ -119,11 +128,13 @@
         this.user = null;
 
         this.create = function (sessionId, user) {
+            console.log('creating session in service')
             this.id = sessionId;
             this.user = user;
         };
 
         this.destroy = function () {
+            console.log('destroying session in service', this);
             this.id = null;
             this.user = null;
         };

@@ -1,16 +1,30 @@
 'use strict';
 var crypto = require('crypto');
-var mongoose = require('mongoose');
+var mongoose = require('mongoose'),
+    extend = require('mongoose-schema-extend');
 var _ = require('lodash');
 
 // var Score = require('Score')
+var baseUserSchema = new mongoose.Schema({
+  isAdmin: {
+    type: Boolean,
+    default: false
+  },
+});
+mongoose.model('baseUser', baseUserSchema);
 
-var schema = new mongoose.Schema({
-
+var authUserSchema = baseUserSchema.extend({
     name: {
         type: String,
         required: true,
         trim: true
+    },
+    email: {
+        type: String,
+        required: true
+    },
+    password: {
+        type: String
     },
     phone: {
         type: String
@@ -19,26 +33,6 @@ var schema = new mongoose.Schema({
     college: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'College'
-    },
-    photo: {
-        type: String,
-        default: '/images/default-photo.jpg' //find default image later
-    },
-    isAdmin: {
-        type: Boolean,
-        default: false
-    },
-    //UCombs is the $ amount you have on your account
-    uComb: {
-        type: Number,
-        default: 0
-    },
-    email: {
-        type: String,
-        required: true
-    },
-    password: {
-        type: String
     },
     salt: {
         type: String
@@ -60,14 +54,14 @@ var schema = new mongoose.Schema({
 
 //STATICS & METHODS
 
-schema.statics.top10Users = function() {
+authUserSchema.statics.top10Users = function() {
     var usersAndAvgRatings = []
     return this.find({})
     .then(function(users){
         Promise.map(users, function(user){
             var userScore = user.getAggregateScore();
             usersAndAvgRatings.push(
-                {"user": user, 
+                {"user": user,
                 "aggregateScore": userScore
             });
         })
@@ -81,7 +75,7 @@ schema.statics.top10Users = function() {
     })
 }
 
-schema.methods.getAggregateScore = function() {
+authUserSchema.methods.getAggregateScore = function() {
 
     return mongoose.model('Review').find({reviewee: this._id})
     .then(function(reviews) {
@@ -95,7 +89,7 @@ schema.methods.getAggregateScore = function() {
     })
 }
 
-schema.methods.getReviews = function() {
+authUserSchema.methods.getReviews = function() {
 
     return mongoose.model('Review').find({reviewee: this._id}).populate('reviewer')
     .then(function(reviews) {
@@ -108,12 +102,12 @@ schema.methods.getReviews = function() {
 
 
 
-schema.methods.getCompletedTasks = function() {
+authUserSchema.methods.getCompletedTasks = function() {
     return mongoose.model('Task').find({seller: this._id, completed: true});
 }
 
 // method to remove sensitive information from user objects before sending them out
-schema.methods.sanitize =  function () {
+authUserSchema.methods.sanitize =  function () {
     return _.omit(this.toJSON(), ['password', 'salt']);
 };
 
@@ -131,7 +125,7 @@ var encryptPassword = function (plainText, salt) {
     return hash.digest('hex');
 };
 
-schema.pre('save', function (next) {
+authUserSchema.pre('save', function (next) {
 
     if (this.isModified('password')) {
         this.salt = this.constructor.generateSalt();
@@ -142,11 +136,12 @@ schema.pre('save', function (next) {
 
 });
 
-schema.statics.generateSalt = generateSalt;
-schema.statics.encryptPassword = encryptPassword;
+authUserSchema.statics.generateSalt = generateSalt;
+authUserSchema.statics.encryptPassword = encryptPassword;
 
-schema.method('correctPassword', function (candidatePassword) {
+authUserSchema.method('correctPassword', function (candidatePassword) {
     return encryptPassword(candidatePassword, this.salt) === this.password;
 });
 
-mongoose.model('User', schema);
+mongoose.model('User', authUserSchema);
+
