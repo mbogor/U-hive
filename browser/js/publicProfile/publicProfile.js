@@ -25,7 +25,7 @@ app.config(function ($stateProvider) {
 app.controller('profileCtrl', function ($scope, theUser, avgRating, reviewsForUser, forSale) {
 
     $scope.user = theUser;
-    $scope.avgRating = avgRating
+    $scope.avgRating = Math.round(avgRating);
     $scope.reviews = reviewsForUser;
     $scope.tasks = forSale
 
