@@ -1,19 +1,18 @@
-app.directive('navbar', function ($rootScope, AuthService, AUTH_EVENTS, $state) {
+app.directive('navbar', function ($rootScope, Session, AuthService, AUTH_EVENTS, $state, localStorageService) {
 
     return {
         restrict: 'E',
         scope: {},
         templateUrl: 'js/common/directives/navbar/navbar.html',
         link: function (scope) {
-
             scope.items = [
                 { label: 'Home', state: 'home' },
                 { label: 'About', state: 'about' },
-                // { label: 'Documentation', state: 'docs' },
                 { label: 'For Sale', state: 'tasksForSale'},
                 { label: 'Top Ten Bees', state: 'stateThatDoesntExistYet'},
-                { label: 'Members Only', state: 'membersOnly', auth: true }
-
+                { label: 'Cart', state: 'viewCart'},
+                { label: 'New Post', state: 'newPost', auth: true},
+                { label: 'My Account', state: 'membersOnly', auth: true }
             ];
 
             scope.user = null;
@@ -28,19 +27,34 @@ app.directive('navbar', function ($rootScope, AuthService, AUTH_EVENTS, $state) 
                 });
             };
 
+            var setCart = function(){
+                console.log('setting cart in navbar');
+            };
+
             var setUser = function () {
-                AuthService.getLoggedInUser().then(function (user) {
+                // console.log('do we have auth interceptor?', AuthInterceptor)
+                console.log('about to set user in navbar link function');
+                console.log('local:', localStorageService.keys());
+                AuthService.getLoggedInUser()
+                .then(function (user) {
+                    console.log('user from getLoggedInUser', user);
+                    if(!user){
+
+                    }
                     scope.user = user;
                 });
             };
 
             var removeUser = function () {
+                console.log('about to remove user (in navbar link function):', scope.user);
                 scope.user = null;
             };
 
             setUser();
+            // setCart();
 
             $rootScope.$on(AUTH_EVENTS.loginSuccess, setUser);
+            $rootScope.$on(AUTH_EVENTS.loginSuccess, setCart);
             $rootScope.$on(AUTH_EVENTS.logoutSuccess, removeUser);
             $rootScope.$on(AUTH_EVENTS.sessionTimeout, removeUser);
 

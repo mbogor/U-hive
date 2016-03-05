@@ -33,6 +33,7 @@ module.exports = function (app) {
 
     // When we give a cookie to the browser, it is just the userId (encrypted with our secret).
     passport.serializeUser(function (user, done) {
+        console.log('passport user', user)
         done(null, user.id);
     });
 
@@ -46,9 +47,11 @@ module.exports = function (app) {
     // This is used by the browser application (Angular) to determine if a user is
     // logged in already.
     app.get('/session', function (req, res) {
+        console.log(req.session);
         if (req.user) {
             res.send({ user: req.user.sanitize() });
         } else {
+            console.log('about to send 401');
             res.status(401).send('No authenticated user.');
         }
     });
@@ -59,6 +62,7 @@ module.exports = function (app) {
         res.status(200).end();
     });
 
+    // THIS IS WHERE THE /LOGIN POST ROUTE LANDS
     // Each strategy enabled gets registered.
     ENABLED_AUTH_STRATEGIES.forEach(function (strategyName) {
         require(path.join(__dirname, strategyName))(app);
