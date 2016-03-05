@@ -1,0 +1,12 @@
+<div class="col-lg-7">
+  <h3>Items For Sale</h3>
+    <table>
+      <div ng-repeat="task in tasks">
+        <img src="{{task.imageUrl}}" class="task-img">
+        <br>
+        <span>{{task.name}}</span>
+      </div>
+      <span ng-show="tasks.length === 0">You have no items for sale</span>
+    </table>
+</div>
+
