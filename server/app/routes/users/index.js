@@ -1,7 +1,6 @@
 'use strict';
 var router = require('express').Router();
 module.exports = router;
-var _ = require('lodash');
 var mongoose = require('mongoose')
 var User = mongoose.model('User');
 var Task = mongoose.model('Task');
@@ -53,12 +52,21 @@ router.get('/:id/reviews', function(req, res, next) {
     .then(null, next)
 })
 
+router.get('/:id/cart', function(req, res, next){
+    req.reqUser.getCartItems()
+    .then(function(cartItems){
+        res.json(cartItems);
+    })
+    .then(null, next);
+})
 
-// router.get('/:id/tasks', function(req, res, next){
-//     Tasks.find({})
-// })
-
-
+router.get('/:id/purchasehistory', function(req, res, next){
+    req.reqUser.getPurchaseHistory()
+    .then(function(purchaseHistory){
+        res.json(purchaseHistory);
+    })
+    .then(null, next)
+})
 
 router.post('/', function(req, res, next) {
     User.create(req.body)

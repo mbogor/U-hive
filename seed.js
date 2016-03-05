@@ -75,10 +75,12 @@ function makeTasks(){
         description: chance.sentence({words: _.random(15,40)}),
         imageUrl: 'http://lorempixel.com/400/200/',
         dateOffered: chance.date({year: 2016}),
+        datePosted: chance.date({year: 2016}),
         restrictedByCampus: chance.weighted([true, false], [50,50]),
         completed: false,
         purchased: chance.weighted([true, false], [50,50]),
-        forSaleOrWanted: chance.weighted(['forsale', 'wanted'], [50,50]),
+        datePurchased: chance.date({year: 2016}),
+        forSaleOrWanted: chance.weighted(['forsale', 'wanted'], [50,50])
     });
 };
 
@@ -98,7 +100,8 @@ function makeCarts() {
     //buyer: reference to User
     //tasks: [reference to Task]
     timeCreated: chance.date({month: _.random(0,3), year: 2016}),
-    processed: chance.weighted([true, false], [10,90])
+    processed: chance.weighted([true, false], [50,50]),
+    dateProcessed: chance.date({year: 2016})
     })
 }
 
@@ -167,9 +170,9 @@ function generateAll () {
         isAdmin: true,
         phone: chance.phone()
     }));
-    var tasks = _.times(40, makeTasks);
-    var reviews = _.times(40, makeReviews);
-    var carts = _.times(5, makeCarts);
+    var tasks = _.times(300, makeTasks);
+    var reviews = _.times(100, makeReviews);
+    var carts = _.times(100, makeCarts);
     // console.log(colleges)
     return users.concat(tasks).concat(reviews).concat(carts).concat(colleges)
 }

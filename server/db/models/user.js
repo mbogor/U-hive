@@ -99,13 +99,25 @@ schema.methods.getReviews = function() {
 
     return mongoose.model('Review').find({reviewee: this._id}).populate('reviewer')
     .then(function(reviews) {
-        console.log('reviews', reviews)
         if(!reviews.length) return;
         return reviews;
     })
 }
 
+schema.methods.getCartItems = function() {
+    return mongoose.model('Cart').findOne({buyer: this._id, processed: false}).populate('tasks')
+    .then(function(cart){
+        return cart.tasks;
+    })
+}
 
+schema.methods.getPurchaseHistory = function() {
+    return mongoose.model('Cart').find({buyer: this._id, processed: true}).populate('tasks');
+}
+
+schema.methods.getSalesHistory = function() {
+    return mongoose.model('Task').find({seller: this._id, purchased: true, completed: true});
+}
 
 
 schema.methods.getCompletedTasks = function() {
@@ -113,7 +125,7 @@ schema.methods.getCompletedTasks = function() {
 }
 
 // method to remove sensitive information from user objects before sending them out
-schema.methods.sanitize =  function () {
+schema.methods.sanitize = function () {
     return _.omit(this.toJSON(), ['password', 'salt']);
 };
 

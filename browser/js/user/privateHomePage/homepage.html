@@ -19,8 +19,8 @@
 					</thead>
 					<tbody>
 						<tr>
-							<td>{{user.itemsforsale}}</td>
-							<td>{{user.itemsincart}}</td>
+							<td>{{tasks.length}}</td>
+							<td>{{cartItems.length}}</td>
 							<td>{{user.totalsalestodate}}</td>
 							<td>{{avgRating}}</td>
 						</tr>
@@ -30,12 +30,12 @@
 		</div>
 	</div>
 
-	<div class="col-lg-4">
+	<div class="col-lg-3">
 		<sidebar></sidebar>
 	</div>
 
 
-	<div class="col-lg-8">
+	<div class="col-lg-9">
 		<ui-view></ui-view>
 	</div>
 </div>	

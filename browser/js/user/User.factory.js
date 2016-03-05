@@ -17,6 +17,16 @@ app.factory('UserFactory', function($http) {
   	.then(response => response.data) 
   }
 
+  UserFactory.getCart = function(id) {
+    return $http.get('/api/users/' + id + '/cart')
+    .then(response => response.data) 
+  }
+
+  UserFactory.getPurchaseHistory = function(id) {
+    return $http.get('/api/users/' + id + '/purchasehistory')
+    .then(response => response.data) 
+  }
+
 
   return UserFactory;
 })

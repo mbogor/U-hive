@@ -50,6 +50,9 @@ var taskSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
+    datePurchased: {
+        type: Date
+    },
     forSaleOrWanted: {
         type: String,
         required: true,
