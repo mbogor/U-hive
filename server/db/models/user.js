@@ -100,7 +100,7 @@ schema.methods.getReviews = function() {
     return mongoose.model('Review').find({reviewee: this._id}).populate('reviewer')
     .then(function(reviews) {
         console.log('reviews', reviews)
-        if(!reviews.length) return 'User hasn\'t been reviewed yet';
+        if(!reviews.length) return;
         return reviews;
     })
 }
