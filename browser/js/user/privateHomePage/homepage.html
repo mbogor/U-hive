@@ -1,0 +1,41 @@
+<div class="container">
+	<div>
+		<h1>{{user.name}}'s U-hive</h1>
+	</div>
+	<div>
+		<div class="clearfix">
+			<div class="col-lg-3">
+				 <img src="{{user.photo}}" class="img-thumbnail">
+			</div>
+			<div class="col-lg-9">
+				<table class="table">
+					<thead>
+						<tr>
+							<th>Items for Sale</th>
+							<th>Items in Cart</th>
+							<th>Total Sales To Date</th>
+							<th>Average Rating</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>{{user.itemsforsale}}</td>
+							<td>{{user.itemsincart}}</td>
+							<td>{{user.totalsalestodate}}</td>
+							<td>{{avgRating}}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+
+	<div class="col-lg-4">
+		<sidebar></sidebar>
+	</div>
+
+
+	<div class="col-lg-8">
+		<ui-view></ui-view>
+	</div>
+</div>	

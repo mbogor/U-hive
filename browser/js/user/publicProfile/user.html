@@ -9,7 +9,7 @@
     <div class="col-lg-9">
       <ul>
         <li>School: {{user.college.name}}</li>
-        <li>Average Rating: {{avgRating}}</li>
+        <li ng-show="reviews.length>0">Average Rating: {{avgRating}}</li>
         <li>Email: {{user.email}}</li>
         <li>Phone: {{user.phone}}</li>
       </ul>
@@ -33,7 +33,7 @@
   <div class="row">
     <div class="col-lg-12">
       <h3>Reviews</h3>
-      <span ng-show="reviews.length === 0">User has not been reviewed</span>
+      <span ng-show="reviews.length === 0">User has not been reviewed yet</span>
       <table class='table' ng-show="reviews.length > 0">
         <thead>
           <tr>
