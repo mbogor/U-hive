@@ -34,6 +34,9 @@ var authUserSchema = baseUserSchema.extend({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'College'
     },
+    streetAddress: {
+        type: String
+    },
     salt: {
         type: String
     },
