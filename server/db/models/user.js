@@ -1,7 +1,7 @@
 'use strict';
 var crypto = require('crypto');
-var mongoose = require('mongoose'),
-    extend = require('mongoose-schema-extend');
+var mongoose = require('mongoose');
+var extend = require('mongoose-schema-extend');
 var _ = require('lodash');
 
 // var Score = require('Score')
