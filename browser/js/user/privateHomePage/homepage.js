@@ -22,6 +22,9 @@ app.config(function ($stateProvider) {
           },
           purchaseHistory: function(UserFactory, $stateParams) {
             return UserFactory.getPurchaseHistory($stateParams.personId)
+          },
+          salesHistory: function(UserFactory, $stateParams) {
+            return UserFactory.getSalesHistory($stateParams.personId)
           }
         }
     });
@@ -41,16 +44,31 @@ app.config(function ($stateProvider) {
       templateUrl: '/js/user/privateHomePage/subviews/purchasehistory.html'
     })
 
+    $stateProvider.state('homepage.saleshistory', {
+      url:'/saleshistory',
+      templateUrl: '/js/user/privateHomePage/subviews/saleshistory.html'
+    })
+
 });
 
-app.controller('homeCtrl', function ($scope, theUser, avgRating, reviewsForUser, forSale, getCart, purchaseHistory) {
+app.controller('homeCtrl', function ($scope, theUser, avgRating, reviewsForUser, forSale, getCart, purchaseHistory, salesHistory) {
     $scope.user = theUser;
     $scope.avgRating = Math.round(avgRating);
     $scope.reviews = reviewsForUser;
     $scope.tasks = forSale;
     $scope.cartItems = getCart;
     $scope.purchaseHistory = purchaseHistory;
+    $scope.salesHistory = salesHistory
 
+    $scope.totalValue = function(order) {
+      var total = order.reduce(function(accum, elem) {
+            return accum + elem.price;
+        }, 0)
+      return total;
+    }
+    $scope.orderProcessDate = function(order) {
+      return order.slice(0,10)
+    }
 
 });
 

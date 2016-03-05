@@ -68,6 +68,14 @@ router.get('/:id/purchasehistory', function(req, res, next){
     .then(null, next)
 })
 
+router.get('/:id/saleshistory', function(req, res, next){
+    req.reqUser.getSalesHistory()
+    .then(function(salesHistory){
+        res.json(salesHistory);
+    })
+    .then(null, next)
+})
+
 router.post('/', function(req, res, next) {
     User.create(req.body)
     .then(function(user) {

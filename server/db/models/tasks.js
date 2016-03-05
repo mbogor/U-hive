@@ -2,6 +2,7 @@
 var mongoose = require('mongoose');
 var Promise = require('bluebird');
 var moment = require('moment');
+var deepPopulate = require('mongoose-deep-populate')(mongoose);
 
 var taskSchema = new mongoose.Schema({
     name: {
@@ -92,6 +93,7 @@ taskSchema.statics.clearOutDate = function(){
     return Task.remove({dateOffered: {$lte: Date.now()}}).exec()
 }
 
+taskSchema.plugin(deepPopulate);
 mongoose.model('Task', taskSchema);
 
 var Task = mongoose.model('Task');

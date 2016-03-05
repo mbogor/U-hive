@@ -3,6 +3,8 @@ var crypto = require('crypto');
 var mongoose = require('mongoose'),
     extend = require('mongoose-schema-extend');
 var _ = require('lodash');
+var deepPopulate = require('mongoose-deep-populate')(mongoose);
+
 
 // var Score = require('Score')
 var baseUserSchema = new mongoose.Schema({
@@ -99,7 +101,8 @@ authUserSchema.methods.getReviews = function() {
 }
 
 authUserSchema.methods.getCartItems = function() {
-    return mongoose.model('Cart').findOne({buyer: this._id, processed: false}).populate('tasks')
+    return mongoose.model('Cart').findOne({buyer: this._id, processed: false})
+    .populate('tasks')
     .then(function(cart){
         return cart.tasks;
     })
@@ -107,10 +110,11 @@ authUserSchema.methods.getCartItems = function() {
 
 authUserSchema.methods.getPurchaseHistory = function() {
     return mongoose.model('Cart').find({buyer: this._id, processed: true}).populate('tasks');
+    //deepPopulate tasks.seller is not working :(!!
 }
 
 authUserSchema.methods.getSalesHistory = function() {
-    return mongoose.model('Task').find({seller: this._id, purchased: true, completed: true});
+    return mongoose.model('Task').find({seller: this._id, purchased: true});
 }
 
 
@@ -156,5 +160,6 @@ authUserSchema.method('correctPassword', function (candidatePassword) {
     return encryptPassword(candidatePassword, this.salt) === this.password;
 });
 
+authUserSchema.plugin(deepPopulate);
 mongoose.model('User', authUserSchema);
 
