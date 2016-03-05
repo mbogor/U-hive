@@ -8,7 +8,8 @@ var cartSchema = new mongoose.Schema({
   buyer: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   tasks: [{type: mongoose.Schema.Types.ObjectId, ref: 'Task'}],
   timeCreated: { type: Date, default: Date.now },
-  processed: { type: Boolean, default: false }
+  processed: { type: Boolean, default: false },
+  dateProcessed: { type: Date }
 })
 
 

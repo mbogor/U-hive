@@ -15,6 +15,14 @@ router.param('id', function(req, res, next){
   .then(null, next);
 })
 
+router.get('/', function(req, res, next) {
+  mongoose.model('Cart').find()
+  .then(function(carts){
+    res.json(carts);
+  })
+  .then(null, next)
+})
+
 //get a cart
 router.get('/:id', function(req, res, next){
   res.json(req.cart)
