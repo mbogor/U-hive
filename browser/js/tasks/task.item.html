@@ -3,7 +3,10 @@
     <div class="col-lg-4 task-list" >
       <div >
         <div ng-click="detailTransfer(task._id)"><h3>{{task.name}}</h3></div>
-        <p ng-click="toggleExpand()">{{task.description}}</p>
+        <p>{{task.description | trim:expandTask}}</p>
+        <p>${{task.price}}</p>
+        <button>Add to cart</button>
+        <a ng-click="toggleExpand()">More info</a>
       </div>
     </div>
   </div>

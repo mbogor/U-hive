@@ -15,8 +15,8 @@ app.factory('TaskFactory', function($http){
     return $http.get('api/tasks/'+id)
     .then(function(task){
       return task.data;
-    })
-  }
+    });
+  };
 
   TaskFactory.getForSaleByUser = function(userId) {
   	return $http.get('/api/tasks/forsale/' + userId)

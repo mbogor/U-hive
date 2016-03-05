@@ -3,7 +3,7 @@
 app.config(function($stateProvider){
   $stateProvider.state('taskDetail', {
     url: '/forsale/:id',
-    templateUrl: '/js/tasks/task.detail.html',
+    templateUrl: '/js/task-detail/task.detail.html',
     controller: 'ItemCtrl',
     resolve:{
       task: function(TaskFactory, $stateParams){ //this is the injectible thing
