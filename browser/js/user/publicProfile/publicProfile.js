@@ -2,17 +2,17 @@ app.config(function ($stateProvider) {
 
     $stateProvider.state('publicProfile', {
         url: '/user/:personId',
-        templateUrl: 'js/publicProfile/user.html',
+        templateUrl: 'js/user/publicProfile/user.html',
         controller: 'profileCtrl',
         resolve: {
-          theUser: function(PublicProfileFactory, $stateParams) {
-            return PublicProfileFactory.fetchById($stateParams.personId);
+          theUser: function(UserFactory, $stateParams) {
+            return UserFactory.fetchById($stateParams.personId);
           },
-          avgRating: function(PublicProfileFactory, $stateParams) {
-            return PublicProfileFactory.fetchAvgRating($stateParams.personId)
+          avgRating: function(UserFactory, $stateParams) {
+            return UserFactory.fetchAvgRating($stateParams.personId)
           },
-          reviewsForUser: function(PublicProfileFactory, $stateParams) {
-            return PublicProfileFactory.getAllReviews($stateParams.personId)
+          reviewsForUser: function(UserFactory, $stateParams) {
+            return UserFactory.getAllReviews($stateParams.personId)
           },
           forSale: function(TaskFactory, $stateParams) {
             return TaskFactory.getForSaleByUser($stateParams.personId)

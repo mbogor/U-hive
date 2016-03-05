@@ -1,22 +1,22 @@
-app.factory('PublicProfileFactory', function($http) {
+app.factory('UserFactory', function($http) {
 
-  var PublicProfileFactory = {};
+  var UserFactory = {};
 
-  PublicProfileFactory.fetchById = function(id) {
+  UserFactory.fetchById = function(id) {
     return $http.get('/api/users/' + id) 
     .then(response => response.data)
   }
 
-  PublicProfileFactory.fetchAvgRating = function(id) {
+  UserFactory.fetchAvgRating = function(id) {
   	return $http.get('/api/users/' + id + '/averagerating')
   	.then(response => response.data)
   }
 
-  PublicProfileFactory.getAllReviews = function(id) {
+  UserFactory.getAllReviews = function(id) {
   	return $http.get('/api/users/' + id + '/reviews')
   	.then(response => response.data) 
   }
 
 
-  return PublicProfileFactory;
+  return UserFactory;
 })
