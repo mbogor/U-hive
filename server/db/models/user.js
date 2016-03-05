@@ -1,7 +1,7 @@
 'use strict';
 var crypto = require('crypto');
-var mongoose = require('mongoose'),
-    extend = require('mongoose-schema-extend');
+var mongoose = require('mongoose');
+var extend = require('mongoose-schema-extend');
 var _ = require('lodash');
 
 // var Score = require('Score')
@@ -33,6 +33,9 @@ var authUserSchema = baseUserSchema.extend({
     college: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'College'
+    },
+    streetAddress: {
+        type: String
     },
     salt: {
         type: String
