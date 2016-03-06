@@ -53,9 +53,10 @@ router.get('/:id/reviews', function(req, res, next) {
 })
 
 router.get('/:id/cart', function(req, res, next){
-    req.reqUser.getCartItems()
-    .then(function(cartItems){
-        res.json(cartItems);
+    req.reqUser.getCart()
+    .then(function(cart){
+        console.log(cart)
+        res.json(cart);
     })
     .then(null, next);
 })

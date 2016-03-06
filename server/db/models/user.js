@@ -103,11 +103,11 @@ authUserSchema.methods.getReviews = function() {
     })
 }
 
-authUserSchema.methods.getCartItems = function() {
+authUserSchema.methods.getCart = function() {
     return mongoose.model('Cart').findOne({buyer: this._id, processed: false})
     .populate('tasks')
     .then(function(cart){
-        return cart.tasks;
+        return cart;
     })
 }
 

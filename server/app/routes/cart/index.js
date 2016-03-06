@@ -48,6 +48,16 @@ router.put('/:id/:taskId', function(req, res, next){
   })
 })
 
+//remove one item from a cart
+router.put('/:id/remove/:taskId', function(req, res, next){
+  req.cart.update({$pull: {tasks: req.params.taskId } })
+  .then(function(item) {
+    console.log('hit this route', item)
+    res.sendStatus(204);
+  })
+  .then(null, next);
+})
+
 // delete a cart by id
 router.delete('/:id', function(req, res, next){
   req.cart.remove()

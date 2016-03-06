@@ -1,12 +1,19 @@
 <div class="col-lg-7">
-  <h3>Items For Sale</h3>
-    <table>
-      <div ng-repeat="task in tasks">
-        <img src="{{task.imageUrl}}" class="task-img">
-        <br>
-        <span>{{task.name}}</span>
-      </div>
-      <span ng-show="tasks.length === 0">You have no items for sale</span>
-    </table>
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h5>Items For Sale ({{tasks.length}})</h5>
+		</div>
+	    <div class="panel-body" ng-repeat="task in tasks">
+	      <div>
+	        <img src="{{task.imageUrl}}" class="task-img">
+	        <br>
+	        <div class="col-lg-8 task-description">{{task.name}}</div>
+	        <div class="col-lg-4 right-padding" align="right">
+	        	<button type="button" class="btn btn-secondary btn-sm">Edit</button>
+	        	<button type="button" class="btn btn-danger btn-sm">Delete</button>
+	        </div>
+	      </div>
+	    </div>
+	    <span ng-show="tasks.length === 0">You have no items for sale</span>
+	</div>
 </div>
-

@@ -32,5 +32,10 @@ app.factory('UserFactory', function($http) {
     .then(response => response.data) 
   }
 
+  UserFactory.removeItemFromCart = function(cartId, taskId) {
+    return $http.put('/api/cart/' + cartId + '/remove/' + taskId)
+    .then(response => response.data)
+  }
+
   return UserFactory;
 })
