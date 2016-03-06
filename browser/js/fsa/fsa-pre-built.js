@@ -56,11 +56,14 @@
     app.service('UnAuthService', function($http, Session, $rootScope, AUTH_EVENTS, $q){
 
         console.log('inside of unath')
+        console.log("session user ", !!Session.user)
 
         function onSuccessfulCreation(response) {
-            console.log('running success creation', response.data);
+            console.log('running success creation, RESPONSE DATA', response.data);
             var data = response.data;
-            Session.create(data.id);
+            console.log("response id", data.id)
+            console.log('response user', data.user)
+            Session.create(data.id, data.user);
             // Session.create(data.id, data.user);
             $rootScope.$broadcast(AUTH_EVENTS.creationSuccess);
             return data.user;
@@ -68,11 +71,13 @@
         
 
         this.hasSession = function () {
+            
             return !!Session.user;
         }
 
         this.createUnAuthUser = function() {
-            if(this.hasSession){
+            
+            if(!this.hasSession){
                 console.log("has session")
                 return;
             } 
@@ -95,6 +100,7 @@
 
         function onSuccessfulLogin(response) {
             console.log('running success login', response.data);
+            console.log('response data logged in', response.data)
             var data = response.data;
             Session.create(data.id, data.user);
             $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);

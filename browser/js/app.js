@@ -16,21 +16,15 @@ app.config(function(localStorageServiceProvider){
 // This app.run is for controlling access to specific states.
 
 
-app.run(function(UnAuthService){
-
-    console.log('we are in the run block')
-    UnAuthService.createUnAuthUser()
-
-    //all the unauthenticated user logic will be handled here
-
-})
 
 app.run(function ($rootScope, AuthService, $state) {
 
     // The given state requires an authenticated user.
+   console.log('INSIDE OF AUTH')
+
     var destinationStateRequiresAuth = function (state) {
-        return state.data && state.data.authenticate;
         console.log("state", state, "state.data", state.data)
+        return state.data && state.data.authenticate;
     };
 
     // $stateChangeStart is an event fired
@@ -70,3 +64,25 @@ app.run(function ($rootScope, AuthService, $state) {
     });
 
 });
+app.run(function ($rootScope, UnAuthService){
+
+    console.log('INSIDE OF UNAUTH')
+
+
+
+    $rootScope.$on('$stateChangeStart', function (event, toState, toParams) {
+
+
+        // if (!destinationStateRequiresAuth(toState)) {
+        //     // The destination state does not require authentication
+        //     // Short circuit with return.
+        //     return;
+        // }
+        console.log('about to create unauth user')
+        UnAuthService.createUnAuthUser()
+    })
+
+
+    //all the unauthenticated user logic will be handled here
+
+})

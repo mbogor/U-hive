@@ -49,6 +49,10 @@ module.exports = function (app) {
     // logged in already.
     
     app.get('/unauthU', function(req, res, next){
+        console.log("req.user", req.user)
+        // console.log("res", res)
+        console.log("res.session", res.session)
+        // if(res.session) return;
         if(req.user) return;
         baseUserM.create({})
         .then(function(user){
@@ -63,7 +67,8 @@ module.exports = function (app) {
 
 
     app.get('/session', function (req, res) {
-        console.log("pre creation", req.session);
+        console.log("pre creation auth", req.session);
+        console.log("res.session auth", res.session)
         if (req.user) {
             res.send({ user: req.user.sanitize() });
         } else {
