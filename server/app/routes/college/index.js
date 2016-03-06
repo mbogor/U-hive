@@ -7,7 +7,6 @@ module.exports = router;
 router.get('/', function(req, res, next){
   mongoose.model('College').find()
   .then(function(colleges){
-    console.log(colleges);
     res.json(colleges);
   })
   .then(null, next);
