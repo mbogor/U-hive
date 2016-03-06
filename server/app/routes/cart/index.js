@@ -52,7 +52,6 @@ router.put('/:id/:taskId', function(req, res, next){
 router.put('/:id/remove/:taskId', function(req, res, next){
   req.cart.update({$pull: {tasks: req.params.taskId } })
   .then(function(item) {
-    console.log('hit this route', item)
     res.sendStatus(204);
   })
   .then(null, next);
