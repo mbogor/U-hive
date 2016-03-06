@@ -4,10 +4,9 @@ app.controller('SignupCtrl', function($scope, colleges, UserFactory, AuthService
   $scope.colleges = colleges;
 
   $scope.sendSignup = function(signup){
-    console.log('new user:', signup);
+    var newLogin = {email: signup.email, password: signup.password};
     UserFactory.create(signup)
     .then(function(newUser){
-      var newLogin = {email: newUser.email, password: newUser.password}
       return AuthService.login(newLogin);
     })
     .then(function(){

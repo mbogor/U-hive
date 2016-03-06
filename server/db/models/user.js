@@ -42,6 +42,10 @@ var authUserSchema = baseUserSchema.extend({
     salt: {
         type: String
     },
+    accountCreated: {
+        type: Date,
+        default: Date.now()
+    },
     twitter: {
         id: String,
         username: String,
@@ -146,8 +150,7 @@ var encryptPassword = function (plainText, salt) {
 };
 
 authUserSchema.pre('save', function (next) {
-
-    if (this.isModified('password')) {
+    if (this.isModified('password')||this.isNew) {
         this.salt = this.constructor.generateSalt();
         this.password = this.constructor.encryptPassword(this.password, this.salt);
     }
