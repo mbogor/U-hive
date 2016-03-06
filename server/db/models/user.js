@@ -168,4 +168,3 @@ authUserSchema.method('correctPassword', function (candidatePassword) {
 
 authUserSchema.plugin(deepPopulate);
 mongoose.model('User', authUserSchema);
-

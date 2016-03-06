@@ -2,7 +2,7 @@ app.config(function ($stateProvider) {
 
     $stateProvider.state('homepage', {
         url: '/myhomepage/:personId',
-        templateUrl: 'js/user/privateHomePage/homepage.html',
+        templateUrl: '/js/user/privateHomePage/homepage.html',
         controller: 'homeCtrl',
         resolve: {
           theUser: function(UserFactory, $stateParams) {
