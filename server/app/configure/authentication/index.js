@@ -57,11 +57,12 @@ module.exports = function (app) {
         baseUserM.create({})
         .then(function(user){
             console.log("recently created user", user)
-            console.log("post creation req", req.session);
+            console.log("post creation req", req.session.user);
             console.log("post creation res", res.session)
             res.status(201).send(user)
+
         })
-        .then(null,next)
+        // .then(null,next)
     })
 
 
@@ -69,6 +70,7 @@ module.exports = function (app) {
     app.get('/session', function (req, res) {
         console.log("pre creation auth", req.session);
         console.log("res.session auth", res.session)
+        console.log("req.user", req.user)
         if (req.user) {
             res.send({ user: req.user.sanitize() });
         } else {

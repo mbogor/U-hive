@@ -15,7 +15,40 @@ app.config(function(localStorageServiceProvider){
 });
 // This app.run is for controlling access to specific states.
 
+app.run(function ($rootScope, UnAuthService, $state){
 
+    console.log('INSIDE OF UNAUTH')
+
+
+
+    $rootScope.$on('$stateChangeStart', function (event,toState, toParams) {
+
+
+        // if (!destinationStateRequiresAuth(toState)) {
+        //     // The destination state does not require authentication
+        //     // Short circuit with return.
+        //     return;
+        // }
+        if (UnAuthService.hasSession()) {
+
+            return;
+        }
+        
+        console.log('about to create unauth user')
+
+        UnAuthService.createUnAuthUser().then(function (user) {
+            // If a user is retrieved, then renavigate to the destination
+            // (the second time, AuthService.isAuthenticated() will work)
+            // otherwise, if no user is logged in, go to "login" state.
+
+                $state.go(toState.name, toParams);
+        });
+    })
+
+
+    //all the unauthenticated user logic will be handled here
+
+})
 
 app.run(function ($rootScope, AuthService, $state) {
 
@@ -64,25 +97,4 @@ app.run(function ($rootScope, AuthService, $state) {
     });
 
 });
-app.run(function ($rootScope, UnAuthService){
 
-    console.log('INSIDE OF UNAUTH')
-
-
-
-    $rootScope.$on('$stateChangeStart', function (event, toState, toParams) {
-
-
-        // if (!destinationStateRequiresAuth(toState)) {
-        //     // The destination state does not require authentication
-        //     // Short circuit with return.
-        //     return;
-        // }
-        console.log('about to create unauth user')
-        UnAuthService.createUnAuthUser()
-    })
-
-
-    //all the unauthenticated user logic will be handled here
-
-})

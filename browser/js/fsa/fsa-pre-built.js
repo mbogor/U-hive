@@ -62,22 +62,23 @@
             console.log('running success creation, RESPONSE DATA', response.data);
             var data = response.data;
             console.log("response id", data.id)
-            console.log('response user', data.user)
-            Session.create(data.id, data.user);
+            console.log('response user', data)
+            Session.create(data.id, data);
             // Session.create(data.id, data.user);
             $rootScope.$broadcast(AUTH_EVENTS.creationSuccess);
-            return data.user;
+            console.log('DATA', data)
+            return data;
         }
         
 
         this.hasSession = function () {
-            
+            console.log("unauth session.user", Session.user)
             return !!Session.user;
         }
 
         this.createUnAuthUser = function() {
             
-            if(!this.hasSession){
+            if(this.hasSession()){
                 console.log("has session")
                 return;
             } 
@@ -87,6 +88,9 @@
             // If it returns a 401 response, we catch it and instead resolve to null.
             console.log('GETTING INSIDE OF CREATE UNAUTH USER')
             return $http.get('/unauthU')
+            // .then(function(user){
+            //     console.log('NEW USER', user)
+            // })
             .then(onSuccessfulCreation)
             .catch(function () {
                 return null;
@@ -101,6 +105,8 @@
         function onSuccessfulLogin(response) {
             console.log('running success login', response.data);
             console.log('response data logged in', response.data)
+            console.log('response data logged in ID', response.data.id)
+            console.log('response data logged in USER', response.data.user)
             var data = response.data;
             Session.create(data.id, data.user);
             $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
@@ -110,6 +116,7 @@
         // Uses the session factory to see if an
         // authenticated user is currently registered.
         this.isAuthenticated = function () {
+            // console.log("auth session.user", Session.user)
             return !!Session.user;
         };
 
@@ -163,10 +170,10 @@
         console.log('running session service creator');
         var self = this;
 
-        $rootScope.$on(AUTH_EVENTS.notAuthenticated, function () {
-            console.log('not auth. destroying', self)
-            self.destroy();
-        });
+        // $rootScope.$on(AUTH_EVENTS.notAuthenticated, function () {
+        //     console.log('not auth. destroying', self)
+        //     self.destroy();
+        // });
 
         $rootScope.$on(AUTH_EVENTS.sessionTimeout, function () {
             console.log('sessionTimeout. destroying', self)
