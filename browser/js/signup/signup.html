@@ -3,32 +3,41 @@
     <alert type="danger" ng-show="error">
         {{ error }}
     </alert>
+
     <div class="form-group">
         <label for="name">Name</label>
-        <input type="text" ng-model="signup.name" class="form-control" id="name" placeholder="Your name">
+        <input type="text" ng-model="signup.name" ng-required="true" class="form-control" id="name" placeholder="Your name">
     </div>
+
     <div class="form-group">
         <label for="email">Email address</label>
-        <input type="text" ng-model="login.email" class="form-control" id="email" placeholder="Your email">
+        <input type="text" ng-model="signup.email" ng-required="true" class="form-control" id="email" placeholder="Your email">
     </div>
+
     <div class="form-group">
         <label for="phone">Phone number</label>
-        <input type="text" ng-model="login.phone" class="form-control" id="phone" placeholder="Your phone">
+        <input type="text" ng-model="signup.phone" class="form-control" id="phone" placeholder="Your phone">
     </div>
+
     <div class="form-group">
         <label for="address">Street Address</label>
-        <input type="text" ng-model="login.address" class="form-control" id="address" placeholder="Your address">
+        <input type="text" ng-model="signup.address" ng-required="true" class="form-control" id="address" placeholder="Your address">
     </div>
+
     <div class="form-group">
         <label for="college">College</label>
-        <select type="text" ng-model="login.college" class="form-control" id="college" placeholder="Your college"><option ng-repeat="college in colleges">{{college.name}}</option></select>
+        <select type="text" ng-model="myCollege._id" ng-options="college as college.name for college in colleges" ></select>
+        <!-- <select type="text" ng-model="signup.college._id" class="form-control" id="college"><option ng-repeat="college in colleges">{{college.name}}</option></select> -->
     </div>
+
     <div class="form-group">
         <label for="signup-password">Password</label>
-        <input type="password" ng-model="signup.password" class="form-control" id="signup-password" placeholder="Password">
-        <input type="password" ng-model="signup.confirmPassword" class="form-control" id="signup-password" placeholder="Confirm Password">
+        <input type="password" id="pass1" name="pass1" ng-model="pass1" ng-required="true" class="form-control" placeholder="Password">
+        <!-- <input type="password" id="pass2" name="pass2" ng-model="pass2" ng-required="true" class="form-control" placeholder="Confirm Password" check-match="pass1"> -->
     </div>
-    <button type="submit" class="btn btn-default">Sign up</button>
+
+    <button type="submit" class="btn btn-default" ng-disabled="!signupForm.$valid">Sign up</button>
+
     <div>
         Already have an account? <button class="btn btn-default" ui-sref="login">Login</button>
     </div>

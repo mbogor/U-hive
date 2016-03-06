@@ -5,9 +5,13 @@
         <div ng-click="detailTransfer(task._id)"><h3>{{task.name}}</h3></div>
         <p>{{task.description | trim:expandTask}}</p>
         <p>${{task.price}}</p>
+        <p>Seller Name: {{task.seller.name}}</p>
+        <p>Average Score: {{task.seller.score}}</p>
         <button>Add to cart</button>
         <a ng-click="toggleExpand()">More info</a>
       </div>
     </div>
   </div>
 </div>
+
+<!-- Add tiny directive that binds each seller's id and makes a request for their aggregate score -->
