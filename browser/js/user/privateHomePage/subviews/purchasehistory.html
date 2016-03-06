@@ -1,17 +1,28 @@
 <div class="col-lg-12">
   <h3>Purchase History</h3>
     <table>
-      <div ng-repeat="order in purchaseHistory">
+      <div ng-repeat="order in purchaseHistory | orderBy: '-dateProcessed'">
 		<div class="panel panel-default">
 		  	<div class="panel-heading">
 		  		<div class="row">
-		  			<span> Order Placed: {{order.dateProcessed }}</span>
+		  			<span> 
+		  			<b>Checkout Date</b>: {{orderProcessDate(order.dateProcessed) }}    
+		  			<b>Order Total</b>: {{totalValue(order.tasks) | currency}}</span>
 		  		</div>
 			</div>
 
 		  	<div class="panel-body">
-		    {{order}}
-		 	 </div>
+		  		<div ng-repeat="task in order.tasks" class="clearfix">
+			  		<div class="col-lg-2">
+			  			<img src="{{task.imageUrl}}" class="task-img">
+			  		</div>
+			  		<div class="col-lg-10">
+			  			<div>{{task.name}}</div>
+			  			<div>{{task.price | currency}}</div>
+			  			<div>Sold By: {{task.seller}}</div>
+			  		</div>
+			  	</div>	
+		 	</div>
      	</div>
       	<span ng-show="purchaseHistory.length === 0">You have no past orders</span>
     </table>

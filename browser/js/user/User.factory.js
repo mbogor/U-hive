@@ -27,6 +27,10 @@ app.factory('UserFactory', function($http) {
     .then(response => response.data) 
   }
 
+  UserFactory.getSalesHistory = function(id) {
+    return $http.get('/api/users/' + id + '/saleshistory')
+    .then(response => response.data) 
+  }
 
   return UserFactory;
 })
