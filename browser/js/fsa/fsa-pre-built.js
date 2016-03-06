@@ -21,7 +21,8 @@
         logoutSuccess: 'auth-logout-success',
         sessionTimeout: 'auth-session-timeout',
         notAuthenticated: 'auth-not-authenticated',
-        notAuthorized: 'auth-not-authorized'
+        notAuthorized: 'auth-not-authorized',
+        creationSuccess: 'base-user-created'
     });
 
     app.factory('AuthInterceptor', function ($rootScope, $q, AUTH_EVENTS) {
@@ -50,6 +51,46 @@
         ]);
     });
 
+
+
+    app.service('UnAuthService', function($http, Session, $rootScope, AUTH_EVENTS, $q){
+
+        console.log('inside of unath')
+
+        function onSuccessfulCreation(response) {
+            console.log('running success creation', response.data);
+            var data = response.data;
+            Session.create(data.id);
+            // Session.create(data.id, data.user);
+            $rootScope.$broadcast(AUTH_EVENTS.creationSuccess);
+            return data.user;
+        }
+        
+
+        this.hasSession = function () {
+            return !!Session.user;
+        }
+
+        this.createUnAuthUser = function() {
+            if(this.hasSession){
+                console.log("has session")
+                return;
+            } 
+
+            // Make request GET /unauthU.
+            // If it returns a user, call onSuccessfulLogin with the response.
+            // If it returns a 401 response, we catch it and instead resolve to null.
+            console.log('GETTING INSIDE OF CREATE UNAUTH USER')
+            return $http.get('/unauthU')
+            .then(onSuccessfulCreation)
+            .catch(function () {
+                return null;
+            })
+
+        }
+
+    })
+
     app.service('AuthService', function ($http, Session, $rootScope, AUTH_EVENTS, $q) {
 
         function onSuccessfulLogin(response) {
@@ -65,6 +106,8 @@
         this.isAuthenticated = function () {
             return !!Session.user;
         };
+
+
 
         this.getLoggedInUser = function (fromServer) {
             console.log('in AuthService.getLoggedInUser', fromServer);

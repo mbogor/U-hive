@@ -6,6 +6,7 @@ var passport = require('passport');
 var path = require('path');
 var mongoose = require('mongoose');
 var UserModel = mongoose.model('User');
+var baseUserM =  mongoose.model('baseUser');
 
 var ENABLED_AUTH_STRATEGIES = [
     'local',
@@ -46,15 +47,34 @@ module.exports = function (app) {
     // We provide a simple GET /session in order to get session information directly.
     // This is used by the browser application (Angular) to determine if a user is
     // logged in already.
+    
+    app.get('/unauthU', function(req, res, next){
+        if(req.user) return;
+        baseUserM.create({})
+        .then(function(user){
+            console.log("recently created user", user)
+            console.log("post creation req", req.session);
+            console.log("post creation res", res.session)
+            res.status(201).send(user)
+        })
+        .then(null,next)
+    })
+
+
+
     app.get('/session', function (req, res) {
-        console.log(req.session);
+        console.log("pre creation", req.session);
         if (req.user) {
             res.send({ user: req.user.sanitize() });
         } else {
             console.log('about to send 401');
+
             res.status(401).send('No authenticated user.');
         }
-    });
+    })
+
+
+
 
     // Simple /logout route.
     app.get('/logout', function (req, res) {
