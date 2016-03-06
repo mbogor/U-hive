@@ -34,6 +34,11 @@ app.config(function ($stateProvider) {
       templateUrl: '/js/user/privateHomePage/subviews/forsale.html'
     })
 
+    $stateProvider.state('homepage.forsale.edit', {
+      url:'/forsale/edit',
+      templateUrl: '/js/user/privateHomePage/subviews/editTask.html'
+    })
+
     $stateProvider.state('homepage.cart', {
       url:'/cart',
       templateUrl: '/js/user/privateHomePage/subviews/cart.html'
@@ -51,12 +56,13 @@ app.config(function ($stateProvider) {
 
 });
 
-app.controller('homeCtrl', function ($scope, theUser, avgRating, reviewsForUser, forSale, getCart, purchaseHistory, salesHistory) {
+app.controller('homeCtrl', function ($scope, theUser, avgRating, reviewsForUser, forSale, getCart, purchaseHistory, salesHistory, UserFactory) {
     $scope.user = theUser;
     $scope.avgRating = Math.round(avgRating);
     $scope.reviews = reviewsForUser;
     $scope.tasks = forSale;
-    $scope.cartItems = getCart;
+    $scope.cartItems = getCart.tasks;
+    $scope.cartId = getCart._id
     $scope.purchaseHistory = purchaseHistory;
     $scope.salesHistory = salesHistory
 
@@ -70,6 +76,10 @@ app.controller('homeCtrl', function ($scope, theUser, avgRating, reviewsForUser,
       return order.slice(0,10)
     }
 
+    $scope.removeFromCart = function(item) {
+      $scope.cartItems.splice($scope.cartItems.indexOf(item), 1)
+      return UserFactory.removeItemFromCart($scope.cartId, item._id);
+    }
 });
 
 

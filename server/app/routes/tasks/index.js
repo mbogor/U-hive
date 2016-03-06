@@ -22,21 +22,21 @@ router.get('/', function(req, res, next){
   .then(function(tasks){
     res.json(tasks);
   })
-  .then(null, next)
-})
+  .then(null, next);
+});
 
 router.get('/forsale', function(req, res, next){
-  Task.find({completed: false, forSaleOrWanted: 'forsale'})
-  .populate('seller').exec()
+  var t, u, s;
+  Task.getAllForSale()
   .then(function(tasks){
     res.json(tasks);
   })
   .then(null, next);
-})
+});
 
 //get one by id
 router.get('/:id', function(req, res, next){
-  res.json(req.task)
+  res.json(req.task);
 });
 
 // post one task
@@ -70,7 +70,7 @@ router.delete('/:id', function(req, res, next){
 //get a users forsale tasks
 
 router.get('/forsale/:sellerId', function(req, res, next){
-  Task.find({seller: req.params.sellerId, forSaleOrWanted: 'forsale', 
+  Task.find({seller: req.params.sellerId, forSaleOrWanted: 'forsale',
     completed: false })
   .then(function(tasks){
     console.log('tasks', tasks)
@@ -79,4 +79,4 @@ router.get('/forsale/:sellerId', function(req, res, next){
   .then(null, next);
 });
 
-// 
+//

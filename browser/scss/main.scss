@@ -36,6 +36,28 @@ body {
   border: none
 }
 
+.task-description {
+  padding: 5px;
+}
+
+.right-padding {
+  padding-right: 5px;
+}
+
+.left-padding {
+  padding-left: 5px;
+}
+
+.allpadding {
+  padding: 5px
+}
+
+.alignleft {
+  float: left;
+}
+.alignright {
+  float: right;
+}
 
 @import 'directives/main';
 @import 'home/main';

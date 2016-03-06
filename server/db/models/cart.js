@@ -53,7 +53,6 @@ cartSchema.methods.processCheckout = function(cartTotal) {
 }
 
 
-
 mongoose.model('Cart', cartSchema);
 
 
