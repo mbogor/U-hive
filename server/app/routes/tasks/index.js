@@ -27,6 +27,7 @@ router.get('/', function(req, res, next){
 
 router.get('/forsale', function(req, res, next){
   Task.find({completed: false, forSaleOrWanted: 'forsale'})
+  .populate('seller').exec()
   .then(function(tasks){
     res.json(tasks);
   })

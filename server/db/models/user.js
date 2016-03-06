@@ -42,6 +42,10 @@ var authUserSchema = baseUserSchema.extend({
     salt: {
         type: String
     },
+    accountCreated: {
+        type: Date,
+        default: Date.now()
+    },
     twitter: {
         id: String,
         username: String,
@@ -103,11 +107,11 @@ authUserSchema.methods.getReviews = function() {
     })
 }
 
-authUserSchema.methods.getCartItems = function() {
+authUserSchema.methods.getCart = function() {
     return mongoose.model('Cart').findOne({buyer: this._id, processed: false})
     .populate('tasks')
     .then(function(cart){
-        return cart.tasks;
+        return cart;
     })
 }
 
@@ -146,8 +150,7 @@ var encryptPassword = function (plainText, salt) {
 };
 
 authUserSchema.pre('save', function (next) {
-
-    if (this.isModified('password')) {
+    if (this.isModified('password')||this.isNew) {
         this.salt = this.constructor.generateSalt();
         this.password = this.constructor.encryptPassword(this.password, this.salt);
     }
@@ -165,4 +168,3 @@ authUserSchema.method('correctPassword', function (candidatePassword) {
 
 authUserSchema.plugin(deepPopulate);
 mongoose.model('User', authUserSchema);
-
