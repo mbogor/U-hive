@@ -61,6 +61,8 @@ var taskSchema = new mongoose.Schema({
     }
 });
 
+taskSchema.plugin(deepPopulate);
+
 taskSchema.methods.findSimilar = function() {
     return Task.find({category: {$in: this.category}, _id: {$ne: this._id}}).exec();
 }
@@ -72,7 +74,9 @@ taskSchema.statics.findPriceRange = function(min, max){
 }
 
 taskSchema.statics.getAllForSale = function(){
-    return Task.find({forSaleOrWanted: 'forsale'}).exec();
+    return Task.find({completed: false, forSaleOrWanted: 'forsale'})
+    .populate('seller')
+    .exec();
 }
 
 taskSchema.statics.getAllWanted = function(){
@@ -93,7 +97,7 @@ taskSchema.statics.clearOutDate = function(){
     return Task.remove({dateOffered: {$lte: Date.now()}}).exec()
 }
 
-taskSchema.plugin(deepPopulate);
+
 mongoose.model('Task', taskSchema);
 
 var Task = mongoose.model('Task');
