@@ -9,7 +9,7 @@ var baseUserSchema = new mongoose.Schema({
   isAdmin: {
     type: Boolean,
     default: false
-  },
+  }
 });
 mongoose.model('baseUser', baseUserSchema);
 

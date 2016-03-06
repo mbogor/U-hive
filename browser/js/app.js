@@ -14,16 +14,29 @@ app.config(function(localStorageServiceProvider){
     .setStorageCookie(7,'/'); //number of days before cookies expire & the path they represent(?)
 });
 // This app.run is for controlling access to specific states.
+
+
+app.run(function(UnAuthService){
+
+    console.log('we are in the run block')
+    UnAuthService.createUnAuthUser()
+
+    //all the unauthenticated user logic will be handled here
+
+})
+
 app.run(function ($rootScope, AuthService, $state) {
 
     // The given state requires an authenticated user.
     var destinationStateRequiresAuth = function (state) {
         return state.data && state.data.authenticate;
+        console.log("state", state, "state.data", state.data)
     };
 
     // $stateChangeStart is an event fired
     // whenever the process of changing a state begins.
     $rootScope.$on('$stateChangeStart', function (event, toState, toParams) {
+
 
         if (!destinationStateRequiresAuth(toState)) {
             // The destination state does not require authentication
@@ -34,11 +47,14 @@ app.run(function ($rootScope, AuthService, $state) {
         if (AuthService.isAuthenticated()) {
             // The user is authenticated.
             // Short circuit with return.
+            
             return;
         }
 
         // Cancel navigating to new state.
         event.preventDefault();
+
+        
 
         AuthService.getLoggedInUser().then(function (user) {
             // If a user is retrieved, then renavigate to the destination
