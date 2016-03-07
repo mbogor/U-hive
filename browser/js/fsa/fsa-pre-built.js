@@ -21,8 +21,8 @@
         logoutSuccess: 'auth-logout-success',
         sessionTimeout: 'auth-session-timeout',
         notAuthenticated: 'auth-not-authenticated',
-        notAuthorized: 'auth-not-authorized',
-        creationSuccess: 'base-user-created'
+        notAuthorized: 'auth-not-authorized'
+        // creationSuccess: 'base-user-created'
     });
 
     app.factory('AuthInterceptor', function ($rootScope, $q, AUTH_EVENTS) {
@@ -53,52 +53,53 @@
 
 
 
-    app.service('UnAuthService', function($http, Session, $rootScope, AUTH_EVENTS, $q){
+    // app.service('UnAuthService', function($http, Session, $rootScope, AUTH_EVENTS, $q){
 
-        console.log('inside of unath')
-        console.log("session user ", !!Session.user)
+    //     console.log('inside of unath')
+    //     console.log("session user ", !!Session.user)
 
-        function onSuccessfulCreation(response) {
-            console.log('running success creation, RESPONSE DATA', response.data);
-            var data = response.data;
-            console.log("response id", data.id)
-            console.log('response user', data)
-            Session.create(data.id, data);
-            // Session.create(data.id, data.user);
-            $rootScope.$broadcast(AUTH_EVENTS.creationSuccess);
-            console.log('DATA', data)
-            return data;
-        }
+    //     function onSuccessfulCreation(response) {
+    //         console.log('running success creation, RESPONSE DATA', response.data);
+    //         var data = response.data;
+    //         console.log("response id", data.id)
+    //         console.log('response user', data)
+    //         Session.create(data.id, data);
+    //         // Session.create(data.id, data.user);
+    //         $rootScope.$broadcast(AUTH_EVENTS.creationSuccess);
+    //         console.log('DATA', data)
+    //         return data;
+    //     }
         
 
-        this.hasSession = function () {
-            console.log("unauth session.user", Session.user)
-            return !!Session.user;
-        }
+    //     this.hasSession = function () {
+    //         console.log("unauth session.user", Session.user)
+    //         return !!Session.user;
+    //     }
 
-        this.createUnAuthUser = function() {
+    //     this.createUnAuthUser = function() {
             
-            if(this.hasSession()){
-                console.log("has session")
-                return;
-            } 
+    //         if(this.hasSession()){
+    //             console.log("unauth session.user", Session.user)
+    //             console.log("has session")
+    //             return;
+    //         } 
 
-            // Make request GET /unauthU.
-            // If it returns a user, call onSuccessfulLogin with the response.
-            // If it returns a 401 response, we catch it and instead resolve to null.
-            console.log('GETTING INSIDE OF CREATE UNAUTH USER')
-            return $http.get('/unauthU')
-            // .then(function(user){
-            //     console.log('NEW USER', user)
-            // })
-            .then(onSuccessfulCreation)
-            .catch(function () {
-                return null;
-            })
+    //         // Make request GET /unauthU.
+    //         // If it returns a user, call onSuccessfulLogin with the response.
+    //         // If it returns a 401 response, we catch it and instead resolve to null.
+    //         console.log('GETTING INSIDE OF CREATE UNAUTH USER')
+    //         return $http.get('/unauthU')
+    //         // .then(function(user){
+    //         //     console.log('NEW USER', user)
+    //         // })
+    //         .then(onSuccessfulCreation)
+    //         .catch(function () {
+    //             return null;
+    //         })
 
-        }
+    //     }
 
-    })
+    // })
 
     app.service('AuthService', function ($http, Session, $rootScope, AUTH_EVENTS, $q) {
 
@@ -184,7 +185,7 @@
         this.user = null;
 
         this.create = function (sessionId, user) {
-            console.log('creating session in service')
+            console.log('creating session in service', sessionId, user)
             this.id = sessionId;
             this.user = user;
         };
