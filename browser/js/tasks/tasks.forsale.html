@@ -1,4 +1,22 @@
-<div class="task-container">
-  <task-item ng-repeat="task in forsale">
-  </task-item>
+<div class="container">
+
+  <div class="panel panel-default">
+    <div class="panel-heading">Refine your search</div>
+    <div class="panel-body">
+      <label>Search: <input ng-model="searchTask"></label>
+<!--       <h2>Category</h2>
+      <label>cleaning</label>
+      <input type="checkbox" ng-model="category">&nbsp;
+      <label>food</label>
+      <input type="checkbox" ng-model="category">&nbsp;
+      <label>tutoring</label>
+      <input type="checkbox"  ng-model="category">&nbsp; -->
+    </div>
+  </div>
+
+  <div class="task-container">
+    <task-item ng-repeat="task in forsale | filter:searchTask">
+    </task-item>
+  </div>
+
 </div>
