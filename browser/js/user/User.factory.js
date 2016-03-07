@@ -42,5 +42,16 @@ app.factory('UserFactory', function($http) {
     .then(response => response.data)
   }
 
+  UserFactory.deleteTaskForSale = function(taskId) {
+    return $http.delete('/api/tasks/' + taskId)
+    .then(response => response.data)
+  }
+
+  UserFactory.updateTaskForSale = function(taskId, task) {
+    return $http.put('/api/tasks/' + taskId, task)
+    .then(response => response.data)
+  }
+
+
   return UserFactory;
 })

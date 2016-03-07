@@ -9,9 +9,10 @@
 	        <br>
 	        <div class="col-lg-8 task-description">{{task.name}}</div>
 	        <div class="col-lg-4 right-padding" align="right">
-	        	<button type="button" class="btn btn-secondary btn-sm">Edit</button>
-	        	<button type="button" class="btn btn-danger btn-sm">Delete</button>
+	        	<button ng-click="goToEditTask(task)" type="button" class="btn btn-secondary btn-sm">Edit</button>
+	        	<button ng-click="deleteTaskForSale(task)" type="button" class="btn btn-danger btn-sm">Delete</button>
 	        </div>
+			<ui-view ng-show="currentTask === task._id"></ui-view>
 	      </div>
 	    </div>
 	    <span ng-show="tasks.length === 0">You have no items for sale</span>
