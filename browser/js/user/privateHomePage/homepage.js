@@ -1,31 +1,34 @@
 app.config(function ($stateProvider) {
 
     $stateProvider.state('homepage', {
-        url: '/myhomepage/:personId',
+        url: '/myhomepage',
         templateUrl: '/js/user/privateHomePage/homepage.html',
         controller: 'homeCtrl',
         resolve: {
-          theUser: function(UserFactory, $stateParams) {
-            return UserFactory.fetchById($stateParams.personId);
+          theUser: function(UserFactory, AuthService) {
+            return AuthService.getLoggedInUser();
           },
-          avgRating: function(UserFactory, $stateParams) {
-            return UserFactory.fetchAvgRating($stateParams.personId)
+          avgRating: function(UserFactory, theUser) {
+            return UserFactory.fetchAvgRating(theUser._id);
           },
-          reviewsForUser: function(UserFactory, $stateParams) {
-            return UserFactory.getAllReviews($stateParams.personId)
+          reviewsForUser: function(UserFactory, theUser) {
+            return UserFactory.getAllReviews(theUser._id);
           },
-          forSale: function(TaskFactory, $stateParams) {
-            return TaskFactory.getForSaleByUser($stateParams.personId)
+          forSale: function(TaskFactory, theUser) {
+            return TaskFactory.getForSaleByUser(theUser._id);
           },
-          getCart: function(UserFactory, $stateParams) {
-            return UserFactory.getCart($stateParams.personId)
+          getCart: function(UserFactory, theUser) {
+            return UserFactory.getCart(theUser._id);
           },
-          purchaseHistory: function(UserFactory, $stateParams) {
-            return UserFactory.getPurchaseHistory($stateParams.personId)
+          purchaseHistory: function(UserFactory, theUser) {
+            return UserFactory.getPurchaseHistory(theUser._id);
           },
-          salesHistory: function(UserFactory, $stateParams) {
-            return UserFactory.getSalesHistory($stateParams.personId)
+          salesHistory: function(UserFactory, theUser) {
+            return UserFactory.getSalesHistory(theUser._id);
           }
+        },
+        data: {
+          authenticate: true
         }
     });
 
@@ -57,6 +60,7 @@ app.config(function ($stateProvider) {
 });
 
 app.controller('homeCtrl', function ($scope, theUser, avgRating, reviewsForUser, forSale, getCart, purchaseHistory, salesHistory, UserFactory) {
+    console.log('homeCtrl', theUser)
     $scope.user = theUser;
     $scope.avgRating = Math.round(avgRating);
     $scope.reviews = reviewsForUser;
