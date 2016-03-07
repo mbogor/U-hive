@@ -3,7 +3,7 @@
 app.config(function($stateProvider){
   $stateProvider.state('cart', {
     url: '/cart',
-    templateUrl: '/js/cart/cart.html',
+    templateUrl: '/js/cart/cart.template.html',
     controller: 'CartCtrl',
      resolve: {
       user: function(AuthService){
@@ -23,7 +23,7 @@ app.config(function($stateProvider){
 
 app.controller('CartCtrl', function($scope, user, cart){
   $scope.user = user;
-  $scope.cart = cart;
+  $scope.cartItems = cart.tasks;
 
   $scope.totalValue = function(order) {
     var total = order.reduce(function(accum, elem) {
