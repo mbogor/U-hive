@@ -22,9 +22,13 @@ app.config(function($stateProvider){
 
 
 app.controller('CartCtrl', function($scope, user, cart){
-  console.log('CartCtrl', user, cart);
-  // $scope.cart = cart;
-  // UserFactory.get
   $scope.user = user;
   $scope.cart = cart;
+
+  $scope.totalValue = function(order) {
+    var total = order.reduce(function(accum, elem) {
+          return accum + elem.price;
+      }, 0)
+    return total;
+  }
 })

@@ -2,8 +2,8 @@
   <div class="panel panel-default">
     <div class="panel-heading">
       <div class="row">
-        <p class="alignleft allpadding">My Cart {{cart.tasks.length}}</p>
-        <p class="alignright allpadding">{{totalValue(cartItems) | currency}}</p>
+        <p class="alignleft allpadding">My Cart ({{cart.tasks.length}} items)</p>
+        <p class="alignright allpadding">Total: {{totalValue(cart.tasks) | currency}}</p>
         </div>
       </div>
       <div class="panel-body" ng-repeat="task in cart.tasks">
