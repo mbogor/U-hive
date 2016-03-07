@@ -1,0 +1,15 @@
+<div class="panel-body" ng-repeat="task in cartItems">
+  <div>
+    <img src="{{task.imageUrl}}" class="task-img">
+    <br>
+    <div class="col-lg-8 task-description">
+      <span>{{task.name}}</span><br>
+      <span><strong>Offered:</strong> {{task.dateOffered | date: format: 'MMM dd, yyyy'}}</span><br>
+      <span>{{task.price | currency}}</span>
+
+    </div>
+    <div class="col-lg-2 right-padding" align="right">
+      <button ng-click="removeFromCart(task)" type="button" class="btn btn-danger btn-sm">Remove item</button>
+    </div>
+  </div>
+</div>

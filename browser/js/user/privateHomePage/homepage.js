@@ -44,7 +44,7 @@ app.config(function ($stateProvider) {
 
     $stateProvider.state('homepage.cart', {
       url:'/cart',
-      templateUrl: '/js/user/privateHomePage/subviews/cart.html'
+      templateUrl: '/js/cart/cart.template.html'
     })
 
     $stateProvider.state('homepage.purchasehistory', {
