@@ -41,6 +41,7 @@ module.exports = function (app) {
     // When we receive a cookie from the browser, we use that id to set our req.user
     // to a user found in the database.
     passport.deserializeUser(function (id, done) {
+        console.log("ID", id)
         UserModel.findById(id, done);
     });
 
@@ -51,9 +52,11 @@ module.exports = function (app) {
     app.get('/unauthU', function(req, res, next){
         console.log("req.user", req.user)
         // console.log("res", res)
-        console.log("res.session", res.session)
+        console.log("req._id", req.id)
         // if(res.session) return;
-        if(req.user) return;
+        if(req.session) return;
+
+        // baseUserM.findById(req._id)
         baseUserM.create({})
         .then(function(user){
             console.log("recently created user", user)
