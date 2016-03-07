@@ -17,6 +17,7 @@ var ensureAuthenticated = function (req, res, next) {
 router.param('id', function(req, res, next){
     User.findById(req.params.id).populate('college').exec()
     .then(function(user){
+        if(!user) throw new Error('user wasnt found');
         req.reqUser = user;
         next();
     })
