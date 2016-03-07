@@ -10,9 +10,9 @@ app.directive('navbar', function ($rootScope, Session, AuthService, AUTH_EVENTS,
                 { label: 'About', state: 'about' },
                 { label: 'For Sale', state: 'tasksForSale'},
                 { label: 'Top Ten Bees', state: 'stateThatDoesntExistYet'},
-                { label: 'Cart', state: 'viewCart'},
+                { label: 'Cart', state: 'cart', auth: true},
                 { label: 'New Post', state: 'newPost', auth: true},
-                { label: 'My Account', state: 'membersOnly', auth: true }
+                { label: 'My Account', state: 'homepage', auth: true }
             ];
 
             scope.user = null;
@@ -25,10 +25,6 @@ app.directive('navbar', function ($rootScope, Session, AuthService, AUTH_EVENTS,
                 AuthService.logout().then(function () {
                    $state.go('home');
                 });
-            };
-
-            var setCart = function(){
-                console.log('setting cart in navbar');
             };
 
             var setUser = function () {
@@ -54,7 +50,7 @@ app.directive('navbar', function ($rootScope, Session, AuthService, AUTH_EVENTS,
             // setCart();
 
             $rootScope.$on(AUTH_EVENTS.loginSuccess, setUser);
-            $rootScope.$on(AUTH_EVENTS.loginSuccess, setCart);
+            // $rootScope.$on(AUTH_EVENTS.loginSuccess, setCart);
             $rootScope.$on(AUTH_EVENTS.logoutSuccess, removeUser);
             $rootScope.$on(AUTH_EVENTS.sessionTimeout, removeUser);
 
