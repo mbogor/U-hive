@@ -7,7 +7,7 @@ app.factory('CollegeFactory', function($http){
       .then(function(res){
         console.log('got all colleges:', res.data);
         return res.data;
-      })
+      });
     }
-  }
-})
+  };
+});
