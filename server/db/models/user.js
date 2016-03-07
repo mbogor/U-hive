@@ -60,7 +60,7 @@ var authUserSchema = baseUserSchema.extend({
     }
 });
 
-
+authUserSchema.plugin(deepPopulate);
 //STATICS & METHODS
 
 authUserSchema.statics.top10Users = function() {
@@ -116,7 +116,7 @@ authUserSchema.methods.getCart = function() {
 }
 
 authUserSchema.methods.getPurchaseHistory = function() {
-    return mongoose.model('Cart').find({buyer: this._id, processed: true}).populate('tasks');
+    return mongoose.model('Cart').find({buyer: this._id, processed: true}).deepPopulate('tasks.seller').exec();
     //deepPopulate tasks.seller is not working :(!!
 }
 
@@ -166,5 +166,5 @@ authUserSchema.method('correctPassword', function (candidatePassword) {
     return encryptPassword(candidatePassword, this.salt) === this.password;
 });
 
-authUserSchema.plugin(deepPopulate);
+
 mongoose.model('User', authUserSchema);

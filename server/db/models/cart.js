@@ -2,6 +2,7 @@
 
 var mongoose = require('mongoose');
 var Promise = require('bluebird');
+var deepPopulate = require('mongoose-deep-populate')(mongoose);
 
 //user on cart is the buyer and user on a task is a seller
 var cartSchema = new mongoose.Schema({
@@ -12,6 +13,7 @@ var cartSchema = new mongoose.Schema({
   dateProcessed: { type: Date }
 })
 
+cartSchema.plugin(deepPopulate);
 
 //cartTotal will be passed in from the front end so that we don't need to calculate the cart total here
 cartSchema.methods.processCheckout = function(cartTotal) {
