@@ -1,0 +1,50 @@
+<form id="edit-task-form" name="editTaskForm" ng-submit="editTaskForm.$valid && sendTaskUpdates(task, updatedTask)">
+    <h3>Edit Task: </h3>
+<!--     <alert type="danger" ng-show="error">
+        {{ error }}
+    </alert>
+ -->
+    <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" ng-model="updatedTask.name" ng-required="true" class="form-control" id="name" placeholder="{{task.name}}">
+    </div>
+
+    <div class="form-group">
+        <label for="category">Category</label>
+        <select name="category" ng-model="updatedTask.category" ng-required="true">
+            <option ng-repeat="category in categories" value="{{category}}">{{category}}</option>
+        </select><br>
+     <!--    <input type="text" ng-model="updatedTask.category" ng-required="true" class="form-control" id="category" placeholder="{{task.category}}"> -->
+    </div>
+
+    <div class="form-group">
+        <label for="price">Price</label>
+        <input type="text" ng-model="updatedTask.price" class="form-control" id="price" placeholder="{{task.price}}">
+    </div>
+
+    <div class="form-group">
+        <label for="description">Description</label>
+        <input type="text" ng-model="updatedTask.description" ng-required="true" class="form-control" id="description" placeholder="{{task.description}}">
+    </div>
+
+    <div class="form-group">
+        <label for="dateOffered">Date Offered</label>
+        <input type="text" ng-model="updatedTask.dateOffered" ng-required="true" class="form-control" id="dateOffered" placeholder="{{task.dateOffered}}">
+        <!-- <select type="text" ng-model="updatedTask.dateOffered" ng-options="college as college.name for college in colleges" ></select> -->
+        <!-- <select type="text" ng-model="signup.college._id" class="form-control" id="college"><option ng-repeat="college in colleges">{{college.name}}</option></select> -->
+    </div>
+
+    <div class="form-group">
+        <label for="forSaleOrWanted">For Sale Or Wanted</label>
+        <select name="forSaleOrWanted" ng-model="updatedTask.forSaleOrWanted" ng-required="true">
+            <option value="forsale">forsale</option>
+            <option value="wanted">wanted</option>
+        </select><br>
+<!-- 
+        <input type="text" ng-model="updatedTask.forSaleOrWanted" ng-required="true" class="form-control" id="forSaleOrWanted" placeholder="{{task.forSaleOrWanted}}"> -->
+    </div>
+
+    <button type="submit" class="btn btn-default" ng-disabled="!editTaskForm.$valid">Submit Changes</button>
+
+</form>
+

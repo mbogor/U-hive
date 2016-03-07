@@ -38,7 +38,7 @@ app.config(function ($stateProvider) {
     })
 
     $stateProvider.state('homepage.forsale.edit', {
-      url:'/forsale/edit',
+      url:'/edit',
       templateUrl: '/js/user/privateHomePage/subviews/editTask.html'
     })
 
@@ -59,8 +59,8 @@ app.config(function ($stateProvider) {
 
 });
 
-app.controller('homeCtrl', function ($scope, theUser, avgRating, reviewsForUser, forSale, getCart, purchaseHistory, salesHistory, UserFactory) {
-    console.log('homeCtrl', theUser)
+
+app.controller('homeCtrl', function ($scope, theUser, avgRating, reviewsForUser, forSale, getCart, purchaseHistory, salesHistory, UserFactory, $state) {
     $scope.user = theUser;
     $scope.avgRating = Math.round(avgRating);
     $scope.reviews = reviewsForUser;
@@ -69,6 +69,10 @@ app.controller('homeCtrl', function ($scope, theUser, avgRating, reviewsForUser,
     $scope.cartId = getCart._id
     $scope.purchaseHistory = purchaseHistory;
     $scope.salesHistory = salesHistory
+
+    $scope.currentTask = null;
+
+    $scope.categories = ['food', 'tutoring', 'delivery', 'moving', 'cleaning', 'other']
 
     $scope.totalValue = function(order) {
       var total = order.reduce(function(accum, elem) {
@@ -84,9 +88,28 @@ app.controller('homeCtrl', function ($scope, theUser, avgRating, reviewsForUser,
       $scope.cartItems.splice($scope.cartItems.indexOf(item), 1)
       return UserFactory.removeItemFromCart($scope.cartId, item._id);
     }
+
+    $scope.deleteTaskForSale = function(task) {
+      $scope.tasks.splice($scope.tasks.indexOf(task), 1)
+      return UserFactory.deleteTaskForSale(task._id);
+    }
+
+    $scope.goToEditTask = function(task) {
+      $scope.currentTask = task._id
+      return $state.go('homepage.forsale.edit');
+    }
+
+    $scope.sendTaskUpdates = function(originalTask, updatedTask) {
+
+      return UserFactory.updateTaskForSale(originalTask._id, updatedTask)
+      .then(function(task){
+        $state.go('homepage.forsale', $scope.user._id)
+      })
+    }
 });
 
-
+// 56db57bfd1515327c92a2e39
+// 2016-10-19T09:01:29.409Z
 
 
 
