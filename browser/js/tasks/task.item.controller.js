@@ -24,7 +24,7 @@ app.controller('TaskItem', function($scope, localStorageService, AuthService){
   };
 
   $scope.itemIsInCart = function(task){
-    // console.log('item is in cart:', localStorageService.get('cart').tasks.indexOf(task._id)>-1)
+    if(!localStorageService.get('cart')) return false;
     return localStorageService.get('cart').tasks.indexOf(task._id)>-1;
   }
 })

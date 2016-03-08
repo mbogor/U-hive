@@ -1,5 +1,10 @@
 app.directive('navbar', function ($rootScope, Session, AuthService, AUTH_EVENTS, $state, localStorageService) {
-
+    var cartCt;
+    if(!localStorageService.get('cart')){
+        cartCt = 0
+    }else{
+     cartCt = localStorageService.get('cart').tasks.length;
+    }
     return {
         restrict: 'E',
         scope: {},
@@ -10,7 +15,7 @@ app.directive('navbar', function ($rootScope, Session, AuthService, AUTH_EVENTS,
                 { label: 'About', state: 'about' },
                 { label: 'For Sale', state: 'tasksForSale'},
                 { label: 'Top Ten Bees', state: 'stateThatDoesntExistYet'},
-                { label: 'Cart', state: 'cart', auth: true},
+                { label: 'Cart (' + cartCt + ')', state: 'cart'},
                 { label: 'New Post', state: 'newPost', auth: true},
                 { label: 'My Account', state: 'homepage.purchasehistory', auth: true }
             ];
@@ -29,14 +34,9 @@ app.directive('navbar', function ($rootScope, Session, AuthService, AUTH_EVENTS,
 
             var setUser = function () {
                 // console.log('do we have auth interceptor?', AuthInterceptor)
-                console.log('about to set user in navbar link function');
                 console.log('local:', localStorageService.keys());
                 AuthService.getLoggedInUser()
                 .then(function (user) {
-                    console.log('user from getLoggedInUser', user);
-                    if(!user){
-
-                    }
                     scope.user = user;
                 });
             };
