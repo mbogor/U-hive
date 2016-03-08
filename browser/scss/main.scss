@@ -34,7 +34,9 @@ body {
 }
 
 .task-profileview {
-  border: none
+  border: none;
+  float: left;
+  clear: bottom;
 }
 
 .task-description {
@@ -58,6 +60,23 @@ body {
 }
 .alignright {
   float: right;
+}
+
+.profile-picture {
+  width: 150px;
+  height: 150px;
+}
+
+li {
+  font-size: 1.2em;
+}
+
+ul {
+  list-style-type: none;
+}
+
+.review-data {
+  width: 150px;
 }
 
 @import 'directives/main';
