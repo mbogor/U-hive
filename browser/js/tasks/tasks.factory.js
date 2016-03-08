@@ -10,6 +10,13 @@ app.factory('TaskFactory', function($http){
     });
   };
 
+  TaskFactory.newTask = function(task){
+    return $http.post('/api/tasks/', task)
+    .then(function(res){
+      return res.data
+    })
+  }
+
 
   TaskFactory.getDetail = function(id){
     return $http.get('api/tasks/'+id)
