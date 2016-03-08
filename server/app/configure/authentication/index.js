@@ -34,7 +34,7 @@ module.exports = function (app) {
 
     // When we give a cookie to the browser, it is just the userId (encrypted with our secret).
     passport.serializeUser(function (user, done) {
-        console.log('passport user', user)
+        
         done(null, user.id);
     });
 
@@ -48,26 +48,26 @@ module.exports = function (app) {
     // This is used by the browser application (Angular) to determine if a user is
     // logged in already.
     
-    app.get('/unauthU', function(req, res, next){
-        if(req.user) return;
-        baseUserM.create({})
-        .then(function(user){
-            console.log("recently created user", user)
-            console.log("post creation req", req.session);
-            console.log("post creation res", res.session)
-            res.status(201).send(user)
-        })
-        .then(null,next)
-    })
+    // app.get('/unauthU', function(req, res, next){
+    //     if(req.user) return;
+    //     baseUserM.create({})
+    //     .then(function(user){
+    //         console.log("recently created user", user)
+    //         console.log("post creation req", req.session);
+    //         console.log("post creation res", res.session)
+    //         res.status(201).send(user)
+    //     })
+    //     .then(null,next)
+    // })
 
 
 
     app.get('/session', function (req, res) {
-        console.log("pre creation", req.session);
+
         if (req.user) {
             res.send({ user: req.user.sanitize() });
         } else {
-            console.log('about to send 401');
+
 
             res.status(401).send('No authenticated user.');
         }

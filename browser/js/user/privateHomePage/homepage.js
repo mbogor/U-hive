@@ -105,6 +105,23 @@ app.controller('homeCtrl', function ($scope, theUser, avgRating, reviewsForUser,
     }
 });
 
+
+app.controller('NewPostCtrl', function($scope, $state, TaskFactory){
+
+  $scope.categories = [{id: 0, name:'food'}, {id:1, name:'tutoring'}, {id:2, name:'delivery'}, {id:3, name:'moving'}, {id:4, name:'cleaning'}, {id:5, name:'other'}]
+
+
+  $scope.PostTask = function(task){
+    console.log("TASK", task)
+    return TaskFactory.newTask(task)
+    .then(function(tsk){
+      console.log("promise task", tsk)
+      $state.go('success')
+    })
+  }
+
+});
+
 // 56db57bfd1515327c92a2e39
 // 2016-10-19T09:01:29.409Z
 

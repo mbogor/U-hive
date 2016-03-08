@@ -53,43 +53,43 @@
 
 
 
-    app.service('UnAuthService', function($http, Session, $rootScope, AUTH_EVENTS, $q){
+    // app.service('UnAuthService', function($http, Session, $rootScope, AUTH_EVENTS, $q){
 
-        console.log('inside of unath')
+    //     console.log('inside of unath')
 
-        function onSuccessfulCreation(response) {
-            console.log('running success creation', response.data);
-            var data = response.data;
-            Session.create(data.id);
-            // Session.create(data.id, data.user);
-            $rootScope.$broadcast(AUTH_EVENTS.creationSuccess);
-            return data.user;
-        }
+    //     function onSuccessfulCreation(response) {
+    //         console.log('running success creation', response.data);
+    //         var data = response.data;
+    //         Session.create(data.id);
+    //         // Session.create(data.id, data.user);
+    //         $rootScope.$broadcast(AUTH_EVENTS.creationSuccess);
+    //         return data.user;
+    //     }
         
 
-        this.hasSession = function () {
-            return !!Session.user;
-        }
+    //     this.hasSession = function () {
+    //         return !!Session.user;
+    //     }
 
-        this.createUnAuthUser = function() {
-            if(this.hasSession){
-                console.log("has session")
-                return;
-            } 
+    //     this.createUnAuthUser = function() {
+    //         if(this.hasSession){
+    //             console.log("has session")
+    //             return;
+    //         } 
 
-            // Make request GET /unauthU.
-            // If it returns a user, call onSuccessfulLogin with the response.
-            // If it returns a 401 response, we catch it and instead resolve to null.
-            console.log('GETTING INSIDE OF CREATE UNAUTH USER')
-            return $http.get('/unauthU')
-            .then(onSuccessfulCreation)
-            .catch(function () {
-                return null;
-            })
+    //         // Make request GET /unauthU.
+    //         // If it returns a user, call onSuccessfulLogin with the response.
+    //         // If it returns a 401 response, we catch it and instead resolve to null.
+    //         console.log('GETTING INSIDE OF CREATE UNAUTH USER')
+    //         return $http.get('/unauthU')
+    //         .then(onSuccessfulCreation)
+    //         .catch(function () {
+    //             return null;
+    //         })
 
-        }
+    //     }
 
-    })
+    // })
 
     app.service('AuthService', function ($http, Session, $rootScope, AUTH_EVENTS, $q) {
 
