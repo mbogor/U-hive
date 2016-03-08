@@ -6,7 +6,8 @@ var passport = require('passport');
 var path = require('path');
 var mongoose = require('mongoose');
 var UserModel = mongoose.model('User');
-var baseUserM =  mongoose.model('baseUser');
+var BaseUser =  mongoose.model('baseUser');
+var Cart = mongoose.model('Cart');
 
 var ENABLED_AUTH_STRATEGIES = [
     'local',
@@ -41,26 +42,30 @@ module.exports = function (app) {
     // When we receive a cookie from the browser, we use that id to set our req.user
     // to a user found in the database.
     passport.deserializeUser(function (id, done) {
+        console.log('deserializeUser, id:', id);
         UserModel.findById(id, done);
+    });
+
+    app.use(function(req, res, next){
+        if(!req.session.guest && !req.session.passport.user){
+            BaseUser.create({})
+            .then(function(user){
+                req.session.guest = user._id;
+                return Cart.create({guest: user._id})
+            })
+            .then(function(cart){
+                console.log('created cart,', cart);
+                req.session.cart = cart._id;
+                // res.status(201).json(guestUser);
+            })
+            .then(null, next);
+        }
+        next();
     });
 
     // We provide a simple GET /session in order to get session information directly.
     // This is used by the browser application (Angular) to determine if a user is
     // logged in already.
-    
-    app.get('/unauthU', function(req, res, next){
-        if(req.user) return;
-        baseUserM.create({})
-        .then(function(user){
-            console.log("recently created user", user)
-            console.log("post creation req", req.session);
-            console.log("post creation res", res.session)
-            res.status(201).send(user)
-        })
-        .then(null,next)
-    })
-
-
 
     app.get('/session', function (req, res) {
         console.log("pre creation", req.session);
@@ -68,7 +73,6 @@ module.exports = function (app) {
             res.send({ user: req.user.sanitize() });
         } else {
             console.log('about to send 401');
-
             res.status(401).send('No authenticated user.');
         }
     })
