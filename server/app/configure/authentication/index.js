@@ -28,6 +28,13 @@ module.exports = function (app) {
         saveUninitialized: false
     }));
 
+    
+    app.use(function(req,res,next){ 
+        console.log(req.body, req.session.user, req.session.id);
+        console.log("we are running this bullshit")
+        next()
+    })
+
     // Initialize passport and also allow it to read
     // the request session information.
     app.use(passport.initialize());
@@ -39,11 +46,6 @@ module.exports = function (app) {
         done(null, user.id);
     });
 
-    app.use(function(req,res,next){ 
-        console.log(req.body, req.session.user, req.session.id);
-        console.log("we are running this bullshit")
-        next()
-    })
 
     // When we receive a cookie from the browser, we use that id to set our req.user
     // to a user found in the database.
