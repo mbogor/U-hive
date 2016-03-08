@@ -10,20 +10,13 @@ app.config(function ($urlRouterProvider, $locationProvider) {
 });
 app.config(function(localStorageServiceProvider){
     localStorageServiceProvider
-    .setStorageType('sessionStorage') //type of storage
-    .setStorageCookie(7,'/'); //number of days before cookies expire & the path they represent(?)
+    .setPrefix('uhive')
+    // .setStorageType('sessionStorage') //type of storage
+    .setNotify(true, true)
+    .setStorageCookie(7); //number of days before cookies expire & the path they represent(?)
 });
 // This app.run is for controlling access to specific states.
 
-
-app.run(function(UnAuthService){
-
-    console.log('we are in the run block')
-    UnAuthService.createUnAuthUser()
-
-    //all the unauthenticated user logic will be handled here
-
-})
 
 app.run(function ($rootScope, AuthService, $state) {
 
@@ -47,14 +40,14 @@ app.run(function ($rootScope, AuthService, $state) {
         if (AuthService.isAuthenticated()) {
             // The user is authenticated.
             // Short circuit with return.
-            
+
             return;
         }
 
         // Cancel navigating to new state.
         event.preventDefault();
 
-        
+
 
         AuthService.getLoggedInUser().then(function (user) {
             // If a user is retrieved, then renavigate to the destination
