@@ -6,7 +6,7 @@
 		  	<div class="panel-heading">
 		  		<div class="row">
 		  			<span class="left-padding"> 
-		  			<b>Checkout Date</b>: {{orderProcessDate(order.dateProcessed) }}    
+		  			<b>Checkout Date</b>: {{order.dateProcessed | date: format: 'MMM dd, yyyy' }}    
 		  			<b>Order Total</b>: {{totalValue(order.tasks) | currency}}</span>
 		  		</div>
 			</div>

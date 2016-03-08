@@ -44,7 +44,7 @@ app.config(function ($stateProvider) {
 
     $stateProvider.state('homepage.cart', {
       url:'/cart',
-      templateUrl: '/js/cart/cart.template.html'
+      templateUrl: '/js/user/privateHomePage/subviews/cart.html'
     })
 
     $stateProvider.state('homepage.purchasehistory', {
@@ -79,9 +79,6 @@ app.controller('homeCtrl', function ($scope, theUser, avgRating, reviewsForUser,
             return accum + elem.price;
         }, 0)
       return total;
-    }
-    $scope.orderProcessDate = function(order) {
-      return order.slice(0,10)
     }
 
     $scope.removeFromCart = function(item) {
