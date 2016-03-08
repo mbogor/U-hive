@@ -30,7 +30,12 @@ app.factory('TaskFactory', function($http){
     .then(function(res){
       return res.data;
     });
-  };
+  }
+
+  TaskFactory.destroy = function (task) {
+    return $http.delete('/api/tasks/'+task._id);
+  }
+  
 
 
   return TaskFactory;

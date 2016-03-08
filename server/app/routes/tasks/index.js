@@ -5,7 +5,8 @@ var mongoose = require('mongoose');
 var Promise = require('bluebird');
 var Task = mongoose.model('Task')
 var User = mongoose.model('User')
-var Cart = mongoose.model('Cart')
+var Auth = require('../../configure/auth-middleware');
+var Cart = mongoose.model('Cart');
 module.exports = router;
 
 router.param('id', function(req, res, next){
@@ -71,7 +72,8 @@ router.put('/:id', function(req, res, next){
 })
 
 // delete task by id
-router.delete('/:id', function(req, res, next){
+router.delete('/:id', Auth.assertAdminOrAuthor, function(req, res, next){
+  console.log('REQUEST FROM TASK DELETE', req)
   req.task.remove()
   .then(function(){
     res.sendStatus(204)
