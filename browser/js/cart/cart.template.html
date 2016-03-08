@@ -1,12 +1,27 @@
-<div class="col-lg-7">
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <div class="row">
-        <p class="alignleft allpadding">My Cart ({{cartItems.length}} items)</p>
-        <p class="alignright allpadding">Total: {{totalValue(cartItems) | currency}}</p>
+<div class="container">
+  <div class="col-lg-7">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <div class="row">
+          <h4 class="container">Shopping Cart</h4>
+          </div>
         </div>
+        <cart-item></cart-item>
+        <span ng-show="cartItems.length === 0">You have no items in your cart</span>
+    </div>
+  </div>
+  <div class="col-lg-5">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h4>Cart Summary</h4>
       </div>
-      <cart-item></cart-item>
-      <span ng-show="cartItems.length === 0">You have no items in your cart</span>
+      <div class="panel-body">
+        <h4>Total: ({{cartItems.length}} items) </h4> 
+        <p>{{totalValue(cartItems) | currency}}</p>
+        <!-- <a> -->
+        <button ng-click="changeState()" class="btn btn-primary">Checkout Cart</button>
+        <!-- </a> -->
+      </div>
+    </div>
   </div>
 </div>
