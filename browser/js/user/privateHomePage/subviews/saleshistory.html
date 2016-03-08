@@ -1,12 +1,12 @@
 <div class="col-lg-12">
   <h3>Sales History</h3>
     <table>
-      <div ng-repeat="task in salesHistory">
+      <div ng-repeat="task in salesHistory | orderBy: '-datePurchased'">
 		<div class="panel panel-default">
 		  	<div class="panel-heading">
 		  		<div class="row">
 		  			<span class="left-padding"> 
-		  			<b>Sale Date</b>: {{orderProcessDate(task.datePurchased)}}    
+		  			<b>Sale Date</b>: {{task.datePurchased | date: format: 'MMM dd, yyyy'}}    
 		  			<b>Sale Price</b>: {{task.price | currency}}</span>
 		  		</div>
 			</div>
