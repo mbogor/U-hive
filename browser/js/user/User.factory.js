@@ -52,6 +52,10 @@ app.factory('UserFactory', function($http) {
     .then(response => response.data)
   }
 
+  // UserFactory.findBuyerOfTask = function(taskId) {
+  //   return $http.get('/api/tasks/' + taskId + '/buyer')
+  // }
+
 
   return UserFactory;
 })

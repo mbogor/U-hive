@@ -5,6 +5,7 @@ var mongoose = require('mongoose');
 var Promise = require('bluebird');
 var Task = mongoose.model('Task')
 var User = mongoose.model('User')
+var Cart = mongoose.model('Cart')
 module.exports = router;
 
 router.param('id', function(req, res, next){
@@ -33,6 +34,15 @@ router.get('/forsale', function(req, res, next){
   })
   .then(null, next);
 });
+
+//find buyer of a task
+// router.get('/:id/buyer', function(req, res, next){
+//   Cart.findOne({tasks: { $in: [req.task]} }).populate('buyer').exec()
+//   .then(function(buyer){
+//     res.json(buyer);
+//   })
+//   .then(null, next);
+// })
 
 //get one by id
 router.get('/:id', function(req, res, next){
@@ -73,10 +83,11 @@ router.get('/forsale/:sellerId', function(req, res, next){
   Task.find({seller: req.params.sellerId, forSaleOrWanted: 'forsale',
     completed: false })
   .then(function(tasks){
-    console.log('tasks', tasks)
     res.json(tasks);
   })
   .then(null, next);
 });
 
-//
+
+
+

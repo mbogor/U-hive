@@ -103,6 +103,10 @@ app.controller('homeCtrl', function ($scope, theUser, avgRating, reviewsForUser,
         $state.go('homepage.forsale', $scope.user._id)
       })
     }
+
+    // $scope.findBuyerOfTask = function(taskId) {
+    //   return UserFactory.findBuyerOfTask(taskId)
+    // }
 });
 
 // 56db57bfd1515327c92a2e39
