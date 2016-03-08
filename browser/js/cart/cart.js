@@ -21,7 +21,7 @@ app.config(function($stateProvider){
 });
 
 
-app.controller('CartCtrl', function($scope, user, cart){
+app.controller('CartCtrl', function($scope, user, cart, $location){
   $scope.user = user;
   $scope.cartItems = cart.tasks;
 
@@ -31,4 +31,9 @@ app.controller('CartCtrl', function($scope, user, cart){
       }, 0)
     return total;
   }
+
+  $scope.changeState = function() {
+    return $location.path('checkout')
+  }
+
 })
