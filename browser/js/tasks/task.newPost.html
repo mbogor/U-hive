@@ -1,0 +1,45 @@
+<div class="col-md-6">
+<form id="edit-task-form" name="postTaskForm" ng-submit="postTaskForm.$valid && PostTask(postTask)">
+    <h3>Post New Task: </h3>
+    <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" ng-model="postTask.name" ng-required="true" class="form-control" id="name" placeholder="Task Name">
+    </div>
+
+    <div class="form-group">
+        <label for="category">Category</label>
+        <select ng-required="true" ng-model="postTask.category">
+            <option ng-repeat="category in categories" value="{{category.name}}">{{category.name}}</option>
+        </select><br>
+    </div>
+
+    <div class="form-group">
+        <label for="price">Price</label>
+        <input type="text" ng-model="postTask.price" class="form-control" id="price" placeholder="Price">
+    </div>
+
+    <div class="form-group">
+        <label for="description">Description</label>
+        <input type="text" ng-model="postTask.description" ng-required="true" class="form-control" id="description" placeholder="Task Description">
+    </div>
+
+    <div class="form-group">
+        <label for="dateOffered">Date Offered</label>
+        <input type="text" ng-model="postTask.dateOffered" ng-required="true" class="form-control" id="dateOffered" placeholder="Date ex: 2015-3-5">
+
+    </div>
+
+    <div class="form-group">
+        <label for="forSaleOrWanted">For Sale Or Wanted</label>
+        <select name="forSaleOrWanted" ng-model="postTask.forSaleOrWanted" ng-required="true">
+            <option value="forsale">forsale</option>
+            <option value="wanted">wanted</option>
+        </select><br>
+
+    </div>
+
+    <button type="submit" class="btn btn-default" ng-disabled="!postTaskForm.$valid">Submit Changes</button>
+
+</form>
+</div>
+

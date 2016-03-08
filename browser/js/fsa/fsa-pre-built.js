@@ -50,8 +50,6 @@
     });
 
 
-
-
     app.service('AuthService', function ($http, Session, $rootScope, AUTH_EVENTS, $q) {
 
         function onSuccessfulLogin(response) {

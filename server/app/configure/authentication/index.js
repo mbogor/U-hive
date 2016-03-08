@@ -35,7 +35,7 @@ module.exports = function (app) {
 
     // When we give a cookie to the browser, it is just the userId (encrypted with our secret).
     passport.serializeUser(function (user, done) {
-        console.log('passport user', user)
+
         done(null, user.id);
     });
 
@@ -75,7 +75,7 @@ module.exports = function (app) {
             console.log('about to send 401');
             res.status(401).send('No authenticated user.');
         }
-    })
+    });
 
 
 
