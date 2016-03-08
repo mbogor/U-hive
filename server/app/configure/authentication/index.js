@@ -51,7 +51,7 @@ module.exports = function (app) {
             BaseUser.create({})
             .then(function(user){
                 req.session.guest = user._id;
-                return Cart.create({guest: user._id})
+                return Cart.create({guest: user._id});
             })
             .then(function(cart){
                 console.log('created cart,', cart);
@@ -68,8 +68,8 @@ module.exports = function (app) {
     // logged in already.
 
     app.get('/session', function (req, res) {
-        console.log("pre creation", req.session);
         if (req.user) {
+            console.log('has req.user', req.user);
             res.send({ user: req.user.sanitize() });
         } else {
             console.log('about to send 401');
