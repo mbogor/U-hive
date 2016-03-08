@@ -9,13 +9,14 @@ app.controller('TaskItem', function($scope, CartFactory, localStorageService, Au
 
   $scope.addToCart = function(task){
     var t = task;
-    console.log('adding to cart');
-
     AuthService.getLoggedInUser()
     .then(function(user){
       if(user){
-        console.log('we have a user');
-        // do something different
+          var cartUser = user._id;
+        UserFactory.getCart(cartUser)
+        .then(function(cart){
+          return CartFactory.addToCart(cart._id, t._id);
+        })
       }else{
         UserFactory.getGuest()
         .then(function(guestUser){
@@ -23,7 +24,7 @@ app.controller('TaskItem', function($scope, CartFactory, localStorageService, Au
           return UserFactory.getGuestCart(cartGuest)
         })
         .then(function(cart){
-          return CartFactory.addToGuestCart(cart._id, t._id)
+          return CartFactory.addToCart(cart._id, t._id)
         })
       }
     });

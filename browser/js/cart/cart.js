@@ -37,7 +37,12 @@ app.config(function($stateProvider){
 app.controller('CartCtrl', function($scope, user, cart, $location){
   $scope.user = user;
   console.log('cart ctrl:', $scope.user, cart);
-  $scope.cartItems = cart.tasks;
+  if(cart){
+    $scope.cartItems = cart.tasks;
+  }else{
+    $scope.cartItems = [];
+  }
+
   $scope.totalValue = function(order) {
     var total = order.reduce(function(accum, elem) {
           return accum + elem.price;
@@ -53,7 +58,7 @@ app.controller('CartCtrl', function($scope, user, cart, $location){
 
 app.factory('CartFactory', function($http){
   return{
-    addToGuestCart: function(cartId, taskId){
+    addToCart: function(cartId, taskId){
       return $http.put('/api/cart/' + cartId + '/' + taskId)
       .then(function(res){
         return res.data;
