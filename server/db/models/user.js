@@ -116,7 +116,7 @@ authUserSchema.methods.getReviews = function() {
 
 authUserSchema.methods.getCart = function() {
     return mongoose.model('Cart').findOne({buyer: this._id, processed: false})
-    .populate('tasks')
+    .deepPopulate('tasks.seller').exec()
     .then(function(cart){
         return cart;
     })

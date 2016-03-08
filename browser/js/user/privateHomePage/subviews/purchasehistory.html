@@ -19,7 +19,7 @@
 			  		<div class="col-lg-10">
 			  			<div>{{task.name}}</div>
 			  			<div>{{task.price | currency}}</div>
-			  			<div>Sold By: {{task.seller.name}}</div>
+			  			<div>Sold By: <a ui-sref="publicProfile({personId: task.seller._id})"> {{task.seller.name}}</a></div>
 			  		</div>
 			  	</div>	
 		 	</div>
