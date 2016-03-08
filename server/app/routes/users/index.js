@@ -16,14 +16,15 @@ var ensureAuthenticated = function (req, res, next) {
     }
 };
 router.param('id', function(req, res, next){
+    console.log('routing user:', req.params.id);
     User.findById(req.params.id).populate('college').exec()
     .then(function(user){
         if(!user) {
             console.log('no reg user found');
             return BaseUser.findById(req.params.id)
         }else{
-            req.reqUser = user;
-            next();
+            console.log('setting req.user', user);
+            return user;
         }
     })
     .then(function(user){
