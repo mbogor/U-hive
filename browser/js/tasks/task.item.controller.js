@@ -1,6 +1,6 @@
 'use strict';
 
-app.controller('TaskItem', function($scope, localStorageService, AuthService){
+app.controller('TaskItem', function($scope, localStorageService, AuthService, TaskFactory){
   $scope.expandTask =  true;
 
   $scope.toggleExpand = function(){
@@ -22,6 +22,15 @@ app.controller('TaskItem', function($scope, localStorageService, AuthService){
     localStorageService.set('cart', existingCart);
 
   };
+
+
+  $scope.deleteTask = function(task){
+    TaskFactory.destroy(task)
+    // .then(function () {
+    //   var idx = $scope.forsale.indexOf(task);
+    //   $scope.forsale.splice(idx, 1);
+    // });
+  }
 
   $scope.itemIsInCart = function(task){
     if(!localStorageService.get('cart')) return false;

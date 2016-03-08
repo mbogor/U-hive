@@ -10,6 +10,9 @@
         <p>Average Score: {{task.seller.score}}</p>
         <button ng-disabled="itemIsInCart(task)" class='btn btn-success btn-sm' ng-click="addToCart(task)">Add to cart</button>
         <button ng-show="itemIsInCart(task)" ng-click="removeFromCart(item)" type="button" class="btn btn-danger btn-sm">Remove item</button>
+
+        <button ng-click="deleteTask(task)" type="button" class="btn btn-danger btn-sm">Delete item</button>
+        
         <a ng-click="toggleExpand()">More info</a>
       </div>
     </div>
