@@ -16,6 +16,15 @@ var cartSchema = new mongoose.Schema({
 
 cartSchema.plugin(deepPopulate);
 
+// cartSchema.statics.findBuyerOfTask = function(taskId) {
+//   return this.findOne({
+//     "tasks": { $in: [taskId]}
+//   })
+//   .then(function(cart){
+//     return cart.buyer
+//   })
+// }
+
 //cartTotal will be passed in from the front end so that we don't need to calculate the cart total here
 cartSchema.methods.processCheckout = function(cartTotal) {
   var cart = this;

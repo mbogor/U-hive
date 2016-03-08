@@ -127,6 +127,14 @@ authUserSchema.methods.getReviews = function() {
     })
 }
 
+authUserSchema.methods.getCart = function() {
+    return mongoose.model('Cart').findOne({buyer: this._id, processed: false})
+    .deepPopulate('tasks.seller').exec()
+    .then(function(cart){
+        return cart;
+    })
+}
+
 authUserSchema.methods.getPurchaseHistory = function() {
     return mongoose.model('Cart').find({buyer: this._id, processed: true}).deepPopulate('tasks.seller').exec();
     //deepPopulate tasks.seller is not working :(!!

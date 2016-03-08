@@ -89,6 +89,7 @@ function makeReviews() {
     //reviewee: reference to User
     //reviewer: reference to User
     //task: reference to Task
+    reviewDate: chance.date({month: _.random(0,3), year: 2015})
     text: chance.sentence({words: _.random(15, 40)}),
     rating: _.random(1,5),
     reviewBy: chance.weighted(['Buyer', 'Seller'], [50,50])

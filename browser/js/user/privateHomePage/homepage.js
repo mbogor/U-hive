@@ -110,6 +110,9 @@ app.controller('homeCtrl', function ($scope, theUser, avgRating, reviewsForUser,
       })
     }
 
+    // $scope.findBuyerOfTask = function(taskId) {
+    //   return UserFactory.findBuyerOfTask(taskId)
+    // }
     $scope.sendAccountUpdates = function(user, updatedUser) {
       $scope.changed = true;
       return UserFactory.updatePersonalInfo(user._id, updatedUser)

@@ -75,7 +75,6 @@ router.get('/:id/cart', function(req, res, next){
     console.log('in user/cart', req.reqUser);
     req.reqUser.getCart()
     .then(function(cart){
-        console.log(cart)
         res.json(cart);
     })
     .then(null, next);

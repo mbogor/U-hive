@@ -68,6 +68,9 @@ app.factory('UserFactory', function($http, localStorageService) {
     .then(response => response.data)
   }
 
+  // UserFactory.findBuyerOfTask = function(taskId) {
+  //   return $http.get('/api/tasks/' + taskId + '/buyer')
+  // }
   UserFactory.updatePersonalInfo = function(userId, updatedUser) {
     return $http.put('/api/users/' + userId, updatedUser)
     .then(response => response.data);
