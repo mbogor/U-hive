@@ -1,0 +1,38 @@
+<div class="container">
+	<div class="col-lg-7">
+		<form id="edit-personal-form" name="editPersonal" ng-submit="editPersonal.$valid && sendAccountUpdates(user, updatedUser)">
+		    <h3>Edit Personal Infomation: </h3>
+		    <div class="form-group">
+		        <label for="name">Name</label>
+		        <input type="text" ng-model="updatedUser.name" class="form-control" id="name" placeholder="{{user.name}}">
+		    </div>
+
+		    <div class="form-group">
+		        <label for="email">email</label>
+		        <input type="text" ng-model="updatedUser.email" class="form-control" id="email" placeholder="{{user.email}}">
+		    </div>
+
+		    <div class="form-group">
+		        <label for="password">password</label>
+		        <input type="text" ng-model="updatedUser.password" class="form-control" id="password" placeholder="{{user.password}}">
+		    </div>
+
+		    <div class="form-group">
+		        <label for="phone">phone number</label>
+		        <input type="text" ng-model="updatedUser.phone" class="form-control" id="phone" placeholder="{{user.phone}}">
+		    </div>
+
+		    <div class="form-group">
+		        <label for="streetAddress">street address</label>
+		        <input type="text" ng-model="updatedUser.streetAddress" class="form-control" id="streetAddress" placeholder="{{user.streetAddress}}">
+		    </div>
+
+		    <button type="submit" class="btn btn-default">Submit Changes</button>
+		    <br>
+		    <span ng-show="changed">Changes submitted!</span>
+		</form>
+		<br>
+	</div>
+</div>
+
+

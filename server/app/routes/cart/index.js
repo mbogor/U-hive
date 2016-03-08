@@ -10,11 +10,11 @@ router.param('id', function(req, res, next){
   mongoose.model('Cart').findById(req.params.id)
   .then(function(cart){
     req.cart = cart;
-    next()
+    next();
   })
   .then(null, next);
 })
-
+//gets all carts
 router.get('/', function(req, res, next) {
   mongoose.model('Cart').find()
   .then(function(carts){
@@ -40,8 +40,10 @@ router.post('/', function(req, res, next){
 
 // update a cart by adding a task
 router.put('/:id/:taskId', function(req, res, next){
+
   // assumes req.body is includes only the updated fields from an update/edit form
-  req.cart.set(req.body.taskId);
+  var tasks = req.cart.tasks.push(req.params.taskId);
+  req.cart.tasks.set(tasks);
   req.cart.save()
   .then(function(updatedCart) {
     res.json(updatedCart);

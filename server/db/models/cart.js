@@ -7,6 +7,7 @@ var deepPopulate = require('mongoose-deep-populate')(mongoose);
 //user on cart is the buyer and user on a task is a seller
 var cartSchema = new mongoose.Schema({
   buyer: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  guest: { type: mongoose.Schema.Types.ObjectId, ref: 'baseUser' },
   tasks: [{type: mongoose.Schema.Types.ObjectId, ref: 'Task'}],
   timeCreated: { type: Date, default: Date.now },
   processed: { type: Boolean, default: false },
@@ -14,6 +15,15 @@ var cartSchema = new mongoose.Schema({
 })
 
 cartSchema.plugin(deepPopulate);
+
+// cartSchema.statics.findBuyerOfTask = function(taskId) {
+//   return this.findOne({
+//     "tasks": { $in: [taskId]}
+//   })
+//   .then(function(cart){
+//     return cart.buyer
+//   })
+// }
 
 //cartTotal will be passed in from the front end so that we don't need to calculate the cart total here
 cartSchema.methods.processCheckout = function(cartTotal) {

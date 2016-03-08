@@ -1,36 +1,55 @@
 <div class="container">
   <h1>{{user.name}}'s U-hive profile</h1>
 
-  <div class="row">
+  <div class="row col-lg-7">
     <div class="col-lg-3">
-      <img src="{{user.photo}}" class="img-thumbnail">
+      <img src="{{user.photo}}" class="profile-picture">
     </div> 
 
     <div class="col-lg-9">
-      <ul>
+      <ul class="summary">
         <li>School: {{user.college.name}}</li>
-        <li ng-show="reviews.length>0">Average Rating: {{avgRating}}</li>
+        <li ng-show="reviews.length>0">Average Rating: {{avgRating | number: 1}}</li>
         <li>Email: {{user.email}}</li>
         <li>Phone: {{user.phone}}</li>
       </ul>
     </div>
   </div>
+  <div class="col-lg-5">
+    <ul class="list-group">
+      <li ng-click="showReviews = !showReviews" ng-class="{'active': showReviews}" class="list-group-item">Reviews</li>
+      <li ng-click="showReviews = !showReviews" ng-class="{'active': !showReviews}"class="list-group-item">Items For Sale</li>
+    </ul>
 
-  <div class="row">
+  </div>
+
+
+  <div ng-show="!showReviews" class="row">
     <div class="col-lg-12">
       <h3>Items For Sale</h3>
         <table>
-          <div ng-repeat="task in tasks" class="col-lg-4 task-list container task-profileview">
-            <img src="{{task.imageUrl}}" class="task-img">
-            <br>
-            <span>{{task.name}}</span>
+          <div ng-repeat="task in tasks" class="task-list container task-profileview">
+            <div class="row">
+              <div class='container'>
+                <div class="task-list" >
+                  <div class="container">
+                    <div><h3>{{task.name}}</h3></div>
+                    <p>{{task.description | trim:expandTask}}</p>
+                    <p>${{task.price}}</p>
+                    <button ng-disabled="itemIsInCart(task)" class='btn btn-success btn-sm' ng-click="addToCart(task)">Add to cart</button>
+                    <button ng-show="itemIsInCart(task)" ng-click="removeFromCart(item)" type="button" class="btn btn-danger btn-sm">Remove item</button>
+                    <a ng-click="toggleExpand()">More info</a>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
           <span ng-show="tasks.length === 0">User has no items for sale</span>
         </table>  
     </div>
   </div>
 
-  <div class="row">
+  <div ng-show="showReviews" class="row">
     <div class="col-lg-12">
       <h3>Reviews</h3>
       <span ng-show="reviews.length === 0">User has not been reviewed yet</span>
@@ -45,16 +64,13 @@
         </thead>
         <tbody>
           <tr ng-repeat="review in reviews">
-              <td>{{ review.text }}</td>
-              <td>{{ review.reviewer.name }}</td>
-              <td>{{ review.reviewDate }}</td>
-              <td>{{ review.rating }}</td>
-            </div>
+              <td><em>"{{ review.text }}"</em></td>
+              <td class="review-data">{{ review.reviewer.name }}</td>
+              <td class="review-data">{{ review.reviewDate | date: format: 'MMM dd, yyyy' }}</td>
+              <td class="review-data">{{ review.rating }}</td>
           </tr>
         </tbody>
       </table>
      </div> 
   </div>
-
-
 </div>

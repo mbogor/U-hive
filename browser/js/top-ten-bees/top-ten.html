@@ -1,0 +1,29 @@
+<div class="container">
+	<!-- <div ng-repeat="user in topTenUsers">
+		<ul>
+			<li>Name: {{user.user.name}}</li>
+			<li>Photo: <img src="{{user.user.photo}}" class="img-thumbnail"></li>
+			<li>School: {{user.user.college.name}}</li>
+			<li>Rating: {{user.aggregateScore}}</li>
+		</ul>
+	</div> -->
+
+	<table class='table'>
+        <thead>
+        	<tr>
+	            <th>Name</th>
+	            <th>School</th>
+	            <th>Rating</th>
+            </tr>
+        </thead>
+        <tbody>
+          	<tr ng-repeat="user in topTenUsers">
+	            <td>{{ user.user.name }}</td>
+	            <td>{{ user.user.college.name }}</td>
+	            <td>{{ user.aggregateScore | number:1}}</td>
+          	</tr>
+        </tbody>
+    </table>
+
+</div>
+

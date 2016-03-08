@@ -2,13 +2,14 @@
   <div>
     <img src="{{task.imageUrl}}" class="task-img">
     <br>
-    <div class="col-lg-8 task-description">
+    <div class="col-lg-9 task-description">
       <span>{{task.name}}</span><br>
       <span><strong>Offered:</strong> {{task.dateOffered | date: format: 'MMM dd, yyyy'}}</span><br>
-      <span>{{task.price | currency}}</span>
-
+      <span>{{task.price | currency}}</span><br>
+      <span><strong>Seller: </strong><a ui-sref="publicProfile({personId: task.seller._id})">{{task.seller.name}}</a></span>
+ 
     </div>
-    <div class="col-lg-2 right-padding" align="right">
+    <div class="col-lg-1">
       <button ng-click="removeFromCart(task)" type="button" class="btn btn-danger btn-sm">Remove item</button>
     </div>
   </div>

@@ -4,7 +4,7 @@ var mongoose = require('mongoose');
 var extend = require('mongoose-schema-extend');
 var _ = require('lodash');
 var deepPopulate = require('mongoose-deep-populate')(mongoose);
-
+var Promise = require('bluebird');
 
 // var Score = require('Score')
 var baseUserSchema = new mongoose.Schema({
@@ -13,7 +13,19 @@ var baseUserSchema = new mongoose.Schema({
     default: false
   }
 });
+
+baseUserSchema.methods.getCart = function() {
+    return mongoose.model('Cart').findOne({guest: this._id, processed: false})
+    .populate('tasks')
+    .then(function(cart){
+        return cart;
+    })
+}
+
+
 mongoose.model('baseUser', baseUserSchema);
+
+
 
 var authUserSchema = baseUserSchema.extend({
     name: {
@@ -65,16 +77,23 @@ authUserSchema.plugin(deepPopulate);
 
 authUserSchema.statics.top10Users = function() {
     var usersAndAvgRatings = []
-    return this.find({})
+
+    return this.find({}).populate('college').exec()
     .then(function(users){
-        Promise.map(users, function(user){
-            var userScore = user.getAggregateScore();
-            usersAndAvgRatings.push(
-                {"user": user,
-                "aggregateScore": userScore
-            });
+        return Promise.map(users, function(user){
+            var userScore;
+            return user.getAggregateScore()
+            .then(function(score){
+                userScore = score;
+                usersAndAvgRatings.push(
+                    {"user": user,
+                    "aggregateScore": userScore
+                });
+            })
         })
-        return usersAndAvgRatings;
+        .then(function() {  
+            return usersAndAvgRatings;
+        })
     })
     .then(function(usersAndAvgRatingsArr){
         var sortedUsers = usersAndAvgRatingsArr.sort(function(a,b){
@@ -98,6 +117,14 @@ authUserSchema.methods.getAggregateScore = function() {
     })
 }
 
+authUserSchema.methods.getCart = function() {
+    return mongoose.model('Cart').findOne({buyer: this._id, processed: false})
+    .populate('tasks')
+    .then(function(cart){
+        return cart;
+    })
+}
+
 authUserSchema.methods.getReviews = function() {
 
     return mongoose.model('Review').find({reviewee: this._id}).populate('reviewer')
@@ -109,7 +136,7 @@ authUserSchema.methods.getReviews = function() {
 
 authUserSchema.methods.getCart = function() {
     return mongoose.model('Cart').findOne({buyer: this._id, processed: false})
-    .populate('tasks')
+    .deepPopulate('tasks.seller').exec()
     .then(function(cart){
         return cart;
     })
