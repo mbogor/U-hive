@@ -13,7 +13,19 @@ var baseUserSchema = new mongoose.Schema({
     default: false
   }
 });
+
+baseUserSchema.methods.getCart = function() {
+    return mongoose.model('Cart').findOne({guest: this._id, processed: false})
+    .populate('tasks')
+    .then(function(cart){
+        return cart;
+    })
+}
+
+
 mongoose.model('baseUser', baseUserSchema);
+
+
 
 var authUserSchema = baseUserSchema.extend({
     name: {
@@ -98,20 +110,20 @@ authUserSchema.methods.getAggregateScore = function() {
     })
 }
 
+authUserSchema.methods.getCart = function() {
+    return mongoose.model('Cart').findOne({buyer: this._id, processed: false})
+    .populate('tasks')
+    .then(function(cart){
+        return cart;
+    })
+}
+
 authUserSchema.methods.getReviews = function() {
 
     return mongoose.model('Review').find({reviewee: this._id}).populate('reviewer')
     .then(function(reviews) {
         if(!reviews.length) return;
         return reviews;
-    })
-}
-
-authUserSchema.methods.getCart = function() {
-    return mongoose.model('Cart').findOne({buyer: this._id, processed: false})
-    .populate('tasks')
-    .then(function(cart){
-        return cart;
     })
 }
 

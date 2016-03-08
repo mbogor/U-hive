@@ -6,16 +6,29 @@ app.config(function($stateProvider){
     templateUrl: '/js/cart/cart.template.html',
     controller: 'CartCtrl',
      resolve: {
-      user: function(AuthService){
-        return AuthService.getLoggedInUser();
+      loggedin: function(AuthService){
+        return !!AuthService.getLoggedInUser()
       },
-      cart: function(user, UserFactory){
-        return UserFactory.getCart(user._id);
+      user: function(AuthService, UserFactory){
+        return AuthService.getLoggedInUser()
+        .then(function(user){
+          if(!user){
+            console.log('no logged-in user')
+            return UserFactory.getGuest(); //psuedo, returns user
+          }
+          return user;
+        });
+      },
+      cart: function(user, UserFactory, localStorageService, CartFactory){
+        console.log('in cart resolve block', user);
+        return UserFactory.getCart(user._id)
+        .then(function(cart){
+          if(!cart){
+            return UserFactory.getGuestCart(user._id)
+          }
+          return cart;
+        });
       }
-
-    },
-    data: {
-      authenticate: true
     }
   });
 });
@@ -23,8 +36,8 @@ app.config(function($stateProvider){
 
 app.controller('CartCtrl', function($scope, user, cart, $location){
   $scope.user = user;
+  console.log('cart ctrl:', $scope.user, cart);
   $scope.cartItems = cart.tasks;
-
   $scope.totalValue = function(order) {
     var total = order.reduce(function(accum, elem) {
           return accum + elem.price;
@@ -36,4 +49,15 @@ app.controller('CartCtrl', function($scope, user, cart, $location){
     return $location.path('checkout')
   }
 
+});
+
+app.factory('CartFactory', function($http){
+  return{
+    addToGuestCart: function(cartId, taskId){
+      return $http.put('/api/cart/' + cartId + '/' + taskId)
+      .then(function(res){
+        return res.data;
+      })
+    }
+  }
 })

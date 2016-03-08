@@ -1,11 +1,12 @@
 'use strict';
 var router = require('express').Router();
 module.exports = router;
-var mongoose = require('mongoose')
+var mongoose = require('mongoose');
 var User = mongoose.model('User');
+var BaseUser = mongoose.model('baseUser');
 var Task = mongoose.model('Task');
-var College = mongoose.model('College')
-
+var College = mongoose.model('College');
+var Cart = mongoose.model('Cart');
 
 var ensureAuthenticated = function (req, res, next) {
     if (req.isAuthenticated()) {
@@ -17,11 +18,27 @@ var ensureAuthenticated = function (req, res, next) {
 router.param('id', function(req, res, next){
     User.findById(req.params.id).populate('college').exec()
     .then(function(user){
-        if(!user) throw new Error('user wasnt found');
+        if(!user) {
+            console.log('no reg user found');
+            return BaseUser.findById(req.params.id)
+        }else{
+            req.reqUser = user;
+            next();
+        }
+    })
+    .then(function(user){
         req.reqUser = user;
         next();
     })
     .then(null, next);
+});
+
+router.get('/guest', function(req, res, next){
+    console.log('in req users/guest', req.session.guest);
+    BaseUser.findById(req.session.guest)
+    .then(function(user){
+        res.json(user);
+    });
 });
 
 router.get('/', function(req, res, next) {
@@ -54,6 +71,7 @@ router.get('/:id/reviews', function(req, res, next) {
 })
 
 router.get('/:id/cart', function(req, res, next){
+    console.log('in user/cart', req.reqUser);
     req.reqUser.getCart()
     .then(function(cart){
         console.log(cart)
@@ -61,6 +79,15 @@ router.get('/:id/cart', function(req, res, next){
     })
     .then(null, next);
 })
+
+router.get('/:id/guestcart', function(req, res, next){
+    req.reqUser.getCart()
+    .then(function(cart){
+        console.log(cart)
+        res.json(cart);
+    })
+    .then(null, next);
+});
 
 router.get('/:id/purchasehistory', function(req, res, next){
     req.reqUser.getPurchaseHistory()
@@ -77,6 +104,34 @@ router.get('/:id/saleshistory', function(req, res, next){
     })
     .then(null, next)
 })
+
+
+
+//create new baseUser, with no data
+// router.post('/guest', function(req, res, next){
+//     var guestUser;
+//     if(!req.session.guest){
+//         BaseUser.create({})
+//         .then(function(user){
+//             guestUser = user;
+//             req.session.guest = user._id;
+//             return Cart.create({guest: user._id})
+//         })
+//         .then(function(cart){
+//             console.log('created cart,', cart);
+//             req.session.cart = cart._id;
+//             res.status(201).json(guestUser);
+//         })
+//         .then(null, next);
+//     }else{
+//         BaseUser.findById(req.session.guest)
+//         .then(function(user){
+//             res.json(user);
+//         })
+//         .then(null, next);
+//     }
+// });
+
 
 router.post('/', function(req, res, next) {
     User.create(req.body)
