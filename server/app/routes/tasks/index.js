@@ -51,8 +51,10 @@ router.get('/:id', function(req, res, next){
 
 // post one task
 router.post('/', function(req, res, next){
+  console.log('task req.body', req.body)
   Task.create(req.body)
   .then(function(newTask){
+    console.log('created new task', newTask)
     res.json(newTask);
   })
   .then(null, next);

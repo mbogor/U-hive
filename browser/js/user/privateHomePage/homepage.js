@@ -57,6 +57,12 @@ app.config(function ($stateProvider) {
       templateUrl: '/js/user/privateHomePage/subviews/saleshistory.html'
     })
 
+    $stateProvider.state('homepage.editPersonalInfo', {
+      url:'/accountSettings',
+      templateUrl: '/js/user/privateHomePage/subviews/editPersonalInfo.html'
+    })
+
+
 });
 
 
@@ -69,7 +75,7 @@ app.controller('homeCtrl', function ($scope, theUser, avgRating, reviewsForUser,
     $scope.cartId = getCart._id
     $scope.purchaseHistory = purchaseHistory;
     $scope.salesHistory = salesHistory
-
+    $scope.changed = false;
     $scope.currentTask = null;
 
     $scope.categories = ['food', 'tutoring', 'delivery', 'moving', 'cleaning', 'other']
@@ -97,16 +103,37 @@ app.controller('homeCtrl', function ($scope, theUser, avgRating, reviewsForUser,
     }
 
     $scope.sendTaskUpdates = function(originalTask, updatedTask) {
-
       return UserFactory.updateTaskForSale(originalTask._id, updatedTask)
       .then(function(task){
-        $state.go('homepage.forsale', $scope.user._id)
+        $scope.tasks.splice($scope.tasks.indexOf(originalTask), 1)
+        $state.go('homepage.forsale');
       })
     }
 
     // $scope.findBuyerOfTask = function(taskId) {
     //   return UserFactory.findBuyerOfTask(taskId)
     // }
+    $scope.sendAccountUpdates = function(user, updatedUser) {
+      $scope.changed = true;
+      return UserFactory.updatePersonalInfo(user._id, updatedUser)
+    }
+});
+
+
+app.controller('NewPostCtrl', function($scope, $state, TaskFactory){
+
+  $scope.categories = [{id: 0, name:'food'}, {id:1, name:'tutoring'}, {id:2, name:'delivery'}, {id:3, name:'moving'}, {id:4, name:'cleaning'}, {id:5, name:'other'}]
+
+
+  $scope.PostTask = function(task){
+    console.log("TASK", task)
+    return TaskFactory.newTask(task)
+    .then(function(tsk){
+      console.log("promise task", tsk)
+      $state.go('success')
+    })
+  }
+
 });
 
 // 56db57bfd1515327c92a2e39
