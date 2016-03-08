@@ -4,7 +4,7 @@ var mongoose = require('mongoose');
 var extend = require('mongoose-schema-extend');
 var _ = require('lodash');
 var deepPopulate = require('mongoose-deep-populate')(mongoose);
-
+var Promise = require('bluebird');
 
 // var Score = require('Score')
 var baseUserSchema = new mongoose.Schema({
@@ -77,16 +77,23 @@ authUserSchema.plugin(deepPopulate);
 
 authUserSchema.statics.top10Users = function() {
     var usersAndAvgRatings = []
-    return this.find({})
+
+    return this.find({}).populate('college').exec()
     .then(function(users){
-        Promise.map(users, function(user){
-            var userScore = user.getAggregateScore();
-            usersAndAvgRatings.push(
-                {"user": user,
-                "aggregateScore": userScore
-            });
+        return Promise.map(users, function(user){
+            var userScore;
+            return user.getAggregateScore()
+            .then(function(score){
+                userScore = score;
+                usersAndAvgRatings.push(
+                    {"user": user,
+                    "aggregateScore": userScore
+                });
+            })
         })
-        return usersAndAvgRatings;
+        .then(function() {  
+            return usersAndAvgRatings;
+        })
     })
     .then(function(usersAndAvgRatingsArr){
         var sortedUsers = usersAndAvgRatingsArr.sort(function(a,b){

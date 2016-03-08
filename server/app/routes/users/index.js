@@ -15,6 +15,15 @@ var ensureAuthenticated = function (req, res, next) {
         res.status(401).end();
     }
 };
+
+router.get('/topten', function(req, res, next) {
+    User.top10Users()
+    .then(function(users){
+        res.json(users)
+    })
+    .then(null, next);
+})
+
 router.param('id', function(req, res, next){
     console.log('routing user:', req.params.id);
     User.findById(req.params.id).populate('college').exec()
@@ -70,6 +79,7 @@ router.get('/:id/reviews', function(req, res, next) {
     })
     .then(null, next)
 })
+
 
 router.get('/:id/cart', function(req, res, next){
     console.log('in user/cart', req.reqUser);

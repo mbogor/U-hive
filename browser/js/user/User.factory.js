@@ -76,6 +76,10 @@ app.factory('UserFactory', function($http, localStorageService) {
     .then(response => response.data);
   }
 
+  UserFactory.topTenBees = function() {
+    return $http.get('/api/users/topten')
+    .then(response => response.data);
+  }
 
   return UserFactory;
 })

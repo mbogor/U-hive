@@ -9,7 +9,7 @@
     <div class="col-lg-9">
       <ul class="summary">
         <li>School: {{user.college.name}}</li>
-        <li ng-show="reviews.length>0">Average Rating: {{avgRating}}</li>
+        <li ng-show="reviews.length>0">Average Rating: {{avgRating | number: 1}}</li>
         <li>Email: {{user.email}}</li>
         <li>Phone: {{user.phone}}</li>
       </ul>
@@ -68,7 +68,6 @@
               <td class="review-data">{{ review.reviewer.name }}</td>
               <td class="review-data">{{ review.reviewDate | date: format: 'MMM dd, yyyy' }}</td>
               <td class="review-data">{{ review.rating }}</td>
-            </div>
           </tr>
         </tbody>
       </table>

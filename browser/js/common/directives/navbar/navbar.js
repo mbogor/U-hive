@@ -14,7 +14,7 @@ app.directive('navbar', function ($rootScope, Session, AuthService, AUTH_EVENTS,
                 { label: 'Home', state: 'home' },
                 { label: 'About', state: 'about' },
                 { label: 'For Sale', state: 'tasksForSale'},
-                { label: 'Top Ten Bees', state: 'stateThatDoesntExistYet'},
+                { label: 'Top Ten Bees', state: 'topTen'},
                 { label: 'Cart (' + cartCt + ')', state: 'cart'},
                 { label: 'New Post', state: 'newPost', auth: true},
                 { label: 'My Account', state: 'homepage.purchasehistory', auth: true }
