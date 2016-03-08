@@ -47,9 +47,14 @@ app.factory('UserFactory', function($http) {
     .then(response => response.data)
   }
 
-  UserFactory.updateTaskForSale = function(taskId, task) {
-    return $http.put('/api/tasks/' + taskId, task)
+  UserFactory.updateTaskForSale = function(taskId, updatedTask) {
+    return $http.put('/api/tasks/' + taskId, updatedTask)
     .then(response => response.data)
+  }
+
+  UserFactory.updatePersonalInfo = function(userId, updatedUser) {
+    return $http.put('/api/users/' + userId, updatedUser)
+    .then(response => response.data);
   }
 
 
