@@ -1,11 +1,22 @@
-app.factory('UserFactory', function($http) {
+app.factory('UserFactory', function($http, localStorageService) {
 
   var UserFactory = {};
 
   UserFactory.create = function(newUser){
     return $http.post('/api/users/', newUser)
     .then(response => response.data);
+  };
+
+  UserFactory.createGuest = function(){
+    return $http.post('/api/users/guest')
+    .then(response => response.data);
   }
+
+  UserFactory.getGuest = function(){
+    console.log('getting guest');
+    return $http.get('/api/users/guest')
+    .then(res => res.data);
+  };
 
   UserFactory.fetchById = function(id) {
     return $http.get('/api/users/' + id)
@@ -24,7 +35,12 @@ app.factory('UserFactory', function($http) {
 
   UserFactory.getCart = function(id) {
     return $http.get('/api/users/' + id + '/cart')
-    .then(response => response.data)
+    .then(response => response.data);
+  };
+
+  UserFactory.getGuestCart = function(id){
+    return $http.get('/api/users/' + id + '/guestcart')
+    .then(response => response.data);
   }
 
   UserFactory.getPurchaseHistory = function(id) {

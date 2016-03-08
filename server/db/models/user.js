@@ -13,7 +13,19 @@ var baseUserSchema = new mongoose.Schema({
     default: false
   }
 });
+
+baseUserSchema.methods.getCart = function() {
+    return mongoose.model('Cart').findOne({guest: this._id, processed: false})
+    .populate('tasks')
+    .then(function(cart){
+        return cart;
+    })
+}
+
+
 mongoose.model('baseUser', baseUserSchema);
+
+
 
 var authUserSchema = baseUserSchema.extend({
     name: {
@@ -95,6 +107,14 @@ authUserSchema.methods.getAggregateScore = function() {
         }, 0)
 
         return sum/(reviews.length);
+    })
+}
+
+authUserSchema.methods.getCart = function() {
+    return mongoose.model('Cart').findOne({buyer: this._id, processed: false})
+    .populate('tasks')
+    .then(function(cart){
+        return cart;
     })
 }
 

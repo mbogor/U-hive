@@ -7,29 +7,29 @@ app.config(function ($stateProvider) {
       resolve: {
         user: function(AuthService){
           return AuthService.getLoggedInUser();
-      },
+        },
         cart: function(user, UserFactory){
           return UserFactory.getCart(user._id);
-      }
+        }
       }
   });
-}); 
+});
 
 app.controller('CheckoutCtrl', function($scope, user, cart){
   $scope.user = user;
-  $scope.creditCards = ['Visa', 'Mastercard', 'American Express', 'Discover']
+  $scope.creditCards = ['Visa', 'Mastercard', 'American Express', 'Discover'];
 
   $scope.cartItems = cart.tasks;
 
   $scope.totalValue = function(order) {
     var total = order.reduce(function(accum, elem) {
           return accum + elem.price;
-      }, 0)
+      }, 0);
     return total;
-  }
+  };
 
   $scope.tax = function(value) {
-    return value * .04
-  }
-})
+    return value * 0.04;
+  };
+});
 

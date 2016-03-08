@@ -7,6 +7,7 @@ var deepPopulate = require('mongoose-deep-populate')(mongoose);
 //user on cart is the buyer and user on a task is a seller
 var cartSchema = new mongoose.Schema({
   buyer: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  guest: { type: mongoose.Schema.Types.ObjectId, ref: 'baseUser' },
   tasks: [{type: mongoose.Schema.Types.ObjectId, ref: 'Task'}],
   timeCreated: { type: Date, default: Date.now },
   processed: { type: Boolean, default: false },
