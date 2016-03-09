@@ -1,4 +1,11 @@
 'use strict';
+app.directive('removeTaskFromCart', function(){
+  return{
+    restrict: 'E',
+    template: '<button ng-click="removeFromCart(task)" type="button" class="btn btn-danger btn-sm">Remove item</button>',
+    controller: 'TaskItem'
+  };
+});
 
 app.config(function($stateProvider){
   $stateProvider.state('cart', {
@@ -62,10 +69,10 @@ app.factory('CartFactory', function($http){
       return $http.put('/api/cart/' + cartId + '/' + taskId)
       .then(function(res){
         return res.data;
-      });
+      })
     },
     removeFromCart: function(cartId, taskId){
-      return $http.put('/api/cart/' + cartId + '/' + taskId)
+      return $http.put('/api/cart/' + cartId + '/remove/' + taskId)
       .then(function(res){
         return res.data;
       });

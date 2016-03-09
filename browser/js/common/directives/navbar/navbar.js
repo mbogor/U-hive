@@ -1,9 +1,9 @@
-app.directive('navbar', function ($rootScope, Session, AuthService, AUTH_EVENTS, $state, localStorageService) {
+app.directive('navbar', function ($rootScope, Session, AuthService, AUTH_EVENTS, $state, localStorageService, UserFactory) {
     var cartCt;
     if(localStorageService.get('cart') && localStorageService.get('cart').tasks.length){
-        cartCt = localStorageService.get('cart').tasks.length;
+        $rootScope.cartCt = localStorageService.get('cart').tasks.length;
     }else{
-        cartCt = 0
+        $rootScope.cartCt = 0
     }
     return {
         restrict: 'E',
@@ -15,7 +15,7 @@ app.directive('navbar', function ($rootScope, Session, AuthService, AUTH_EVENTS,
                 { label: 'About', state: 'about' },
                 { label: 'For Sale', state: 'tasksForSale'},
                 { label: 'Top Ten Bees', state: 'topTen'},
-                { label: 'Cart (' + cartCt + ')', state: 'cart'},
+                { label: 'Cart (' + $rootScope.cartCt + ')', state: 'cart'},
                 { label: 'New Post', state: 'newPost', auth: true},
                 { label: 'My Account', state: 'homepage.purchasehistory', auth: true }
             ];
@@ -40,16 +40,25 @@ app.directive('navbar', function ($rootScope, Session, AuthService, AUTH_EVENTS,
                 });
             };
 
+            var setCart = function(){
+                if(localStorageService.get('cart').tasks.length){
+                        console.log('we  cannot handle this currently');
+                }else{
+                    UserFactory.getCart(scope.user._id)
+                    .then(function(cart){
+                        localStorageService.set('cart', {tasks: cart.tasks, timeCreated: cart.timeCreated})
+                    });
+                }
+            }
+
             var removeUser = function () {
-                console.log('about to remove user (in navbar link function):', scope.user);
                 scope.user = null;
             };
 
             setUser();
-            // setCart();
 
             $rootScope.$on(AUTH_EVENTS.loginSuccess, setUser);
-            // $rootScope.$on(AUTH_EVENTS.loginSuccess, setCart);
+            $rootScope.$on(AUTH_EVENTS.loginSuccess, setCart);
             $rootScope.$on(AUTH_EVENTS.logoutSuccess, removeUser);
             $rootScope.$on(AUTH_EVENTS.sessionTimeout, removeUser);
 
