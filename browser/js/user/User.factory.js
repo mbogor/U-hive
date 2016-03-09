@@ -13,7 +13,6 @@ app.factory('UserFactory', function($http, localStorageService) {
   }
 
   UserFactory.getGuest = function(){
-    console.log('getting guest');
     return $http.get('/api/users/guest')
     .then(res => res.data);
   };
@@ -33,15 +32,16 @@ app.factory('UserFactory', function($http, localStorageService) {
   	.then(response => response.data)
   }
 
-  UserFactory.getCart = function(id) {
-    return $http.get('/api/users/' + id + '/cart')
+  UserFactory.getCart = function(id, type) {
+    var url;
+    if(type === 'guest'){
+      url = '/guestcart';
+    }else{
+      url = '/cart';
+    }
+    return $http.get('/api/users/' + id + url)
     .then(response => response.data);
   };
-
-  UserFactory.getGuestCart = function(id){
-    return $http.get('/api/users/' + id + '/guestcart')
-    .then(response => response.data);
-  }
 
   UserFactory.getPurchaseHistory = function(id) {
     return $http.get('/api/users/' + id + '/purchasehistory')

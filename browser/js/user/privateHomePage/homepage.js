@@ -68,7 +68,7 @@ app.config(function ($stateProvider) {
 
 app.controller('homeCtrl', function ($scope, theUser, avgRating, reviewsForUser, forSale, getCart, purchaseHistory, salesHistory, UserFactory, $state) {
     $scope.user = theUser;
-    $scope.avgRating = Math.round(avgRating);
+    $scope.avgRating = avgRating;
     $scope.reviews = reviewsForUser;
     $scope.tasks = forSale;
     $scope.cartItems = getCart.tasks;
@@ -140,10 +140,8 @@ app.controller('NewPostCtrl', function($scope, $state, TaskFactory){
 
 
   $scope.PostTask = function(task){
-    console.log("TASK", task)
     return TaskFactory.newTask(task)
     .then(function(tsk){
-      console.log("promise task", tsk)
       $state.go('success')
     })
   }

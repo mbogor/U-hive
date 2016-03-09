@@ -10,7 +10,7 @@ var Cart = mongoose.model('Cart');
 module.exports = router;
 
 router.param('id', function(req, res, next){
-  Task.findById(req.params.id)
+  Task.findById(req.params.id).populate('seller')
   .then(function(t){
     req.task = t;
     next();
@@ -73,7 +73,11 @@ router.put('/:id', function(req, res, next){
 
 // delete task by id
 router.delete('/:id', Auth.assertAdminOrAuthor, function(req, res, next){
-  console.log('REQUEST FROM TASK DELETE', req)
+  console.log('auth function', Auth.assertAdminOrAuthor)
+  // console.log('user on req', req.task.seller)
+  // console.log('req.task', req.task)
+  // console.log('isAdmin', req.task.seller.isAdmin)
+  // console.log('req.task.seller', req.task.seller)
   req.task.remove()
   .then(function(){
     res.sendStatus(204)

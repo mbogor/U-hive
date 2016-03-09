@@ -1,4 +1,11 @@
 'use strict';
+app.directive('removeTaskFromCart', function(){
+  return{
+    restrict: 'E',
+    template: '<button ng-click="removeFromCart(task)" type="button" class="btn btn-danger btn-sm">Remove item</button>',
+    controller: 'TaskItem'
+  };
+});
 
 app.config(function($stateProvider){
   $stateProvider.state('cart', {
@@ -15,18 +22,16 @@ app.config(function($stateProvider){
         return AuthService.getLoggedInUser()
         .then(function(user){
           if(!user){
-            console.log('no logged-in user')
             return UserFactory.getGuest(); //psuedo, returns user
           }
           return user;
         });
       },
       cart: function(user, UserFactory, localStorageService, CartFactory){
-        console.log('in cart resolve block', user);
         return UserFactory.getCart(user._id)
         .then(function(cart){
           if(!cart){
-            return UserFactory.getGuestCart(user._id)
+            return UserFactory.getCart(user._id,'guest')
           }
           return cart;
         });
@@ -38,7 +43,6 @@ app.config(function($stateProvider){
 
 app.controller('CartCtrl', function($scope, user, cart, $location){
   $scope.user = user;
-  console.log('cart ctrl:', $scope.user, cart);
   if(cart){
     $scope.cartItems = cart.tasks;
   }else{
@@ -65,6 +69,12 @@ app.factory('CartFactory', function($http){
       .then(function(res){
         return res.data;
       })
+    },
+    removeFromCart: function(cartId, taskId){
+      return $http.put('/api/cart/' + cartId + '/remove/' + taskId)
+      .then(function(res){
+        return res.data;
+      });
     }
-  }
-})
+  };
+});

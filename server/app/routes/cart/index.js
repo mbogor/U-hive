@@ -42,11 +42,9 @@ router.post('/', function(req, res, next){
 router.put('/:id/:taskId', function(req, res, next){
 
   // assumes req.body is includes only the updated fields from an update/edit form
-  // AW: push returns the length of the array once the item has been added
-  // repl: https://repl.it/BuTG
-  // you probably don't want to do this 
-  var tasks = req.cart.tasks.push(req.params.taskId);
-  req.cart.tasks.set(tasks);
+  req.cart.tasks.push(req.params.taskId);
+  // console.log('tasks in update router', tasks);
+  // req.cart.tasks.set(tasks);
   req.cart.save()
   .then(function(updatedCart) {
     res.json(updatedCart);

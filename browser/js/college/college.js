@@ -5,7 +5,6 @@ app.factory('CollegeFactory', function($http){
     getAllColleges: function(){
       return $http.get('/api/college')
       .then(function(res){
-        console.log('got all colleges:', res.data);
         return res.data;
       });
     }

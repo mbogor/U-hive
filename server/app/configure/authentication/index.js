@@ -13,7 +13,7 @@ var ENABLED_AUTH_STRATEGIES = [
     'local',
     //'twitter',
     //'facebook',
-    //'google'
+    'google'
 ];
 
 module.exports = function (app) {
@@ -77,12 +77,12 @@ module.exports = function (app) {
         }
     });
 
-
-
-
     // Simple /logout route.
     app.get('/logout', function (req, res) {
         req.logout();
+        console.log('loggedout req', req.session);
+        delete req.session['guest'];
+        delete req.session['cart'];
         res.status(200).end();
     });
 

@@ -4,18 +4,16 @@
     <div class="panel-heading">Refine your search</div>
     <div class="panel-body">
       <label>Search: <input ng-model="searchTask"></label>
-<!--       <h2>Category</h2>
-      <label>cleaning</label>
-      <input type="checkbox" ng-model="category">&nbsp;
-      <label>food</label>
-      <input type="checkbox" ng-model="category">&nbsp;
-      <label>tutoring</label>
-      <input type="checkbox"  ng-model="category">&nbsp; -->
+      <strong>Category:</strong>
+
+      <span ng-repeat="category in categories">
+        <button ng-click="filters.category = category">{{ category }}</button>
+      </span>
     </div>
   </div>
 
-  <div class="panel-body">
-    <task-item ng-repeat="task in forsale | filter:searchTask">
+  <div class="panel-body row">
+    <task-item ng-repeat="task in forsale | filter:searchTask | filter:filters" class="col-lg-6 container">
     </task-item>
   </div>
 

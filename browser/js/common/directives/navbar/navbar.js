@@ -1,9 +1,9 @@
-app.directive('navbar', function ($rootScope, Session, AuthService, AUTH_EVENTS, $state, localStorageService) {
+app.directive('navbar', function ($rootScope, Session, AuthService, AUTH_EVENTS, $state, localStorageService, UserFactory) {
     var cartCt;
-    if(!localStorageService.get('cart')){
-        cartCt = 0
+    if(localStorageService.get('cart') && localStorageService.get('cart').tasks.length){
+        $rootScope.cartCt = localStorageService.get('cart').tasks.length;
     }else{
-     cartCt = localStorageService.get('cart').tasks.length;
+        $rootScope.cartCt = 0
     }
     return {
         restrict: 'E',
@@ -15,7 +15,7 @@ app.directive('navbar', function ($rootScope, Session, AuthService, AUTH_EVENTS,
                 { label: 'About', state: 'about' },
                 { label: 'For Sale', state: 'tasksForSale'},
                 { label: 'Top Ten Bees', state: 'topTen'},
-                { label: 'Cart (' + cartCt + ')', state: 'cart'},
+                { label: 'Cart (' + $rootScope.cartCt + ')', state: 'cart'},
                 { label: 'New Post', state: 'newPost', auth: true},
                 { label: 'My Account', state: 'homepage.purchasehistory', auth: true }
             ];
@@ -28,29 +28,39 @@ app.directive('navbar', function ($rootScope, Session, AuthService, AUTH_EVENTS,
 
             scope.logout = function () {
                 AuthService.logout().then(function () {
-                   $state.go('home');
+                    localStorageService.set('cart', {tasks: [], timeCreated: Date.now()});
+                    $state.go('home');
                 });
             };
 
             var setUser = function () {
-                // console.log('do we have auth interceptor?', AuthInterceptor)
-                console.log('local:', localStorageService.keys());
                 AuthService.getLoggedInUser()
                 .then(function (user) {
                     scope.user = user;
+                    if(scope.user){
+                        setCart();
+                    }
                 });
             };
 
+            var setCart = function(){
+                UserFactory.getCart(scope.user._id)
+                .then(function(cart){
+                    if(!cart){return}
+                    localStorageService.set('cart', {tasks: cart.tasks, timeCreated: cart.timeCreated})
+                })
+                .then(function(){
+                    console.log('this user doesn\'t have a cart');
+                });
+            }
+
             var removeUser = function () {
-                console.log('about to remove user (in navbar link function):', scope.user);
                 scope.user = null;
             };
 
             setUser();
-            // setCart();
 
             $rootScope.$on(AUTH_EVENTS.loginSuccess, setUser);
-            // $rootScope.$on(AUTH_EVENTS.loginSuccess, setCart);
             $rootScope.$on(AUTH_EVENTS.logoutSuccess, removeUser);
             $rootScope.$on(AUTH_EVENTS.sessionTimeout, removeUser);
 

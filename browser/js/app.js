@@ -4,8 +4,13 @@ window.app = angular.module('FullstackGeneratedApp', ['js-data', 'LocalStorageMo
 app.config(function ($urlRouterProvider, $locationProvider) {
     // This turns off hashbang urls (/#about) and changes it to something normal (/about)
     $locationProvider.html5Mode(true);
+
     // If we go to a URL that ui-router doesn't have registered, go to the "/" url.
     $urlRouterProvider.otherwise('/');
+
+    $urlRouterProvider.when('/auth/:provider', function () {
+        window.location.reload();
+    });
 
 });
 app.config(function(localStorageServiceProvider){
@@ -23,7 +28,6 @@ app.run(function ($rootScope, AuthService, $state) {
     // The given state requires an authenticated user.
     var destinationStateRequiresAuth = function (state) {
         return state.data && state.data.authenticate;
-        console.log("state", state, "state.data", state.data)
     };
 
     // $stateChangeStart is an event fired

@@ -20,10 +20,10 @@ app.config(function ($stateProvider) {
       }
     })
 
-    $stateProvider.state('publicProfile.forSale', {   
+    $stateProvider.state('publicProfile.forSale', {
       url: '/forsale',
       templateUrl: 'js/user/privateProfile/subviews/forsale.html',
-      controller: 'profileCtrl'    
+      controller: 'profileCtrl'
     });
 
 });
@@ -31,7 +31,7 @@ app.config(function ($stateProvider) {
 app.controller('profileCtrl', function ($scope, localStorageService, AuthService, theUser, avgRating, reviewsForUser, forSale) {
 
     $scope.user = theUser;
-    $scope.avgRating = Math.round(avgRating);
+    $scope.avgRating = avgRating;
     $scope.reviews = reviewsForUser;
     $scope.tasks = forSale
     $scope.showReviews = true;

@@ -18,7 +18,7 @@
         </thead>
         <tbody>
           	<tr ng-repeat="user in topTenUsers">
-	            <td>{{ user.user.name }}</td>
+	            <td><a ng-click="userTransfer(user.user._id)">{{ user.user.name }}</td>
 	            <td>{{ user.user.college.name }}</td>
 	            <td>{{ user.aggregateScore | number:1}}</td>
           	</tr>

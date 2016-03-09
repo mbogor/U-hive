@@ -1,22 +1,20 @@
-<div class="row">
-  <div class='container'>
-    <div class="task-list" >
-      <div class="container">
-        <div ng-click="detailTransfer(task._id)"><h3>{{task.name}}</h3></div>
+<div>
+  <div class="panel panel-default">
+    <div class="panel-body container">
+        <div ng-click="detailTransfer(task._id)">
+          <h4 class="word-wrap">{{task.name}}</h4>
+        </div>
+        <img src="{{task.imageUrl}}" class="forsale-img">
         <p><strong>Tasker </strong> <a ng-click="sellerTransfer(task.seller._id)">{{task.seller.name}}</a>
-        <p>{{task.description | trim:expandTask}}</p>
+        <p class="word-wrap">{{task.description | trim:expandTask}}</p>
         <p>${{task.price}}</p>
-        <p>Seller Name: {{task.seller.name}}</p>
-        <p>Average Score: {{task.seller.score}}</p>
         <button ng-disabled="itemIsInCart(task)" class='btn btn-success btn-sm' ng-click="addToCart(task)">Add to cart</button>
-        <button ng-show="itemIsInCart(task)" ng-click="removeFromCart(item)" type="button" class="btn btn-danger btn-sm">Remove item</button>
-
+        <button ng-show="itemIsInCart(task)" ng-click="removeFromCart(task)" type="button" class="btn btn-danger btn-sm">Remove from cart</button>
         <button ng-click="deleteTask(task)" type="button" class="btn btn-danger btn-sm">Delete item</button>
-        
         <a ng-click="toggleExpand()">More info</a>
-      </div>
     </div>
   </div>
 </div>
 
-<!-- Add tiny directive that binds each seller's id and makes a request for their aggregate score -->
+<!-- ng-style="{'background-image':'url(https://s-media-cache-ak0.pinimg.com/236x/0e/cf/a5/0ecfa58ae29f0600247b3f75afceb7ed.jpg)'}" -->
+

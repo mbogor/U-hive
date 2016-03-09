@@ -1,7 +1,7 @@
 'use strict';
 var crypto = require('crypto');
 var mongoose = require('mongoose');
-var extend = require('mongoose-schema-extend');
+// var extend = require('mongoose-schema-extend');
 var _ = require('lodash');
 var deepPopulate = require('mongoose-deep-populate')(mongoose);
 var Promise = require('bluebird');
@@ -27,7 +27,11 @@ mongoose.model('baseUser', baseUserSchema);
 
 
 
-var authUserSchema = baseUserSchema.extend({
+var authUserSchema = new mongoose.Schema({
+      isAdmin: {
+        type: Boolean,
+        default: false
+      },
     name: {
         type: String,
         required: true,
@@ -103,7 +107,7 @@ authUserSchema.statics.top10Users = function() {
                 });
             })
         })
-        .then(function() {  
+        .then(function() {
             return usersAndAvgRatings;
         })
     })
