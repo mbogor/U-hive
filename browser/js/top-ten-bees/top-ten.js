@@ -12,8 +12,19 @@ app.config(function ($stateProvider) {
     });
 });
 
-app.controller('TopCtrl', function($scope, topTen){
+app.controller('TopCtrl', function($scope, topTen, UserFactory, $state){
   $scope.topTenUsers = topTen;
   $scope.hello = "hello"
+
+ $scope.userTransfer = function(id){
+
+    UserFactory.fetchById(id)
+    .then(function(user){
+    $state.go('publicProfile', {personId: user._id});
+
+    })
+
+  }
+
 });
 
