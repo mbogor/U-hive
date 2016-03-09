@@ -31,7 +31,7 @@ app.config(function($stateProvider){
         return UserFactory.getCart(user._id)
         .then(function(cart){
           if(!cart){
-            return UserFactory.getGuestCart(user._id)
+            return UserFactory.getCart(user._id,'guest')
           }
           return cart;
         });

@@ -37,18 +37,25 @@ app.directive('navbar', function ($rootScope, Session, AuthService, AUTH_EVENTS,
                 AuthService.getLoggedInUser()
                 .then(function (user) {
                     scope.user = user;
+                    if(scope.user){
+                        setCart();
+                    }
                 });
             };
 
             var setCart = function(){
-                if(localStorageService.get('cart').tasks.length){
-                        console.log('we  cannot handle this currently');
-                }else{
+                // if(localStorageService.get('cart').tasks.length){
+                //     console.log('we  cannot handle this currently');
+                // }else{
                     UserFactory.getCart(scope.user._id)
                     .then(function(cart){
+                        if(!cart){return}
                         localStorageService.set('cart', {tasks: cart.tasks, timeCreated: cart.timeCreated})
+                    })
+                    .then(function(){
+                        console.log('this user doesn\'t have a cart');
                     });
-                }
+                // }
             }
 
             var removeUser = function () {
@@ -58,7 +65,6 @@ app.directive('navbar', function ($rootScope, Session, AuthService, AUTH_EVENTS,
             setUser();
 
             $rootScope.$on(AUTH_EVENTS.loginSuccess, setUser);
-            $rootScope.$on(AUTH_EVENTS.loginSuccess, setCart);
             $rootScope.$on(AUTH_EVENTS.logoutSuccess, removeUser);
             $rootScope.$on(AUTH_EVENTS.sessionTimeout, removeUser);
 
