@@ -80,6 +80,7 @@ app.controller('TaskItem', function($scope, CartFactory, localStorageService, Au
     if(!localStorageService.get('cart')) return false;
     return localStorageService.get('cart').tasks.indexOf(task._id)>-1;
   }
+
 })
 .filter("trim", function(){
   return function(description, bool){

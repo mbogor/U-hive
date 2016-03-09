@@ -25,14 +25,11 @@ router.get('/topten', function(req, res, next) {
 })
 
 router.param('id', function(req, res, next){
-    console.log('routing user:', req.params.id);
     User.findById(req.params.id).populate('college').exec()
     .then(function(user){
         if(!user) {
-            console.log('no reg user found');
             return BaseUser.findById(req.params.id)
         }else{
-            console.log('setting req.user', user);
             return user;
         }
     })
@@ -42,6 +39,14 @@ router.param('id', function(req, res, next){
     })
     .then(null, next);
 });
+
+router.get('/:id/averagerating', function(req, res, next) {
+    req.reqUser.getAggregateScore()
+    .then(function(score){
+        res.json(score);
+    })
+    .then(null, next)
+})
 
 router.get('/guest', function(req, res, next){
     console.log('in req users/guest', req.session.guest);
@@ -62,14 +67,6 @@ router.get('/', function(req, res, next) {
 
 router.get('/:id', function(req, res, next) {
     res.json(req.reqUser);
-})
-
-router.get('/:id/averagerating', function(req, res, next) {
-    req.reqUser.getAggregateScore()
-    .then(function(score){
-        res.json(score);
-    })
-    .then(null, next)
 })
 
 router.get('/:id/reviews', function(req, res, next) {

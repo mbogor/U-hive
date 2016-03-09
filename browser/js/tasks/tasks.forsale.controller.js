@@ -48,10 +48,44 @@ app.controller('ForSaleCtrl', function($scope, forsale, $state, TaskFactory, Use
 // })
 
 
-app.controller('ItemCtrl', function($scope, task, $state, TaskFactory){
+app.controller('ItemCtrl', function($scope, task, $state, TaskFactory, AuthService, UserFactory, localStorageService, CartFactory){
 
   $scope.task = task;
 
+  $scope.itemIsInCart = function(task){
+    if(!localStorageService.get('cart')) return false;
+    return localStorageService.get('cart').tasks.indexOf(task._id)>-1;
+  }
 
-
+  $scope.addToCart = function(task){
+    var t = task;
+    AuthService.getLoggedInUser()
+    .then(function(user){
+      if(user){
+        var cartUser = user._id;
+        return UserFactory.getCart(cartUser)
+      }else{
+        return UserFactory.getGuest()
+        .then(function(guestUser){
+          var cartGuest = guestUser._id;
+          return UserFactory.getCart(cartGuest, 'guest');
+        });
+      }
+    })
+    .then(function(cart){
+      return CartFactory.addToCart(cart._id, t._id);
+    })
+    .then(function(){
+      addTaskToLocal(t._id);
+    });
+  };
+  
+  function addTaskToLocal(taskId){
+    if(!localStorageService.get('cart')){
+      localStorageService.set('cart', {tasks: [], timeCreated: Date.now()});
+    }
+    var existingCart = localStorageService.get('cart')
+    existingCart.tasks.push(taskId);
+    localStorageService.set('cart', existingCart);
+  }
 })

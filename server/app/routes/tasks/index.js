@@ -10,7 +10,7 @@ var Cart = mongoose.model('Cart');
 module.exports = router;
 
 router.param('id', function(req, res, next){
-  Task.findById(req.params.id)
+  Task.findById(req.params.id).populate('seller')
   .then(function(t){
     req.task = t;
     next();
