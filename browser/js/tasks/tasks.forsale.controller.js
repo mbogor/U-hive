@@ -9,7 +9,9 @@ app.controller('ForSaleCtrl', function($scope, forsale, $state, TaskFactory, Use
   //   cleaning: false
   // }
 
-  // $scope.categories = ['food', 'tutoring', 'cleaning']
+  $scope.filters = {}
+
+  $scope.categories = ['food', 'tutoring', 'cleaning']
 
   $scope.detailTransfer = function(id){
     TaskFactory.getDetail(id)
