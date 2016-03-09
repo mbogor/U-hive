@@ -1,9 +1,9 @@
 app.directive('navbar', function ($rootScope, Session, AuthService, AUTH_EVENTS, $state, localStorageService) {
     var cartCt;
-    if(!localStorageService.get('cart')){
-        cartCt = 0
+    if(localStorageService.get('cart') && localStorageService.get('cart').tasks.length){
+        cartCt = localStorageService.get('cart').tasks.length;
     }else{
-     cartCt = localStorageService.get('cart').tasks.length;
+        cartCt = 0
     }
     return {
         restrict: 'E',
@@ -28,13 +28,12 @@ app.directive('navbar', function ($rootScope, Session, AuthService, AUTH_EVENTS,
 
             scope.logout = function () {
                 AuthService.logout().then(function () {
-                   $state.go('home');
+                    localStorageService.set('cart', {tasks: [], timeCreated: Date.now()});
+                    $state.go('home');
                 });
             };
 
             var setUser = function () {
-                // console.log('do we have auth interceptor?', AuthInterceptor)
-                console.log('local:', localStorageService.keys());
                 AuthService.getLoggedInUser()
                 .then(function (user) {
                     scope.user = user;

@@ -25,6 +25,8 @@ app.controller('TaskItem', function($scope, CartFactory, localStorageService, Au
           return UserFactory.getGuestCart(cartGuest)
         })
         .then(function(cart){
+          console.log('cartid:', cart);
+          console.log('taskid:', t._id);
           return CartFactory.addToCart(cart._id, t._id)
         })
       }
@@ -41,6 +43,35 @@ app.controller('TaskItem', function($scope, CartFactory, localStorageService, Au
 
   };
 
+  $scope.removeFromCart = function(task){
+    var t = task;
+    AuthService.getLoggedInUser()
+    .then(function(user){
+      if(user){
+          var cartUser = user._id;
+        UserFactory.getCart(cartUser)
+        .then(function(cart){
+          return CartFactory.addToCart(cart._id, t._id);
+        })
+      }else{
+        UserFactory.getGuest()
+        .then(function(guestUser){
+          var cartGuest = guestUser._id;
+          return UserFactory.getGuestCart(cartGuest)
+        })
+        .then(function(cart){
+          return CartFactory.addToCart(cart._id, t._id)
+        })
+      }
+    });
+
+
+    var existingCart = localStorageService.get('cart')
+    var i = existingCart.tasks.indexOf(task._id);
+    existingCart.tasks.splice(i,1);
+    localStorageService.set('cart', existingCart);
+
+  }
 
   $scope.deleteTask = function(task){
     TaskFactory.destroy(task)

@@ -62,7 +62,13 @@ app.factory('CartFactory', function($http){
       return $http.put('/api/cart/' + cartId + '/' + taskId)
       .then(function(res){
         return res.data;
-      })
+      });
+    },
+    removeFromCart: function(cartId, taskId){
+      return $http.put('/api/cart/' + cartId + '/' + taskId)
+      .then(function(res){
+        return res.data;
+      });
     }
-  }
-})
+  };
+});
