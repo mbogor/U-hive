@@ -1,9 +1,7 @@
 'use strict';
 
-
 app.controller('TaskItem', function($scope, CartFactory, localStorageService, AuthService, UserFactory, TaskFactory){
   $scope.expandTask =  true;
-
   $scope.toggleExpand = function(){
     $scope.expandTask=!$scope.expandTask;
   }
@@ -13,64 +11,62 @@ app.controller('TaskItem', function($scope, CartFactory, localStorageService, Au
     AuthService.getLoggedInUser()
     .then(function(user){
       if(user){
-          var cartUser = user._id;
-        UserFactory.getCart(cartUser)
-        .then(function(cart){
-          return CartFactory.addToCart(cart._id, t._id);
-        })
+        var cartUser = user._id;
+        return UserFactory.getCart(cartUser)
       }else{
-        UserFactory.getGuest()
+        return UserFactory.getGuest()
         .then(function(guestUser){
           var cartGuest = guestUser._id;
-          return UserFactory.getGuestCart(cartGuest)
-        })
-        .then(function(cart){
-          console.log('cartid:', cart);
-          console.log('taskid:', t._id);
-          return CartFactory.addToCart(cart._id, t._id)
-        })
+          return UserFactory.getCart(cartGuest, 'guest');
+        });
       }
+    })
+    .then(function(cart){
+      return CartFactory.addToCart(cart._id, t._id);
+    })
+    .then(function(){
+      addTaskToLocal(t._id);
     });
-
-    if(!localStorageService.get('cart')){
-      localStorageService.set('cart', {tasks: [], timeCreated: Date.now()});
-    }
-
-    var existingCart = localStorageService.get('cart')
-    existingCart.tasks.push(task._id);
-    localStorageService.set('cart', existingCart);
-
-
   };
 
   $scope.removeFromCart = function(task){
     var t = task;
+    console.log('remove this:', task);
     AuthService.getLoggedInUser()
     .then(function(user){
       if(user){
-          var cartUser = user._id;
-        UserFactory.getCart(cartUser)
-        .then(function(cart){
-          return CartFactory.addToCart(cart._id, t._id);
-        })
+        var cartUser = user._id;
+        return UserFactory.getCart(cartUser)
       }else{
-        UserFactory.getGuest()
+        return UserFactory.getGuest()
         .then(function(guestUser){
           var cartGuest = guestUser._id;
-          return UserFactory.getGuestCart(cartGuest)
-        })
-        .then(function(cart){
-          return CartFactory.addToCart(cart._id, t._id)
+          return UserFactory.getCart(cartGuest, 'guest');
         })
       }
+    })
+    .then(function(cart){
+      return CartFactory.removeFromCart(cart._id, t._id);
+    })
+    .then(function(){
+      removeTaskFromLocal(t._id);
     });
 
+  };
 
+  function addTaskToLocal(taskId){
+    if(!localStorageService.get('cart')){
+      localStorageService.set('cart', {tasks: [], timeCreated: Date.now()});
+    }
     var existingCart = localStorageService.get('cart')
-    var i = existingCart.tasks.indexOf(task._id);
+    existingCart.tasks.push(taskId);
+    localStorageService.set('cart', existingCart);
+  }
+  function removeTaskFromLocal(taskId){
+    var existingCart = localStorageService.get('cart');
+    var i = existingCart.tasks.indexOf(taskId);
     existingCart.tasks.splice(i,1);
     localStorageService.set('cart', existingCart);
-
   }
 
   $scope.deleteTask = function(task){
