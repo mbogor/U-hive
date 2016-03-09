@@ -3,12 +3,17 @@
 app.controller('ForSaleCtrl', function($scope, forsale, $state, TaskFactory, UserFactory){
   $scope.forsale = forsale; //this is the list of tasks from the resolve block of tasksForSale
 
+  // $scope.categoryFilter = {
+  //   food: false,
+  //   tutoring: false,
+  //   cleaning: false
+  // }
+
   $scope.filters = {}
 
   $scope.categories = ['food', 'tutoring', 'cleaning']
 
   $scope.detailTransfer = function(id){
-    console.log("live from detail transfer")
     TaskFactory.getDetail(id)
     .then(function(task){
 

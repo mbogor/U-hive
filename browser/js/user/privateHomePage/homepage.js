@@ -126,10 +126,8 @@ app.controller('NewPostCtrl', function($scope, $state, TaskFactory){
 
 
   $scope.PostTask = function(task){
-    console.log("TASK", task)
     return TaskFactory.newTask(task)
     .then(function(tsk){
-      console.log("promise task", tsk)
       $state.go('success')
     })
   }
