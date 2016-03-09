@@ -20,10 +20,10 @@ app.config(function ($stateProvider) {
       }
     })
 
-    $stateProvider.state('publicProfile.forSale', {   
+    $stateProvider.state('publicProfile.forSale', {
       url: '/forsale',
       templateUrl: 'js/user/privateProfile/subviews/forsale.html',
-      controller: 'profileCtrl'    
+      controller: 'profileCtrl'
     });
 
 });

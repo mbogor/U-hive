@@ -53,7 +53,6 @@
     app.service('AuthService', function ($http, Session, $rootScope, AUTH_EVENTS, $q) {
 
         function onSuccessfulLogin(response) {
-            console.log('running success login', response.data);
             var data = response.data;
             Session.create(data.id, data.user);
             $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
@@ -87,7 +86,6 @@
             return $http.get('/session')
             .then(onSuccessfulLogin)
             .catch(function () {
-                console.log('in catch block')
                 return null;
             });
 

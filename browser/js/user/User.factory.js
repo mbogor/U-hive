@@ -13,7 +13,6 @@ app.factory('UserFactory', function($http, localStorageService) {
   }
 
   UserFactory.getGuest = function(){
-    console.log('getting guest');
     return $http.get('/api/users/guest')
     .then(res => res.data);
   };

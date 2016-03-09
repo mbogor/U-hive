@@ -31,7 +31,6 @@ app.controller('TaskItem', function($scope, CartFactory, localStorageService, Au
 
   $scope.removeFromCart = function(task){
     var t = task;
-    console.log('remove this:', task);
     AuthService.getLoggedInUser()
     .then(function(user){
       if(user){

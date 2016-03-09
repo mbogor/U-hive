@@ -20,14 +20,12 @@ app.config(function($stateProvider){
         return AuthService.getLoggedInUser()
         .then(function(user){
           if(!user){
-            console.log('no logged-in user')
             return UserFactory.getGuest(); //psuedo, returns user
           }
           return user;
         });
       },
       cart: function(user, UserFactory, localStorageService, CartFactory){
-        console.log('in cart resolve block', user);
         return UserFactory.getCart(user._id)
         .then(function(cart){
           if(!cart){
@@ -43,7 +41,6 @@ app.config(function($stateProvider){
 
 app.controller('CartCtrl', function($scope, user, cart, $location){
   $scope.user = user;
-  console.log('cart ctrl:', $scope.user, cart);
   if(cart){
     $scope.cartItems = cart.tasks;
   }else{
