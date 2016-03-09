@@ -7,6 +7,8 @@ app.config(function($stateProvider){
     controller: 'CartCtrl',
      resolve: {
       loggedin: function(AuthService){
+        // AW: this is exactly what AuthService.isAuthenticated() does!
+        // no need to repeat 
         return !!AuthService.getLoggedInUser()
       },
       user: function(AuthService, UserFactory){

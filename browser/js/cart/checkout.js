@@ -22,6 +22,7 @@ app.controller('CheckoutCtrl', function($scope, user, cart){
   $scope.cartItems = cart.tasks;
 
   $scope.totalValue = function(order) {
+    // AW: good use of reduce 
     var total = order.reduce(function(accum, elem) {
           return accum + elem.price;
       }, 0);

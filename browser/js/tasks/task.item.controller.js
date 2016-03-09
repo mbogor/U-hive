@@ -14,8 +14,12 @@ app.controller('TaskItem', function($scope, CartFactory, localStorageService, Au
     .then(function(user){
       if(user){
           var cartUser = user._id;
+
         UserFactory.getCart(cartUser)
         .then(function(cart){
+          // AW: shouldn't this all add to the localSTorage cart?
+          // I assume you want your localstorage cart to be in sync with 
+          // the cart document in your db 
           return CartFactory.addToCart(cart._id, t._id);
         })
       }else{
@@ -29,6 +33,8 @@ app.controller('TaskItem', function($scope, CartFactory, localStorageService, Au
         })
       }
     });
+
+    //AW: glad you guys decided to use localStorage!!
 
     if(!localStorageService.get('cart')){
       localStorageService.set('cart', {tasks: [], timeCreated: Date.now()});

@@ -89,10 +89,24 @@ app.controller('homeCtrl', function ($scope, theUser, avgRating, reviewsForUser,
 
     $scope.removeFromCart = function(item) {
       $scope.cartItems.splice($scope.cartItems.indexOf(item), 1)
+      //AW: where's the error handling? why not remove the item from the 
+      // cart once it has successfully been removed from the db?
       return UserFactory.removeItemFromCart($scope.cartId, item._id);
+
+      /* 
+
+      AW: better 
+      return UserFactory.removeItemFromCart($scope.cartId, item._id)
+      .then(function(){
+        // remove from cartItems only once it has been successfully removed
+        // from db 
+        $scope.cartItems.splice($scope.cartItems.indexOf(item), 1)
+      })
+      */
     }
 
     $scope.deleteTaskForSale = function(task) {
+      // AW: same problem here, remove from db, THEN remove from $scope.tasks
       $scope.tasks.splice($scope.tasks.indexOf(task), 1)
       return UserFactory.deleteTaskForSale(task._id);
     }

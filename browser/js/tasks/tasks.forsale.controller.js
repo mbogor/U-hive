@@ -11,6 +11,9 @@ app.controller('ForSaleCtrl', function($scope, forsale, $state, TaskFactory, Use
 
   // $scope.categories = ['food', 'tutoring', 'cleaning']
 
+
+  //AW: where's the error handling for these promises??
+
   $scope.detailTransfer = function(id){
     console.log("live from detail transfer")
     TaskFactory.getDetail(id)
