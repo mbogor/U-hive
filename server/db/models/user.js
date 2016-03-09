@@ -73,7 +73,10 @@ var authUserSchema = new mongoose.Schema({
     },
     google: {
         id: String
-    }
+    }, 
+
+    //AW: why not add a score field?
+    // score: {type: Number}
 });
 
 authUserSchema.plugin(deepPopulate);
@@ -82,11 +85,20 @@ authUserSchema.plugin(deepPopulate);
 authUserSchema.statics.top10Users = function() {
     var usersAndAvgRatings = []
 
+    /*
+
+        AW: this is not good promise composition
+    */
+
+
     return this.find({}).populate('college').exec()
     .then(function(users){
         return Promise.map(users, function(user){
             var userScore;
+            // AW: why not make this function calculate the score
+            // and add the score to the user document ?
             return user.getAggregateScore()
+            // AW: bad "then-chaining" right here
             .then(function(score){
                 userScore = score;
                 usersAndAvgRatings.push(
@@ -108,7 +120,8 @@ authUserSchema.statics.top10Users = function() {
 }
 
 authUserSchema.methods.getAggregateScore = function() {
-
+    // AW: shouldn't this method calculate the score, 
+    // and add it to the user document?
     return mongoose.model('Review').find({reviewee: this._id})
     .then(function(reviews) {
         // console.log('agg score reviews', reviews)
@@ -125,7 +138,7 @@ authUserSchema.methods.getCart = function() {
     return mongoose.model('Cart').findOne({buyer: this._id, processed: false})
     .populate('tasks')
     .then(function(cart){
-        return cart;
+        return cart;  // AW: unnecessary return statement here 
     })
 }
 
@@ -133,8 +146,8 @@ authUserSchema.methods.getReviews = function() {
 
     return mongoose.model('Review').find({reviewee: this._id}).populate('reviewer')
     .then(function(reviews) {
-        if(!reviews.length) return;
-        return reviews;
+        if(!reviews.length) return;  // AW: unnecessary 
+        return reviews;             // AW: unnecessary
     })
 }
 
@@ -142,7 +155,8 @@ authUserSchema.methods.getCart = function() {
     return mongoose.model('Cart').findOne({buyer: this._id, processed: false})
     .deepPopulate('tasks.seller').exec()
     .then(function(cart){
-        return cart;
+        return cart;   // AW: this is KILLING ME! It's literally PAINFUL to see this
+                        
     })
 }
 

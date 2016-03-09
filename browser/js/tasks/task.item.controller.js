@@ -11,6 +11,7 @@ app.controller('TaskItem', function($scope, CartFactory, localStorageService, Au
     AuthService.getLoggedInUser()
     .then(function(user){
       if(user){
+
         var cartUser = user._id;
         return UserFactory.getCart(cartUser)
       }else{
@@ -51,8 +52,10 @@ app.controller('TaskItem', function($scope, CartFactory, localStorageService, Au
       removeTaskFromLocal(t._id);
     });
 
+
   };
 
+    //AW: glad you guys decided to use localStorage!!
   function addTaskToLocal(taskId){
     if(!localStorageService.get('cart')){
       localStorageService.set('cart', {tasks: [], timeCreated: Date.now()});
@@ -61,6 +64,7 @@ app.controller('TaskItem', function($scope, CartFactory, localStorageService, Au
     existingCart.tasks.push(taskId);
     localStorageService.set('cart', existingCart);
   }
+
   function removeTaskFromLocal(taskId){
     var existingCart = localStorageService.get('cart');
     var i = existingCart.tasks.indexOf(taskId);

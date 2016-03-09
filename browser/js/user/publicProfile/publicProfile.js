@@ -42,6 +42,7 @@ app.controller('profileCtrl', function ($scope, localStorageService, AuthService
     }
 
     $scope.addToCart = function(task){
+      // AW: this is a promise. you must .then!
       if(AuthService.getLoggedInUser()) {
         console.log('we have a user');
         // do something different

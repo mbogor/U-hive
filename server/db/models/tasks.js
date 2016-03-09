@@ -87,6 +87,8 @@ taskSchema.statics.newPosts = function(){
     var lastWeek = moment().subtract(7, 'days');
     return Task.find()
     .then(function(tasks){
+        // AW: why use Promise.filter if you're not doing anything
+        // asynchronous?
         return Promise.filter(tasks, function(t){
             if(t.datePosted >= lastWeek) return t;
         });
