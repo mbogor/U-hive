@@ -19,10 +19,21 @@ module.exports = function (app) {
 
         UserModel.findOne({ 'google.id': profile.id }).exec()
             .then(function (user) {
-
                 if (user) {
                     return user;
                 } else {
+                    
+                    // var newUser = new UserModel();
+
+                    // newUser.name = 'Chica';
+                    // newUser.email = 'gmail.com';
+                    // newUser.google.id = profile.id;
+
+                    // console.log(newUser);
+                    // return newUser.save();
+
+                    // return newUser.save();
+
                     return UserModel.create({
                         google: {
                             id: profile.id
@@ -31,6 +42,7 @@ module.exports = function (app) {
                 }
 
             }).then(function (userToLogin) {
+                console.log(userToLogin)
                 done(null, userToLogin);
             }, function (err) {
                 console.error('Error creating user from Google authentication', err);
@@ -55,3 +67,6 @@ module.exports = function (app) {
         });
 
 };
+
+
+
