@@ -7,6 +7,8 @@ Auth.isAuthenticated = function (req) {
 };
 
 Auth.isAdmin = function (req) {
+	console.log('req.user auth', req.user)
+	console.log('req.user.isAdmin', req.user.isAdmin)
 	return req.user && req.user.isAdmin;
 };
 
@@ -15,6 +17,8 @@ Auth.isSelf = function (req) {
 };
 
 Auth.isAuthor = function (req) {
+	console.log('req.user is author', req.user)
+	console.log('req.task.seller', req.task.seller)
 	return req.user.equals(req.task.seller);
 };
 
@@ -38,6 +42,7 @@ Auth.assertAdminOrSelf = Auth.assert(function (req) {
 });
 
 Auth.assertAdminOrAuthor = Auth.assert(function (req) {
+	console.log('we are where we need to be')
 	return Auth.isAdmin(req) || Auth.isAuthor(req);
 });
 
