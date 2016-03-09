@@ -1,17 +1,9 @@
-<div class="row">
-  <div class='container'>
-    <div class="task-list" >
-      <div >
-        <div ><h3>{{task.name}}</h3></div>
-        <p>{{task.description}}</p>
-         <p><strong>Tasker </strong> <a ng-click="sellerTransfer(task.seller._id)">{{task.seller.name}}</a>
-        <p>{{task.description}}</p>
-        <p>${{task.price}}</p>
-        <p>Seller Name: {{task.seller.name}}</p>
-        <p>Average Score: {{task.seller.score}}</p>
-        <button ng-disabled="itemIsInCart(task)" class='btn btn-success btn-sm' ng-click="addToCart(task)">Add to cart</button>
-        <button ng-show="itemIsInCart(task)" ng-click="removeFromCart(item)" type="button" class="btn btn-danger btn-sm">Remove item</button>
-      </div>
-    </div>
-  </div>
+<div class="container">
+  <img src="{{task.imageUrl}}" style="align:right;">
+      <h3>{{task.name}}</h3>
+      <p>{{task.description}}</p>
+      <a ui-sref="publicProfile({personId: task.seller._id})">{{task.seller.name}}</a>
+    <p>${{task.price}}</p>
+    <button ng-disabled="itemIsInCart(task)" class='btn btn-success btn-sm' ng-click="addToCart(task)">Add to cart</button>
 </div>
+
